@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Sparkles, ExternalLink } from 'lucide-react';
+import { Menu, X, Sparkles, ExternalLink, Volume2, VolumeX } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { SBGLogo } from './SBGLogo';
+import { setSoundEnabled, playSound } from '../utils/audio';
 
 interface NavbarProps {
   onRegisterClick?: () => void;
@@ -10,6 +11,7 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ onRegisterClick }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [soundOn, setSoundOn] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,7 +21,17 @@ export const Navbar: React.FC<NavbarProps> = ({ onRegisterClick }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const toggleSound = () => {
+    const nextState = !soundOn;
+    setSoundOn(nextState);
+    setSoundEnabled(nextState);
+    if (nextState) {
+      playSound('coin');
+    }
+  };
+
   const handleRegisterAction = () => {
+    playSound('coin');
     try {
       confetti({
         particleCount: 80,
@@ -38,12 +50,28 @@ export const Navbar: React.FC<NavbarProps> = ({ onRegisterClick }) => {
     }
   };
 
+  const handleLogoClick = () => {
+    playSound('powerup');
+    try {
+      confetti({
+        particleCount: 40,
+        spread: 50,
+        origin: { x: 0.1, y: 0.1 },
+        colors: ['#FF9900', '#FFC72C'],
+      });
+    } catch {
+      // ignore
+    }
+  };
+
   const navLinks = [
     { name: 'Home', href: '#home' },
     { name: 'About', href: '#about' },
+    { name: 'Playground', href: '#builder-playground' },
     { name: 'Agenda', href: '#agenda' },
+    { name: 'Loot & Swag', href: '#swag' },
     { name: 'Tickets', href: '#tickets' },
-    { name: 'Sponsors', href: '#sponsors' },
+    { name: 'Team', href: '#team' },
     { name: 'Venue', href: '#venue' },
   ];
 
@@ -57,33 +85,52 @@ export const Navbar: React.FC<NavbarProps> = ({ onRegisterClick }) => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
+          
           {/* Logo & Brand with AWS SBG PICT */}
           <a
             href="#home"
+            onClick={handleLogoClick}
             className="flex items-center group focus:outline-none focus:ring-2 focus:ring-amber-500 rounded-xl p-1"
           >
             <SBGLogo />
           </a>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-1.5 bg-slate-900/60 p-1.5 rounded-full border border-slate-800/80 backdrop-blur-md">
+          <nav className="hidden xl:flex items-center gap-1 bg-slate-900/60 p-1.5 rounded-full border border-slate-800/80 backdrop-blur-md">
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
-                className="px-4 py-1.5 text-sm font-semibold text-slate-300 hover:text-white hover:bg-slate-800/80 rounded-full transition-all duration-200"
+                onClick={() => playSound('click')}
+                className="px-3.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800/80 rounded-full transition-all duration-200"
               >
                 {link.name}
               </a>
             ))}
           </nav>
 
-          {/* CTA & Mobile Toggle */}
-          <div className="flex items-center gap-3">
+          {/* CTA & Controls */}
+          <div className="flex items-center gap-2.5">
+            {/* Audio Toggle Pill */}
+            <button
+              onClick={toggleSound}
+              title={soundOn ? 'Mute builder sound effects' : 'Enable builder sound effects'}
+              className={`p-2 rounded-full border text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                soundOn
+                  ? 'bg-amber-400 text-slate-950 border-amber-300 shadow-[0_0_12px_rgba(255,153,0,0.4)]'
+                  : 'bg-slate-900/80 text-slate-400 border-slate-700/80 hover:text-white hover:border-slate-600'
+              }`}
+            >
+              {soundOn ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+              <span className="hidden sm:inline text-[11px] uppercase font-mono tracking-wider">
+                {soundOn ? 'SFX ON' : 'SFX OFF'}
+              </span>
+            </button>
+
             {/* Primary Glowing CTA */}
             <button
               onClick={handleRegisterAction}
-              className="relative group hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-bold text-sm text-slate-950 bg-gradient-to-r from-[#FF9900] via-[#FFB703] to-[#FFC72C] shadow-[0_0_20px_rgba(255,153,0,0.45)] hover:shadow-[0_0_30px_rgba(255,153,0,0.7)] hover:scale-105 active:scale-95 transition-all duration-300 border border-amber-300/60 cursor-pointer overflow-hidden"
+              className="relative group hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-bold text-xs sm:text-sm text-slate-950 bg-gradient-to-r from-[#FF9900] via-[#FFB703] to-[#FFC72C] shadow-[0_0_20px_rgba(255,153,0,0.45)] hover:shadow-[0_0_30px_rgba(255,153,0,0.7)] hover:scale-105 active:scale-95 transition-all duration-300 border border-amber-300/60 cursor-pointer overflow-hidden"
             >
               <Sparkles className="w-4 h-4 text-slate-950 animate-pulse" />
               <span>Register Now</span>
@@ -94,24 +141,28 @@ export const Navbar: React.FC<NavbarProps> = ({ onRegisterClick }) => {
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-label="Toggle navigation menu"
-              className="md:hidden p-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white hover:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-amber-500"
+              className="xl:hidden p-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white hover:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-amber-500"
             >
-              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
+
         </div>
       </div>
 
       {/* Mobile Drawer Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden border-b border-slate-800 bg-[#0D1B2A]/98 backdrop-blur-2xl shadow-2xl transition-all duration-300">
-          <div className="px-5 pt-3 pb-6 space-y-2">
+        <div className="xl:hidden border-b border-slate-800 bg-[#0D1B2A]/98 backdrop-blur-2xl shadow-2xl transition-all duration-300">
+          <div className="px-5 pt-3 pb-6 space-y-1.5">
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="block px-4 py-2.5 rounded-xl text-base font-semibold text-slate-200 hover:text-amber-400 hover:bg-slate-800/60 transition-colors"
+                onClick={() => {
+                  playSound('click');
+                  setIsMobileMenuOpen(false);
+                }}
+                className="block px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:text-amber-400 hover:bg-slate-800/60 transition-colors"
               >
                 {link.name}
               </a>
@@ -123,7 +174,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onRegisterClick }) => {
                   setIsMobileMenuOpen(false);
                   handleRegisterAction();
                 }}
-                className="w-full flex items-center justify-center gap-2 py-3 px-5 rounded-xl font-bold text-slate-950 bg-gradient-to-r from-amber-500 to-amber-400 shadow-[0_0_20px_rgba(255,153,0,0.4)]"
+                className="w-full flex items-center justify-center gap-2 py-3 px-5 rounded-xl font-bold text-slate-950 bg-gradient-to-r from-amber-500 to-amber-400 shadow-[0_0_20px_rgba(255,153,0,0.4)] cursor-pointer"
               >
                 <Sparkles className="w-4 h-4" />
                 <span>Register Now</span>

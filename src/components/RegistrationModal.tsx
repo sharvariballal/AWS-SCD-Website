@@ -1,35 +1,50 @@
 import React, { useState } from 'react';
 import { 
   X, 
-  Sparkles, 
   Check, 
-  ExternalLink, 
-  Ticket, 
-  ShieldCheck 
+  QrCode 
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { playSound } from '../utils/audio';
 
 interface RegistrationModalProps {
   isOpen: boolean;
   onClose: () => void;
+  selectedPass?: string;
 }
 
-export const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose }) => {
-  const [ticketType, setTicketType] = useState<string>('super_early');
-  const [name, setName] = useState('');
+export const RegistrationModal: React.FC<RegistrationModalProps> = ({ 
+  isOpen, 
+  onClose,
+  selectedPass 
+}) => {
+  const [ticketType, setTicketType] = useState<string>(selectedPass || 'Super Early Bird (₹199)');
+  const [prevPass, setPrevPass] = useState(selectedPass);
+  const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
+  const [college, setCollege] = useState('');
+  const [prn, setPrn] = useState('');
+  const [gradYear, setGradYear] = useState('2027');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+
+  if (selectedPass !== prevPass) {
+    setPrevPass(selectedPass);
+    if (selectedPass) {
+      setTicketType(selectedPass);
+    }
+  }
 
   if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    playSound('deploy');
 
     try {
       confetti({
-        particleCount: 100,
+        particleCount: 120,
         spread: 80,
         origin: { y: 0.5 },
         colors: ['#FF9900', '#FFC72C', '#6C5CE7', '#10B981'],
@@ -41,146 +56,205 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, on
     setTimeout(() => {
       setIsSubmitting(false);
       setSubmitted(true);
-      window.open('https://registration-link.com', '_blank', 'noopener,noreferrer');
-    }, 700);
+    }, 600);
+  };
+
+  const handleReset = () => {
+    setSubmitted(false);
+    onClose();
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-in fade-in">
-      <div className="bg-white rounded-3xl max-w-lg w-full p-8 shadow-2xl border border-slate-200 relative overflow-hidden">
+      <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-200 relative overflow-hidden max-h-[90vh] overflow-y-auto">
         {/* Decorative Top Accent */}
         <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500" />
 
         {/* Close Button */}
         <button
-          onClick={onClose}
+          onClick={handleReset}
           aria-label="Close registration modal"
           className="absolute top-5 right-5 p-2 rounded-xl text-slate-400 hover:text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer"
         >
           <X className="w-5 h-5" />
         </button>
 
-        {submitted ? (
-          <div className="text-center py-6">
-            <div className="w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-4">
-              <Check className="w-8 h-8" />
-            </div>
-            <h3 className="text-2xl font-black text-slate-900 mb-2">You&apos;re All Set!</h3>
-            <p className="text-sm text-slate-600 mb-6 leading-relaxed">
-              We&apos;ve initiated your registration pass for Cloud City 2027. The official registration
-              portal has opened in a new tab to complete your payment and credentials.
-            </p>
-            <div className="flex flex-col gap-3">
-              <a
-                href="https://registration-link.com"
-                target="_blank"
-                rel="noreferrer"
-                className="w-full py-3.5 rounded-xl font-bold text-sm bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 shadow-md flex items-center justify-center gap-2"
-              >
-                <span>Continue on Portal</span>
-                <ExternalLink className="w-4 h-4" />
-              </a>
-              <button
-                onClick={onClose}
-                className="w-full py-3 rounded-xl font-bold text-sm bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors cursor-pointer"
-              >
-                Close Window
-              </button>
-            </div>
-          </div>
-        ) : (
+        {!submitted ? (
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold uppercase tracking-wider mb-3">
-              <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-              Cloud City 2027 • 31st Jan
+            <div className="flex items-center gap-2 mb-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping" />
+              <span className="text-xs font-mono font-bold text-amber-600 uppercase tracking-wider">
+                STUDENT BUILDER REGISTRATION
+              </span>
             </div>
 
-            <h3 className="text-2xl font-black text-slate-900 tracking-tight mb-2">
-              Book Your Summit Pass
+            <h3 className="text-2xl font-black text-slate-900 mb-1">
+              Join Cloud City 2027
             </h3>
-            <p className="text-xs text-slate-500 mb-6">
-              Dakkhan Banquet Hall | Ambegoan | Katraj | Nahre, Pune
+            <p className="text-xs text-slate-600 mb-6">
+              Complete your verification details to secure your student subsidized pass for Jan 31, 2027.
             </p>
-
-            {/* 4 pass options in INR */}
-            <div className="grid grid-cols-2 gap-2 mb-6">
-              {[
-                { id: 'super_early', label: 'Super Early Bird', price: '₹199' },
-                { id: 'early', label: 'Early Bird', price: '₹299' },
-                { id: 'general', label: 'General Pass', price: '₹399' },
-                { id: 'group', label: 'Group Discount', price: '₹249' },
-              ].map((p) => {
-                const active = ticketType === p.id;
-                return (
-                  <button
-                    key={p.id}
-                    type="button"
-                    onClick={() => setTicketType(p.id)}
-                    className={`p-3 rounded-xl border text-left transition-all duration-200 cursor-pointer flex items-center justify-between ${
-                      active
-                        ? 'border-amber-400 bg-amber-50/80 shadow-xs'
-                        : 'border-slate-200 hover:border-slate-300'
-                    }`}
-                  >
-                    <div>
-                      <div className={`text-xs font-bold ${active ? 'text-slate-950' : 'text-slate-700'}`}>
-                        {p.label}
-                      </div>
-                      <div className="text-[11px] font-extrabold text-amber-600">{p.price}</div>
-                    </div>
-                    <Ticket className={`w-4 h-4 ${active ? 'text-amber-600' : 'text-slate-400'}`} />
-                  </button>
-                );
-              })}
-            </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Pass Tier Selection */}
               <div>
-                <label className="text-xs font-bold text-slate-700 block mb-1">Full Name</label>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Selected Pass Tier
+                </label>
+                <select
+                  value={ticketType}
+                  onChange={(e) => setTicketType(e.target.value)}
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 font-semibold text-xs sm:text-sm focus:border-amber-400 focus:bg-white focus:outline-none transition-colors"
+                >
+                  <option value="Super Early Bird (₹199)">Super Early Bird — ₹199</option>
+                  <option value="Early Bird Pass (₹299)">Early Bird Pass — ₹299</option>
+                  <option value="General Admission (₹399)">General Admission — ₹399</option>
+                  <option value="Builder Squad Pass (₹249)">Builder Squad Pass (3+) — ₹249/ea</option>
+                </select>
+              </div>
+
+              {/* Full Name */}
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Full Name (For Certificate &amp; Smart Badge) *
+                </label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Alex Sharma"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  placeholder="e.g. Aditi Sharma"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-xs sm:text-sm focus:border-amber-400 focus:bg-white focus:outline-none transition-colors"
                 />
               </div>
 
+              {/* Email */}
               <div>
-                <label className="text-xs font-bold text-slate-700 block mb-1">Email Address</label>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Email Address (For Ticket QR &amp; ICS) *
+                </label>
                 <input
                   type="email"
                   required
-                  placeholder="name@gmail.com or name@pict.edu"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                  placeholder="aditi@college.edu or personal email"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-xs sm:text-sm focus:border-amber-400 focus:bg-white focus:outline-none transition-colors"
                 />
               </div>
 
-              <div className="pt-2">
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full py-4 rounded-xl font-black text-sm bg-gradient-to-r from-[#FF9900] via-[#FFB703] to-[#FFC72C] text-slate-950 shadow-[0_0_20px_rgba(255,153,0,0.4)] hover:shadow-[0_0_28px_rgba(255,153,0,0.6)] hover:scale-[1.02] active:scale-98 transition-all duration-300 cursor-pointer flex items-center justify-center gap-2"
-                >
-                  {isSubmitting ? (
-                    <span>Securing Pass...</span>
-                  ) : (
-                    <>
-                      <span>Proceed to Ticket Booking</span>
-                      <ExternalLink className="w-4 h-4" />
-                    </>
-                  )}
-                </button>
+              {/* College & PRN Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                    College / University *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={college}
+                    onChange={(e) => setCollege(e.target.value)}
+                    placeholder="e.g. PICT Pune / COEP / MIT"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-xs focus:border-amber-400 focus:bg-white focus:outline-none transition-colors"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                    Student ID / PRN *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={prn}
+                    onChange={(e) => setPrn(e.target.value)}
+                    placeholder="e.g. 32178 or PRN"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-xs focus:border-amber-400 focus:bg-white focus:outline-none transition-colors"
+                  />
+                </div>
               </div>
 
-              <div className="flex items-center justify-center gap-2 text-[11px] text-slate-500 pt-1">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-                <span>Redirects to https://registration-link.com in new tab</span>
+              {/* Graduation Year */}
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Graduation Year
+                </label>
+                <div className="grid grid-cols-4 gap-2">
+                  {['2026', '2027', '2028', '2029'].map((yr) => (
+                    <button
+                      type="button"
+                      key={yr}
+                      onClick={() => setGradYear(yr)}
+                      className={`py-2 text-xs font-bold rounded-xl border transition-colors cursor-pointer ${
+                        gradYear === yr
+                          ? 'bg-amber-400 border-amber-500 text-slate-950'
+                          : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
+                      }`}
+                    >
+                      {yr}
+                    </button>
+                  ))}
+                </div>
               </div>
+
+              {/* Terms note */}
+              <p className="text-[11px] text-slate-500 leading-tight">
+                By registering, you agree to the AWS Student Community Day Code of Conduct and student ID verification at the entry gates.
+              </p>
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full py-3.5 rounded-xl font-black text-sm bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-400 text-slate-950 shadow-lg hover:brightness-105 active:scale-[0.99] transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+              >
+                <span>{isSubmitting ? 'Confirming Credentials...' : 'Proceed to Reserve Seat →'}</span>
+              </button>
             </form>
+          </div>
+        ) : (
+          /* Instant Mock Pass Card Display */
+          <div className="text-center py-4 animate-in fade-in">
+            <div className="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-3">
+              <Check className="w-7 h-7" />
+            </div>
+
+            <h3 className="text-2xl font-black text-slate-900 mb-1">
+              Seat Reserved, Builder! 🎉
+            </h3>
+            <p className="text-xs text-slate-600 mb-5">
+              Your registration slot has been held for AWS Student Community Day 2027 at PICT Pune.
+            </p>
+
+            {/* Mock Digital Badge */}
+            <div className="p-4 rounded-2xl bg-gradient-to-tr from-[#0D1B2A] to-slate-800 text-white text-left relative overflow-hidden mb-6 shadow-xl border border-amber-400/30">
+              <div className="flex items-center justify-between border-b border-slate-700 pb-3 mb-3">
+                <div>
+                  <span className="text-[10px] font-mono text-amber-400 uppercase font-bold block">
+                    AWS SBG PICT • CLOUD CITY 2027
+                  </span>
+                  <div className="text-base font-black text-white">{fullName || 'Student Builder'}</div>
+                  <div className="text-xs text-slate-300">{college || 'PICT Pune'} • Class of {gradYear}</div>
+                </div>
+                <div className="w-12 h-12 rounded-xl bg-white p-1 flex items-center justify-center shrink-0">
+                  <QrCode className="w-10 h-10 text-slate-950" />
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between text-xs font-mono text-slate-300">
+                <span>PASS: {ticketType.split('—')[0]}</span>
+                <span className="text-emerald-400 font-bold">STATUS: CONFIRMED</span>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2.5">
+              <button
+                onClick={handleReset}
+                className="w-full py-3 rounded-xl bg-slate-950 hover:bg-slate-800 text-white font-bold text-xs transition-colors cursor-pointer"
+              >
+                Done
+              </button>
+            </div>
           </div>
         )}
       </div>

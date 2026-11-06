@@ -4,7 +4,8 @@ import {
   Send, 
   ArrowUp, 
   Check, 
-  Shield 
+  ShieldCheck, 
+  FileText 
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { 
@@ -15,14 +16,20 @@ import {
   GitHubIcon 
 } from './BrandIcons';
 import { SBGLogo } from './SBGLogo';
+import { playSound } from '../utils/audio';
 
-export const Footer: React.FC = () => {
+interface FooterProps {
+  onOpenCodeOfConduct?: () => void;
+}
+
+export const Footer: React.FC<FooterProps> = ({ onOpenCodeOfConduct }) => {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !email.includes('@')) return;
+    playSound('coin');
     setSubscribed(true);
     try {
       confetti({
@@ -37,6 +44,7 @@ export const Footer: React.FC = () => {
   };
 
   const scrollToTop = () => {
+    playSound('click');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -51,13 +59,14 @@ export const Footer: React.FC = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-12 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-14">
+          
           {/* Col 1 & 2: Brand & Mission */}
           <div className="lg:col-span-2 space-y-4">
             <SBGLogo />
 
             <p className="text-sm text-slate-400 leading-relaxed max-w-sm">
               AWS Student Builder Group at Pune Institute of Computer Technology (PICT).
-              Bridging classroom theory with hands-on cloud innovation and real-world architectures.
+              Bridging classroom theory with hands-on cloud innovation, serverless architectures, and real-world builder opportunities.
             </p>
 
             {/* Social Media Links */}
@@ -89,7 +98,7 @@ export const Footer: React.FC = () => {
           {/* Col 3: Navigation */}
           <div>
             <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400 mb-4">
-              Summit Navigation
+              Summit Exploration
             </h4>
             <ul className="space-y-2.5 text-sm">
               <li>
@@ -103,28 +112,28 @@ export const Footer: React.FC = () => {
                 </a>
               </li>
               <li>
+                <a href="#builder-playground" className="hover:text-amber-400 transition-colors">
+                  Architecture Simulator
+                </a>
+              </li>
+              <li>
+                <a href="#persona-quiz" className="hover:text-amber-400 transition-colors">
+                  Builder Persona Quiz
+                </a>
+              </li>
+              <li>
                 <a href="#agenda" className="hover:text-amber-400 transition-colors">
-                  Teaser Schedule
+                  Tracks &amp; Schedule
                 </a>
               </li>
               <li>
-                <a href="#tickets" className="hover:text-amber-400 transition-colors">
-                  Book Tickets
+                <a href="#swag" className="hover:text-amber-400 transition-colors">
+                  Swag &amp; Loot Bag
                 </a>
               </li>
               <li>
-                <a href="#speakers" className="hover:text-amber-400 transition-colors">
-                  Speakers Lineup
-                </a>
-              </li>
-              <li>
-                <a href="#sponsors" className="hover:text-amber-400 transition-colors">
-                  Sponsors &amp; Partners
-                </a>
-              </li>
-              <li>
-                <a href="#venue" className="hover:text-amber-400 transition-colors">
-                  Venue Location
+                <a href="#team" className="hover:text-amber-400 transition-colors">
+                  Student Core Team
                 </a>
               </li>
             </ul>
@@ -133,18 +142,18 @@ export const Footer: React.FC = () => {
           {/* Col 4: Resources & Support */}
           <div>
             <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400 mb-4">
-              Event Details
+              Event Logistics
             </h4>
             <ul className="space-y-2.5 text-sm">
               <li className="text-slate-400">
-                📅 31st January 2027
+                📅 Sunday, 31st January 2027
               </li>
               <li className="text-slate-400">
                 📍 Dakkhan Banquet Hall, Pune
               </li>
               <li>
                 <a
-                  href="mailto:contact@awssbgpict.org"
+                  href="mailto:team@awssbgpict.org"
                   className="hover:text-amber-400 transition-colors flex items-center gap-1.5"
                 >
                   <Mail className="w-3.5 h-3.5" />
@@ -152,8 +161,17 @@ export const Footer: React.FC = () => {
                 </a>
               </li>
               <li>
+                <button
+                  onClick={onOpenCodeOfConduct}
+                  className="hover:text-amber-400 transition-colors flex items-center gap-1.5 text-slate-300 text-left cursor-pointer"
+                >
+                  <FileText className="w-3.5 h-3.5 text-amber-400" />
+                  Code of Conduct
+                </button>
+              </li>
+              <li>
                 <span className="text-xs text-slate-500 flex items-center gap-1">
-                  <Shield className="w-3 h-3 text-emerald-400" /> PICT Community Chapter
+                  <ShieldCheck className="w-3 h-3 text-emerald-400" /> PICT Student Chapter
                 </span>
               </li>
             </ul>
@@ -165,7 +183,7 @@ export const Footer: React.FC = () => {
               Stay Updated
             </h4>
             <p className="text-xs text-slate-400 mb-4">
-              Get schedule releases and summit announcements directly to your inbox.
+              Get schedule releases, secret speaker drops, and hackathon prompts sent to your inbox.
             </p>
 
             {subscribed ? (
@@ -195,6 +213,7 @@ export const Footer: React.FC = () => {
               </form>
             )}
           </div>
+
         </div>
 
         {/* Bottom Bar & Disclaimer */}
@@ -203,9 +222,9 @@ export const Footer: React.FC = () => {
             <p className="mb-1">
               © 2027 AWS Student Builder Group PICT — Cloud City. All rights reserved.
             </p>
-            <p className="text-[11px] text-slate-600">
-              Disclaimer: AWS Student Builder Group at PICT is a student-led technical community.
-              Amazon Web Services, AWS, and the AWS logo are trademarks of Amazon.com, Inc. or its affiliates.
+            <p className="text-[11px] text-slate-500 leading-relaxed">
+              Disclaimer: AWS Student Builder Group at PICT is an independent student-run university club.
+              Amazon Web Services, AWS, and the AWS smile logo are trademarks of Amazon.com, Inc. or its affiliates.
             </p>
           </div>
 
@@ -213,12 +232,13 @@ export const Footer: React.FC = () => {
           <button
             onClick={scrollToTop}
             aria-label="Scroll back to top"
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors cursor-pointer border border-slate-700/80"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors cursor-pointer border border-slate-700/80"
           >
             <span>Back to Top</span>
             <ArrowUp className="w-3.5 h-3.5 text-amber-400" />
           </button>
         </div>
+
       </div>
     </footer>
   );

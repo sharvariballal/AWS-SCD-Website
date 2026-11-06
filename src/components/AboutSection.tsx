@@ -1,7 +1,14 @@
 import React from 'react';
-import { Sparkles, Terminal, Users, Cpu, Rocket } from 'lucide-react';
+import { Sparkles, Terminal, Users, Cpu, Rocket, Award } from 'lucide-react';
 
 export const AboutSection: React.FC = () => {
+  const stats = [
+    { value: '1,000+', label: 'Student Builders', icon: Users, color: 'text-amber-500' },
+    { value: '12+', label: 'Expert Talks', icon: Sparkles, color: 'text-violet-500' },
+    { value: '6+', label: 'Hands-on Labs', icon: Terminal, color: 'text-blue-500' },
+    { value: '₹50K+', label: 'Hackathon Bounties', icon: Award, color: 'text-emerald-500' },
+  ];
+
   return (
     <section id="about" className="py-24 relative overflow-hidden bg-white">
       {/* Decorative background subtle glow */}
@@ -11,7 +18,7 @@ export const AboutSection: React.FC = () => {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Pill Badge */}
         <div className="text-center mb-6">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-700 text-xs font-bold uppercase tracking-wider">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-700 text-xs font-bold uppercase tracking-wider">
             <Sparkles className="w-3.5 h-3.5 text-amber-500" />
             <span>About The Summit</span>
           </div>
@@ -19,7 +26,7 @@ export const AboutSection: React.FC = () => {
 
         {/* Section Heading */}
         <div className="text-center max-w-4xl mx-auto mb-12">
-          <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight mb-8">
+          <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-8">
             Where Cloud Infrastructure Meets{' '}
             <span className="bg-gradient-to-r from-amber-600 via-amber-500 to-violet-600 bg-clip-text text-transparent">
               Urban Architectural Scale
@@ -27,8 +34,8 @@ export const AboutSection: React.FC = () => {
           </h2>
 
           {/* User Requested Custom Copy in a rich glassmorphic container */}
-          <div className="p-8 sm:p-10 rounded-3xl bg-slate-50/90 border border-slate-200/90 shadow-sm text-left relative overflow-hidden">
-            <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-amber-400 via-yellow-400 to-violet-500" />
+          <div className="p-8 sm:p-10 rounded-3xl bg-slate-50/90 border border-slate-200/90 shadow-md text-left relative overflow-hidden">
+            <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-amber-400 via-yellow-400 to-violet-500" />
 
             <p className="text-base sm:text-lg text-slate-700 leading-relaxed font-normal mb-6">
               Fellow cloud citizens! Step into an immersive tech metropolis where cloud comes to life.
@@ -45,9 +52,9 @@ export const AboutSection: React.FC = () => {
 
             {/* 4 Interactive Pillars: Learn, Build, Grow, Connect */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-slate-200">
-              <div className="flex items-center gap-3 p-3 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
-                <div className="w-9 h-9 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
-                  <Terminal className="w-4 h-4" />
+              <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
+                <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+                  <Terminal className="w-5 h-5" />
                 </div>
                 <div>
                   <div className="text-xs font-bold text-slate-900">Learn</div>
@@ -55,9 +62,9 @@ export const AboutSection: React.FC = () => {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 p-3 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
-                <div className="w-9 h-9 rounded-xl bg-violet-100 text-violet-700 flex items-center justify-center shrink-0">
-                  <Cpu className="w-4 h-4" />
+              <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
+                <div className="w-10 h-10 rounded-xl bg-violet-100 text-violet-700 flex items-center justify-center shrink-0">
+                  <Cpu className="w-5 h-5" />
                 </div>
                 <div>
                   <div className="text-xs font-bold text-slate-900">Build</div>
@@ -65,9 +72,9 @@ export const AboutSection: React.FC = () => {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 p-3 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
-                <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
-                  <Rocket className="w-4 h-4" />
+              <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
+                <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                  <Rocket className="w-5 h-5" />
                 </div>
                 <div>
                   <div className="text-xs font-bold text-slate-900">Grow</div>
@@ -75,9 +82,9 @@ export const AboutSection: React.FC = () => {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 p-3 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
-                <div className="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shrink-0">
-                  <Users className="w-4 h-4" />
+              <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
+                <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shrink-0">
+                  <Users className="w-5 h-5" />
                 </div>
                 <div>
                   <div className="text-xs font-bold text-slate-900">Connect</div>
@@ -85,6 +92,23 @@ export const AboutSection: React.FC = () => {
                 </div>
               </div>
             </div>
+
+            {/* Metrics Ticker */}
+            <div className="mt-8 pt-8 border-t border-slate-200 grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
+              {stats.map((stat, sIdx) => {
+                const IconC = stat.icon;
+                return (
+                  <div key={sIdx} className="space-y-1">
+                    <div className="text-2xl sm:text-3xl font-black text-slate-900 font-mono tracking-tight flex items-center justify-center gap-1.5">
+                      <IconC className={`w-5 h-5 ${stat.color}`} />
+                      <span>{stat.value}</span>
+                    </div>
+                    <div className="text-xs font-semibold text-slate-500">{stat.label}</div>
+                  </div>
+                );
+              })}
+            </div>
+
           </div>
         </div>
       </div>
