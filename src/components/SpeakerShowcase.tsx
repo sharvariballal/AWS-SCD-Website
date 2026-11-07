@@ -1,82 +1,42 @@
 import React from 'react';
-import { Mic2 } from 'lucide-react';
-import { LinkedInIcon, TwitterXIcon } from './BrandIcons';
+import { Mic2, Sparkles, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { playSound } from '../utils/audio';
 
-interface SpeakerCard {
-  name: string;
-  role: string;
-  company: string;
-  topic: string;
-  superpower: string;
-  stack: string[];
-  avatarColor: string;
-  initials: string;
+interface SpeakerShowcaseProps {
+  onOpenCFPModal?: () => void;
 }
 
-const speakers: SpeakerCard[] = [
-  {
-    name: 'Sarah Chen',
-    role: 'Principal Cloud Architect',
-    company: 'AWS Community Hero',
-    topic: 'Architecting Resilient Multi-Region Serverless Grids',
-    superpower: '10,000+ Cold Starts Slain',
-    stack: ['AWS Lambda', 'DynamoDB', 'Rust', 'EventBridge'],
-    avatarColor: 'bg-amber-400 text-slate-950',
-    initials: 'SC',
-  },
-  {
-    name: 'Devon Vance',
-    role: 'Senior Staff AI Engineer',
-    company: 'Cognitive Cloud Labs',
-    topic: 'Production GenAI Agents with Amazon Bedrock',
-    superpower: 'Prompt & Multi-Agent Sorcerer',
-    stack: ['Bedrock', 'Claude 3.7', 'Python', 'LangGraph'],
-    avatarColor: 'bg-indigo-400 text-white',
-    initials: 'DV',
-  },
-  {
-    name: 'Priya Sharma',
-    role: 'Head of Developer Relations',
-    company: 'Serverless Global',
-    topic: 'Zero-Cold-Start Strategies for High-Throughput APIs',
-    superpower: 'Sub-10ms P99 Latency Guru',
-    stack: ['CloudFront', 'API Gateway', 'Go', 'X-Ray'],
-    avatarColor: 'bg-emerald-400 text-slate-950',
-    initials: 'PS',
-  },
-  {
-    name: 'Alex Rivera',
-    role: 'Security & Compliance Lead',
-    company: 'CloudShield Guard',
-    topic: 'Automated IAM Governance & Cloud Incident Response',
-    superpower: 'Zero-Trust Shield Master',
-    stack: ['IAM', 'GuardDuty', 'SecurityHub', 'Terraform'],
-    avatarColor: 'bg-rose-400 text-white',
-    initials: 'AR',
-  },
-  {
-    name: 'Elena Rostova',
-    role: 'Staff Kubernetes Engineer',
-    company: 'InfraScale Systems',
-    topic: 'EKS at Extreme Scale: Multi-Cluster Autoscaling',
-    superpower: 'Cluster Orchestra Conductor',
-    stack: ['Amazon EKS', 'Karpenter', 'Kubernetes', 'Prometheus'],
-    avatarColor: 'bg-cyan-400 text-slate-950',
-    initials: 'ER',
-  },
-  {
-    name: 'Marcus Brody',
-    role: 'Cloud Architect & Founder',
-    company: 'Nexacore Cloud',
-    topic: 'Scaling Cloud SaaS from University Project to 1M Users',
-    superpower: 'Campus Hacker to VC-Backed CTO',
-    stack: ['AWS CDK', 'PostgreSQL', 'Next.js', 'Bedrock'],
-    avatarColor: 'bg-amber-300 text-slate-950',
-    initials: 'MB',
-  },
-];
+export const SpeakerShowcase: React.FC<SpeakerShowcaseProps> = ({ onOpenCFPModal }) => {
+  const teaserSpeakers = [
+    {
+      role: 'AWS Community Hero',
+      specialty: 'Autonomous Multi-Agent Grids & Serverless',
+      badge: 'KEYNOTE',
+      avatarColor: 'bg-amber-400 text-slate-950',
+    },
+    {
+      role: 'Principal Solutions Architect',
+      specialty: 'Petabyte-Scale Data Lakes & Bedrock AI',
+      badge: 'ARCHITECT PANEL',
+      avatarColor: 'bg-indigo-400 text-white',
+    },
+    {
+      role: 'Staff Platform Engineer',
+      specialty: 'EKS Clusters & Zero-Cold-Start Strategies',
+      badge: 'TECH DEEP-DIVE',
+      avatarColor: 'bg-emerald-400 text-slate-950',
+    },
+  ];
 
-export const SpeakerShowcase: React.FC = () => {
+  const handleOpenCFP = () => {
+    playSound('click');
+    if (onOpenCFPModal) {
+      onOpenCFPModal();
+    } else {
+      window.open('https://forms.gle/aws-sbg-cfp', '_blank');
+    }
+  };
+
   return (
     <section id="speakers-studio" className="py-20 px-4 sm:px-6 lg:px-8 bg-white border-b-2 border-slate-900">
       <div className="max-w-7xl mx-auto">
@@ -85,115 +45,96 @@ export const SpeakerShowcase: React.FC = () => {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border-2 border-slate-900 bg-amber-400 text-slate-950 text-xs font-mono font-black uppercase mb-3 shadow-[2px_2px_0px_#0F172A]">
+              <Mic2 className="w-3.5 h-3.5" />
               <span>Industry Heavyweights</span>
             </div>
             <h2 className="text-3xl sm:text-5xl font-black text-slate-950 tracking-tight">
               Featured Speakers &amp; Mentors
             </h2>
             <p className="text-sm sm:text-base text-slate-600 mt-2 max-w-xl font-medium">
-              Learn directly from AWS Community Heroes, principal architects, and engineers pushing production limits.
+              Learn directly from AWS Community Heroes, principal architects, and engineering leaders on the main stage.
             </p>
           </div>
 
-          <a
-            href="https://forms.gle/aws-sbg-cfp"
-            target="_blank"
-            rel="noreferrer"
-            className="neo-btn bg-slate-900 hover:bg-slate-800 text-white px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-bold flex items-center gap-2 cursor-pointer self-start md:self-auto shadow-[3px_3px_0px_#FF9900]"
+          <button
+            onClick={handleOpenCFP}
+            className="neo-btn bg-slate-950 hover:bg-slate-900 text-amber-400 px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-black flex items-center gap-2 cursor-pointer self-start md:self-auto shadow-[3px_3px_0px_#FF9900]"
           >
             <Mic2 className="w-4 h-4 text-amber-400" />
             <span>Apply to Speak (CFP Open)</span>
-          </a>
+          </button>
         </div>
 
-        {/* 6 Trading Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {speakers.map((sp, idx) => (
-            <div
-              key={idx}
-              className="neo-card p-6 bg-white flex flex-col justify-between relative overflow-hidden group hover:border-slate-950"
-            >
-              {/* Tape Accent */}
-              <div className="washi-tape" />
+        {/* Master Cohesive Teaser Block */}
+        <div className="p-6 sm:p-10 rounded-3xl bg-slate-900 border-3 border-slate-950 shadow-[8px_8px_0px_#0F172A] text-white relative overflow-hidden">
+          
+          {/* Subtle Background Pattern */}
+          <div className="absolute inset-0 bg-[radial-gradient(#334155_1px,transparent_1px)] [background-size:20px_20px] opacity-40 pointer-events-none" />
 
-              <div>
-                <div className="flex items-start justify-between mb-4">
-                  <div
-                    className={`w-14 h-14 rounded-2xl border-2 border-slate-900 ${sp.avatarColor} flex items-center justify-center font-black text-xl shadow-[3px_3px_0px_#0F172A]`}
-                  >
-                    {sp.initials}
-                  </div>
-
-                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-slate-100 border border-slate-300 text-slate-700">
-                    KEYNOTE/LAB
-                  </span>
-                </div>
-
-                <h3 className="text-xl font-black text-slate-950 group-hover:text-amber-600 transition-colors">
-                  {sp.name}
-                </h3>
-
-                <div className="text-xs font-bold text-amber-600 font-mono">
-                  {sp.role}
-                </div>
-                <div className="text-xs text-slate-500 font-semibold mb-3">
-                  {sp.company}
-                </div>
-
-                {/* Talk Topic Box */}
-                <div className="p-3.5 rounded-xl bg-slate-50 border-2 border-slate-900 shadow-[2px_2px_0px_#0F172A] mb-4">
-                  <div className="text-[10px] font-mono font-bold text-slate-400 uppercase">
-                    TALK TOPIC:
-                  </div>
-                  <div className="text-xs font-bold text-slate-900 leading-snug mt-0.5">
-                    &ldquo;{sp.topic}&rdquo;
-                  </div>
-                </div>
-
-                {/* Superpower tag */}
-                <div className="text-[11px] font-mono font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-300 inline-block mb-4">
-                  ⚡ {sp.superpower}
-                </div>
-
-                {/* Tech Stack Chips */}
-                <div className="flex flex-wrap gap-1.5 mb-4">
-                  {sp.stack.map((stk, sIdx) => (
-                    <span
-                      key={sIdx}
-                      className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200"
-                    >
-                      {stk}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Social Connect Bottom Bar */}
-              <div className="pt-3 border-t-2 border-slate-900 flex items-center justify-between text-xs text-slate-500">
-                <span className="font-mono text-[11px] font-semibold">STAGE 1</span>
-                <div className="flex items-center gap-2">
-                  <a
-                    href="https://linkedin.com"
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label={`${sp.name} LinkedIn`}
-                    className="p-1.5 rounded-lg border border-slate-900 bg-white hover:bg-slate-100 text-slate-800 transition-colors shadow-[1px_1px_0px_#0F172A]"
-                  >
-                    <LinkedInIcon className="w-3.5 h-3.5 fill-current" />
-                  </a>
-                  <a
-                    href="https://x.com"
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label={`${sp.name} Twitter`}
-                    className="p-1.5 rounded-lg border border-slate-900 bg-white hover:bg-slate-100 text-slate-800 transition-colors shadow-[1px_1px_0px_#0F172A]"
-                  >
-                    <TwitterXIcon className="w-3.5 h-3.5 fill-current" />
-                  </a>
-                </div>
-              </div>
+          <div className="relative z-10 max-w-3xl mx-auto text-center space-y-6">
+            
+            {/* Status Pill */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-slate-800 border border-slate-700 text-amber-400 text-xs font-mono font-black uppercase tracking-wider">
+              <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+              <span>🔒 SPEAKERS REVEALING IN PHASE 2</span>
             </div>
-          ))}
+
+            <h3 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
+              Curated Industry Lineup Under Final Review
+            </h3>
+
+            <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-medium max-w-2xl mx-auto">
+              Our review committee is finalizing keynotes from prominent AWS Community Heroes, AWS User Group mentors, and pioneering student founders. All sessions will be held sequentially on the grand stage inside Dakkhan Hall.
+            </p>
+
+            {/* Silhouette Teaser Row */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
+              {teaserSpeakers.map((sp, idx) => (
+                <div
+                  key={idx}
+                  className="p-4 rounded-2xl bg-slate-800/80 border border-slate-700 backdrop-blur-sm text-left flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="flex items-center justify-between mb-3">
+                      <div className={`w-9 h-9 rounded-xl ${sp.avatarColor} border border-slate-900 flex items-center justify-center font-black text-sm`}>
+                        <Mic2 className="w-4 h-4" />
+                      </div>
+                      <span className="text-[10px] font-mono font-black px-2 py-0.5 rounded bg-slate-700 text-slate-300">
+                        {sp.badge}
+                      </span>
+                    </div>
+
+                    <h4 className="text-sm font-black text-white">{sp.role}</h4>
+                    <p className="text-xs text-slate-400 mt-1 font-medium">{sp.specialty}</p>
+                  </div>
+
+                  <div className="mt-3 pt-2 border-t border-slate-700/60 flex items-center gap-1.5 text-[10px] font-mono text-emerald-400">
+                    <CheckCircle2 className="w-3 h-3" />
+                    <span>Confirmed Roster</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* CFP Callout & Button */}
+            <div className="pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-center gap-4">
+              <div className="text-xs text-slate-300 text-center sm:text-left">
+                <strong className="text-white block font-sans">Have a cloud story or architecture lesson to share?</strong>
+                <span>Our Call for Speakers is officially open for students and professionals.</span>
+              </div>
+
+              <button
+                onClick={handleOpenCFP}
+                className="neo-btn bg-amber-400 hover:bg-amber-300 text-slate-950 px-6 py-3 rounded-2xl text-xs sm:text-sm font-black flex items-center gap-2 cursor-pointer shadow-[3px_3px_0px_#FFFFFF] shrink-0"
+              >
+                <Sparkles className="w-4 h-4" />
+                <span>Submit Talk to CFP</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+
+          </div>
+
         </div>
 
       </div>

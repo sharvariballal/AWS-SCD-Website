@@ -1,13 +1,7 @@
 import React, { useState } from 'react';
 import { 
   Clock, 
-  MapPin, 
-  Download, 
-  Terminal, 
-  Sparkles, 
-  Coffee, 
-  Trophy, 
-  Users 
+  Lock 
 } from 'lucide-react';
 import { playSound } from '../utils/audio';
 
@@ -131,29 +125,7 @@ export const ConferenceMatrix: React.FC = () => {
     return item.trackId === activeTab || item.trackId === 'all';
   });
 
-  const handleDownloadICS = () => {
-    playSound('coin');
-    const icsData = `BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//AWS Student Builder Group PICT//Cloud City 2027//EN
-BEGIN:VEVENT
-SUMMARY:AWS Student Community Day 2027 - Pune
-DESCRIPTION:Premier student cloud conference by AWS Student Builder Group PICT.
-LOCATION:Dakkhan Banquet Hall, Ambegoan | Katraj | Nahre, Pune
-DTSTART:20270207T030000Z
-DTEND:20270207T123000Z
-STATUS:CONFIRMED
-END:VEVENT
-END:VCALENDAR`;
 
-    const blob = new Blob([icsData], { type: 'text/calendar;charset=utf-8' });
-    const link = document.createElement('a');
-    link.href = window.URL.createObjectURL(blob);
-    link.setAttribute('download', 'AWS_SCD_2027_Pune.ics');
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
 
   return (
     <section id="agenda-matrix" className="py-20 px-4 sm:px-6 lg:px-8 bg-blueprint-grid border-b-2 border-slate-900">
@@ -174,11 +146,12 @@ END:VCALENDAR`;
           </div>
 
           <button
-            onClick={handleDownloadICS}
-            className="neo-btn bg-white hover:bg-slate-100 text-slate-900 px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-bold flex items-center gap-2 cursor-pointer self-start md:self-auto shadow-[3px_3px_0px_#0F172A]"
+            disabled
+            title="Calendar sync will be enabled once the full agenda is revealed"
+            className="px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-bold flex items-center gap-2 self-start md:self-auto border-2 border-slate-300 bg-slate-100 text-slate-400 cursor-not-allowed opacity-80 shadow-[2px_2px_0px_#CBD5E1]"
           >
-            <Download className="w-4 h-4 text-amber-600" />
-            <span>Add to Calendar (.ICS)</span>
+            <Lock className="w-3.5 h-3.5" />
+            <span>Add to Calendar (.ICS) • Locked</span>
           </button>
         </div>
 
@@ -207,68 +180,53 @@ END:VCALENDAR`;
           ))}
         </div>
 
-        {/* Timeline Matrix Cards */}
-        <div className="space-y-4">
-          {filteredSessions.map((session) => (
-            <div
-              key={session.id}
-              className="neo-card p-5 sm:p-6 bg-white hover:border-amber-500 transition-all"
-            >
-              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-2xl border-2 border-slate-900 bg-amber-400 text-slate-950 flex items-center justify-center shrink-0 shadow-[2px_2px_0px_#0F172A]">
-                    {session.tag.includes('KEYNOTE') ? (
-                      <Sparkles className="w-6 h-6" />
-                    ) : session.tag.includes('LAB') ? (
-                      <Terminal className="w-6 h-6" />
-                    ) : session.tag.includes('HACKATHON') || session.tag.includes('BOUNTIES') ? (
-                      <Trophy className="w-6 h-6" />
-                    ) : session.tag.includes('BREAKFAST') || session.tag.includes('LUNCH') ? (
-                      <Coffee className="w-6 h-6" />
-                    ) : (
-                      <Users className="w-6 h-6" />
-                    )}
-                  </div>
-
-                  <div>
-                    <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                      <span className="text-xs font-mono font-black text-amber-700 bg-amber-100 px-2.5 py-0.5 rounded-full border border-amber-300 flex items-center gap-1">
-                        <Clock className="w-3 h-3" /> {session.time}
-                      </span>
-                      <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-full bg-slate-100 border border-slate-300 text-slate-700">
-                        {session.trackName}
-                      </span>
-                      <span className="text-[11px] font-semibold text-slate-500 flex items-center gap-1">
-                        <MapPin className="w-3 h-3 text-slate-400" /> {session.room}
-                      </span>
-                    </div>
-
-                    <h3 className="text-base sm:text-lg font-black text-slate-950">
-                      {session.title}
-                    </h3>
-
-                    <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-3xl leading-relaxed">
-                      {session.summary}
-                    </p>
-                  </div>
+        {/* Schedule Matrix Container with Frosted Teaser Lock Overlay */}
+        <div className="relative rounded-3xl overflow-hidden border-2 border-slate-900 shadow-[6px_6px_0px_#0F172A] bg-white">
+          
+          {/* Blurred Background Schedule */}
+          <div className="p-6 sm:p-8 blur-[7px] opacity-30 pointer-events-none select-none space-y-4">
+            {filteredSessions.slice(0, 4).map((session) => (
+              <div
+                key={session.id}
+                className="p-5 rounded-2xl border-2 border-slate-900 bg-slate-50 flex items-center justify-between"
+              >
+                <div>
+                  <span className="text-xs font-mono font-bold text-amber-600">{session.time}</span>
+                  <h4 className="text-base font-black text-slate-900">{session.title}</h4>
+                  <p className="text-xs text-slate-500 mt-1">{session.summary}</p>
                 </div>
+                <span className="text-xs font-mono px-2 py-1 bg-slate-900 text-white rounded">
+                  {session.tag}
+                </span>
+              </div>
+            ))}
+          </div>
 
-                <div className="self-start lg:self-center shrink-0 text-left lg:text-right pt-2 lg:pt-0 border-t lg:border-t-0 border-slate-100">
-                  <span className="inline-block px-2.5 py-1 rounded-md bg-slate-900 text-white font-mono text-[10px] font-bold uppercase tracking-wider">
-                    {session.tag}
-                  </span>
-                  <div className="text-xs font-bold text-slate-900 mt-1">
-                    🎙️ {session.speaker}
-                  </div>
-                  <div className="text-[11px] text-slate-500 font-medium">
-                    {session.role}
-                  </div>
-                </div>
+          {/* Central Frosted Teaser Badge */}
+          <div className="absolute inset-0 z-20 flex items-center justify-center p-6 bg-slate-950/25 backdrop-blur-[6px]">
+            <div className="max-w-md w-full p-8 rounded-3xl bg-white border-3 border-slate-950 shadow-[8px_8px_0px_#0F172A] text-center">
+              <div className="w-16 h-16 rounded-2xl bg-amber-400 border-2 border-slate-950 text-slate-950 flex items-center justify-center mx-auto mb-4 shadow-[3px_3px_0px_#0F172A]">
+                <Clock className="w-8 h-8 animate-pulse" />
+              </div>
 
+              <span className="px-3 py-1 rounded-full bg-slate-950 text-amber-400 font-mono text-[11px] font-black uppercase tracking-wider inline-block mb-3">
+                🔒 AGENDA REVEALING SOON
+              </span>
+
+              <h3 className="text-2xl font-black text-slate-950 mb-2">
+                Curated Lineup Under Wraps
+              </h3>
+
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium mb-4">
+                Our student committee and AWS architects are fine-tuning the sequential session rundown. All keynotes, panels, and workshops will run sequentially inside the grand hall.
+              </p>
+
+              <div className="p-2.5 rounded-xl bg-amber-50 border border-amber-300 text-[11px] font-mono font-bold text-amber-900">
+                ⚡ Full schedule dropping shortly for registered builders
               </div>
             </div>
-          ))}
+          </div>
+
         </div>
 
       </div>

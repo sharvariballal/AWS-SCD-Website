@@ -121,23 +121,43 @@ export const VenueBlueprint: React.FC = () => {
               </div>
             </div>
 
-            {/* Schematic Graphic / Coordinates Box */}
-            <div className="lg:col-span-5 h-72 rounded-2xl bg-slate-900 border-2 border-slate-900 p-6 flex flex-col justify-between text-white shadow-[4px_4px_0px_#0F172A] relative overflow-hidden">
-              <div className="flex items-center justify-between font-mono text-xs text-amber-400 font-bold">
-                <span>📍 PUNE METRO ZONE</span>
-                <span className="text-emerald-400">● GATE ACCESS ACTIVE</span>
+            {/* Interactive Google Maps Visual Box */}
+            <div className="lg:col-span-5 h-80 rounded-2xl bg-slate-900 border-2 border-slate-900 flex flex-col justify-between text-white shadow-[4px_4px_0px_#0F172A] relative overflow-hidden group">
+              {/* Top Banner Overlay */}
+              <div className="absolute top-0 inset-x-0 z-10 p-3 bg-slate-950/85 backdrop-blur-sm border-b border-slate-800 flex items-center justify-between font-mono text-[11px] text-amber-400 font-bold">
+                <span className="flex items-center gap-1.5">
+                  <MapPin className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Dakkhan Banquet Hall, Pune</span>
+                </span>
+                <span className="text-emerald-400 flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  GATE ACCESS ACTIVE
+                </span>
               </div>
 
-              <div className="text-center my-auto">
-                <div className="w-16 h-16 rounded-2xl bg-amber-400 text-slate-950 border-2 border-white flex items-center justify-center mx-auto mb-2 shadow-[0_0_20px_rgba(255,153,0,0.4)]">
-                  <MapPin className="w-8 h-8" />
-                </div>
-                <div className="text-xl font-black text-white">Dakkhan Banquet Hall</div>
-                <div className="text-xs font-mono text-slate-300 mt-1">18.4485° N, 73.8588° E</div>
+              {/* Embedded Google Maps Visual */}
+              <div className="w-full h-full relative">
+                <iframe
+                  title="Dakkhan Banquet Hall Venue Location Map"
+                  src="https://maps.google.com/maps?q=Dakkhan+Banquet+Hall+Katraj+Ambegaon+Pune&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                  className="w-full h-full border-0 grayscale-[20%] hover:grayscale-0 transition-all duration-300"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  allowFullScreen
+                />
               </div>
 
-              <div className="text-xs font-mono text-slate-400 text-center bg-slate-800/80 p-2 rounded-xl border border-slate-700">
-                10 mins from PICT Pune campus • Next to NH-4 Highway
+              {/* Bottom Quick Directions Overlay */}
+              <div className="absolute bottom-2 inset-x-2 z-10 flex items-center justify-between gap-2 p-2.5 rounded-xl bg-slate-950/90 backdrop-blur-md border border-slate-700/80 text-[11px] font-mono text-slate-300">
+                <span className="truncate">18.4485° N, 73.8588° E • Next to NH-4</span>
+                <a
+                  href="https://maps.google.com/?q=Dakkhan+Banquet+Hall+Katraj+Pune"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="shrink-0 px-2 py-0.5 rounded bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-[10px] transition-colors"
+                >
+                  Get Route ↗
+                </a>
               </div>
             </div>
 

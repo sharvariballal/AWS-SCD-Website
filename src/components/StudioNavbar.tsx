@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Menu, X, Sparkles, Volume2, VolumeX, ArrowUpRight } from 'lucide-react';
-import confetti from 'canvas-confetti';
 import { setSoundEnabled, playSound } from '../utils/audio';
 
 interface StudioNavbarProps {
@@ -15,31 +14,21 @@ export const StudioNavbar: React.FC<StudioNavbarProps> = ({ onRegisterClick }) =
     const next = !soundOn;
     setSoundOn(next);
     setSoundEnabled(next);
-    if (next) playSound('coin');
+    if (next) playSound('click');
   };
 
   const handleRegister = () => {
-    playSound('coin');
-    try {
-      confetti({
-        particleCount: 80,
-        spread: 70,
-        origin: { y: 0.15 },
-        colors: ['#FF9900', '#10B981', '#4F46E5', '#F59E0B'],
-      });
-    } catch {
-      // ignore
-    }
+    playSound('click');
     onRegisterClick();
   };
 
   const navLinks = [
-    { label: 'Lab Station', href: '#hero-studio' },
-    { label: 'Circuit Jammer', href: '#circuit-jammer' },
-    { label: 'Agenda Matrix', href: '#agenda-matrix' },
+    { label: 'City Map', href: '#cloud-city-map' },
+    { label: 'Arcade', href: '#circuit-jammer' },
     { label: 'Speakers', href: '#speakers-studio' },
-    { label: 'Loot Box', href: '#loot-box' },
+    { label: 'Swag & Perks', href: '#loot-box' },
     { label: 'Passes', href: '#ticket-dispenser' },
+    { label: 'Sponsors', href: '#sponsors-showcase' },
     { label: 'Venue', href: '#venue-blueprint' },
   ];
 
@@ -117,7 +106,7 @@ export const StudioNavbar: React.FC<StudioNavbarProps> = ({ onRegisterClick }) =
             className="neo-btn neo-btn-primary px-4 sm:px-5 py-2 rounded-xl text-xs sm:text-sm flex items-center gap-1.5 cursor-pointer font-black tracking-tight"
           >
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Get Pass • ₹199</span>
+            <span>Get Pass • ₹299</span>
             <ArrowUpRight className="w-3.5 h-3.5 hidden sm:inline" />
           </button>
 
@@ -158,7 +147,7 @@ export const StudioNavbar: React.FC<StudioNavbarProps> = ({ onRegisterClick }) =
               className="w-full neo-btn neo-btn-primary py-2.5 rounded-xl text-sm font-black flex items-center justify-center gap-2 cursor-pointer"
             >
               <Sparkles className="w-4 h-4" />
-              <span>Claim Builder Pass (From ₹199)</span>
+              <span>Claim Early Bird Pass (₹299)</span>
             </button>
           </div>
         </div>

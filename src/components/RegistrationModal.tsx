@@ -5,7 +5,6 @@ import {
   QrCode 
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import { playSound } from '../utils/audio';
 
 interface RegistrationModalProps {
   isOpen: boolean;
@@ -18,7 +17,7 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
   onClose,
   selectedPass 
 }) => {
-  const [ticketType, setTicketType] = useState<string>(selectedPass || 'Super Early Bird (₹199)');
+  const [ticketType, setTicketType] = useState<string>(selectedPass || 'Early Bird Pass (₹299)');
   const [prevPass, setPrevPass] = useState(selectedPass);
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -40,11 +39,10 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    playSound('deploy');
 
     try {
       confetti({
-        particleCount: 120,
+        particleCount: 100,
         spread: 80,
         origin: { y: 0.5 },
         colors: ['#FF9900', '#FFC72C', '#6C5CE7', '#10B981'],
@@ -92,7 +90,7 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
               Join Cloud City 2027
             </h3>
             <p className="text-xs text-slate-600 mb-6">
-              Complete your verification details to secure your student subsidized pass for Jan 31, 2027.
+              Complete your verification details to secure your student subsidized pass for Feb 7, 2027.
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -106,10 +104,9 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
                   onChange={(e) => setTicketType(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 font-semibold text-xs sm:text-sm focus:border-amber-400 focus:bg-white focus:outline-none transition-colors"
                 >
-                  <option value="Super Early Bird (₹199)">Super Early Bird — ₹199</option>
-                  <option value="Early Bird Pass (₹299)">Early Bird Pass — ₹299</option>
-                  <option value="General Admission (₹399)">General Admission — ₹399</option>
-                  <option value="Builder Squad Pass (₹249)">Builder Squad Pass (3+) — ₹249/ea</option>
+                  <option value="Early Bird Pass (₹299)">Early Bird Pass — ₹299 (Active)</option>
+                  <option value="Regular Pass (Phase 2)">Regular Pass — (Phase 2)</option>
+                  <option value="Group Discount Pass (Teams of 3+)">Group Discount Pass (Teams of 3+)</option>
                 </select>
               </div>
 

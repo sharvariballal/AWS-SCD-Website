@@ -11,7 +11,6 @@ import {
   Trophy,
   CheckCircle2
 } from 'lucide-react';
-import confetti from 'canvas-confetti';
 import { playSound } from '../utils/audio';
 
 interface PadService {
@@ -109,17 +108,7 @@ export const ServiceCircuitJammer: React.FC = () => {
       const next = [...allTriggered, pad.id];
       setAllTriggered(next);
       if (next.length === servicePads.length) {
-        playSound('deploy');
-        try {
-          confetti({
-            particleCount: 120,
-            spread: 90,
-            origin: { y: 0.6 },
-            colors: ['#FF9900', '#10B981', '#6366F1', '#EC4899'],
-          });
-        } catch {
-          // ignore
-        }
+        playSound('powerup');
       }
     }
 
