@@ -86,7 +86,7 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({ onOpenCodeOfConduct 
               Summit Telemetry
             </h4>
             <ul className="space-y-2.5 text-xs sm:text-sm text-slate-400 font-mono">
-              <li>📅 31 January 2027</li>
+              <li>📅 07 February 2027</li>
               <li>📍 Dakkhan Banquet Hall, Pune</li>
               <li>👥 1,000+ Builder Capacity</li>
               <li>⚡ ap-south-1 Deployment</li>

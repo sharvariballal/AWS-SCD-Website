@@ -59,7 +59,7 @@ export const VenueBlueprint: React.FC = () => {
           </h2>
 
           <p className="text-sm sm:text-base text-slate-600 mt-2 font-medium">
-            Join us in person on Sunday, 31st January 2027 in Southern Pune.
+            Join us in person on Sunday, 7th February 2027 in Southern Pune.
           </p>
         </div>
 
@@ -84,7 +84,7 @@ export const VenueBlueprint: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono font-bold text-slate-700">
                 <div className="flex items-center gap-2 p-2.5 rounded-xl bg-white border-2 border-slate-900 shadow-[2px_2px_0px_#0F172A]">
                   <Calendar className="w-4 h-4 text-purple-600" />
-                  <span>Sunday, 31 January 2027</span>
+                  <span>Sunday, 07 February 2027</span>
                 </div>
                 <div className="flex items-center gap-2 p-2.5 rounded-xl bg-white border-2 border-slate-900 shadow-[2px_2px_0px_#0F172A]">
                   <Clock className="w-4 h-4 text-purple-600" />

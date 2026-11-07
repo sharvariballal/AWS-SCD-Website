@@ -18,7 +18,7 @@ interface InteractiveHeroStudioProps {
 }
 
 export const InteractiveHeroStudio: React.FC<InteractiveHeroStudioProps> = ({ onRegisterClick }) => {
-  // Live Countdown to 31 Jan 2027
+  // Live Countdown to 7 Feb 2027
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   // Interactive Badge State
@@ -28,7 +28,7 @@ export const InteractiveHeroStudio: React.FC<InteractiveHeroStudioProps> = ({ on
   const [badgeTheme, setBadgeTheme] = useState<'orange' | 'purple' | 'emerald'>('orange');
 
   useEffect(() => {
-    const target = new Date('2027-01-31T09:00:00+05:30').getTime();
+    const target = new Date('2027-02-07T09:00:00+05:30').getTime();
     const tick = () => {
       const now = new Date().getTime();
       const diff = target - now;
@@ -78,7 +78,7 @@ export const InteractiveHeroStudio: React.FC<InteractiveHeroStudioProps> = ({ on
 
           <div className="flex items-center gap-4 text-xs font-mono font-bold text-slate-700">
             <span className="flex items-center gap-1">
-              <Calendar className="w-3.5 h-3.5 text-amber-600" /> 31 Jan 2027
+              <Calendar className="w-3.5 h-3.5 text-amber-600" /> 07 Feb 2027
             </span>
             <span className="hidden md:inline">•</span>
             <span className="hidden md:flex items-center gap-1">
@@ -247,7 +247,7 @@ export const InteractiveHeroStudio: React.FC<InteractiveHeroStudioProps> = ({ on
 
               {/* Badge Footer */}
               <div className="flex items-center justify-between text-[10px] font-mono font-bold text-slate-500 pt-2 border-t border-slate-200">
-                <span>31 JAN 2027 • DAKKHAN HALL</span>
+                <span>07 FEB 2027 • DAKKHAN HALL</span>
                 <span className="text-emerald-600 flex items-center gap-1">
                   <Check className="w-3 h-3" /> VERIFIED
                 </span>

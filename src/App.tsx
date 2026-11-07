@@ -6,7 +6,6 @@ import { ConferenceMatrix } from './components/ConferenceMatrix';
 import { SpeakerShowcase } from './components/SpeakerShowcase';
 import { LootBoxVault } from './components/LootBoxVault';
 import { TicketDispenser } from './components/TicketDispenser';
-import { StudentCrew } from './components/StudentCrew';
 import { VenueBlueprint } from './components/VenueBlueprint';
 import { FAQStudio } from './components/FAQStudio';
 import { StudioFooter } from './components/StudioFooter';
@@ -54,10 +53,7 @@ export function App() {
         {/* 7. Pass Dispensary Machine (Perforated ticket stub & coupon validator) */}
         <TicketDispenser onRegisterClick={(pass) => handleOpenRegistration(pass)} />
 
-        {/* 8. AWS Student Builder Group PICT Core Crew */}
-        <StudentCrew />
-
-        {/* 9. Venue Blueprint & Pune Transit Routes */}
+        {/* 8. Venue Blueprint & Pune Transit Routes */}
         <VenueBlueprint />
 
         {/* 10. Frequently Asked Questions Studio */}

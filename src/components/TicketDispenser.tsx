@@ -161,7 +161,7 @@ export const TicketDispenser: React.FC<TicketDispenserProps> = ({ onRegisterClic
           </h2>
 
           <p className="text-sm sm:text-base text-slate-600 mt-2 font-medium">
-            Subsidized student admission for Sunday, 31st January 2027 at Dakkhan Banquet Hall, Pune. Valid college PRN required.
+            Subsidized student admission for Sunday, 7th February 2027 at Dakkhan Banquet Hall, Pune. Valid college PRN required.
           </p>
         </div>
 
@@ -307,7 +307,7 @@ export const TicketDispenser: React.FC<TicketDispenserProps> = ({ onRegisterClic
                     ● ALL MEALS INCLUDED
                   </span>
                   <div className="text-[11px] font-mono font-semibold text-slate-500 mt-1">
-                    31 Jan 2027 • Pune
+                    07 Feb 2027 • Pune
                   </div>
                 </div>
               </div>

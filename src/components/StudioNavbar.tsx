@@ -40,7 +40,6 @@ export const StudioNavbar: React.FC<StudioNavbarProps> = ({ onRegisterClick }) =
     { label: 'Speakers', href: '#speakers-studio' },
     { label: 'Loot Box', href: '#loot-box' },
     { label: 'Passes', href: '#ticket-dispenser' },
-    { label: 'Student Crew', href: '#student-crew' },
     { label: 'Venue', href: '#venue-blueprint' },
   ];
 
