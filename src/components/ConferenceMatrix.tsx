@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { 
   Clock, 
-  Lock 
+  Lock,
+  Sparkles
 } from 'lucide-react';
 import { playSound } from '../utils/audio';
 
@@ -58,24 +59,24 @@ const matrixSchedule: SessionItem[] = [
   {
     id: 'm4',
     time: '10:45 AM - 12:15 PM',
-    title: 'Zero-Cold-Start High-Throughput APIs with DynamoDB & CloudFront',
+    title: 'Zero-Cold-Start Strategies for Serverless Enterprise Architectures',
     trackId: 'trackA',
-    trackName: 'Track A • Architecture',
-    room: 'Hall 2',
-    speaker: 'Priya Sharma',
-    role: 'Head of DevRel, Serverless Global',
-    tag: 'SYSTEM DESIGN',
-    summary: 'Mastering p99 latency optimization, connection pooling with RDS Proxy, and resilient DynamoDB single-table design under extreme traffic spikes.',
+    trackName: 'Track A • Systems Architecture',
+    room: 'Grand Auditorium',
+    speaker: 'Alex Rivera',
+    role: 'Staff Platform Engineer',
+    tag: 'SYSTEMS DEEP DIVE',
+    summary: 'Real-world benchmarks reducing latency across 500M+ monthly invocations using SnapStart, provisioned concurrency, and Rust on AWS Lambda.',
   },
   {
     id: 'm5',
-    time: '12:15 PM - 01:15 PM',
-    title: 'Executive Panel: From College Campus to Cloud Staff Engineer & Founder',
-    trackId: 'trackA',
-    trackName: 'Track A • Career & Growth',
+    time: '12:30 PM - 01:15 PM',
+    title: 'Panel Discussion: From Campus Code to Cloud Solutions Architect at AWS',
+    trackId: 'all',
+    trackName: 'All Tracks • Career Forum',
     room: 'Grand Auditorium',
-    speaker: 'Alex Rivera, Marcus Brody & Student Founders',
-    role: 'CloudShield Guard & Nexacore',
+    speaker: 'AWS Student Alumni Panel',
+    role: 'Industry Leaders & AWS SA Alumni',
     tag: 'CAREER FORUM',
     summary: 'Candid advice on cracking AWS certifications, landing top-tier cloud internships, open-source contributions, and launching SaaS startups in university.',
   },
@@ -125,22 +126,21 @@ export const ConferenceMatrix: React.FC = () => {
     return item.trackId === activeTab || item.trackId === 'all';
   });
 
-
-
   return (
-    <section id="agenda-matrix" className="py-20 px-4 sm:px-6 lg:px-8 bg-blueprint-grid border-b-2 border-slate-900">
+    <section id="agenda-matrix" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[#F5EFFE] via-[#EFE6FD] to-[#FAF7FF] border-b-2 border-purple-900/10">
       <div className="max-w-7xl mx-auto">
         
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border-2 border-slate-900 bg-purple-300 text-slate-950 text-xs font-mono font-black uppercase mb-3 shadow-[2px_2px_0px_#0F172A]">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-purple-300 bg-purple-100 text-purple-900 text-xs font-mono font-black uppercase mb-3 shadow-sm">
+              <Sparkles className="w-3.5 h-3.5 text-purple-700" />
               <span>Summit Matrix</span>
             </div>
-            <h2 className="text-3xl sm:text-5xl font-black text-slate-950 tracking-tight">
+            <h2 className="text-3xl sm:text-5xl font-black text-[#260B49] tracking-tight">
               Event Schedule &amp; Tracks
             </h2>
-            <p className="text-sm sm:text-base text-slate-600 mt-2 max-w-xl font-medium">
+            <p className="text-sm sm:text-base text-purple-950/75 mt-2 max-w-xl font-medium">
               3 high-octane tracks covering system design, generative AI agent labs, and a competitive live-fire hackathon.
             </p>
           </div>
@@ -148,7 +148,7 @@ export const ConferenceMatrix: React.FC = () => {
           <button
             disabled
             title="Calendar sync will be enabled once the full agenda is revealed"
-            className="px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-bold flex items-center gap-2 self-start md:self-auto border-2 border-slate-300 bg-slate-100 text-slate-400 cursor-not-allowed opacity-80 shadow-[2px_2px_0px_#CBD5E1]"
+            className="px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-bold flex items-center gap-2 self-start md:self-auto border border-purple-200 bg-white/70 text-purple-400 cursor-not-allowed opacity-80 shadow-sm"
           >
             <Lock className="w-3.5 h-3.5" />
             <span>Add to Calendar (.ICS) • Locked</span>
@@ -169,10 +169,10 @@ export const ConferenceMatrix: React.FC = () => {
                 playSound('click');
                 setActiveTab(tab.id as typeof activeTab);
               }}
-              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold font-mono transition-all border-2 border-slate-900 cursor-pointer whitespace-nowrap ${
+              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold font-mono transition-all border cursor-pointer whitespace-nowrap ${
                 activeTab === tab.id
-                  ? 'bg-slate-950 text-white shadow-[3px_3px_0px_#FF9900]'
-                  : 'bg-white text-slate-700 hover:bg-slate-100 shadow-[2px_2px_0px_#0F172A]'
+                  ? 'bg-purple-950 text-amber-300 border-purple-950 shadow-md shadow-purple-950/20'
+                  : 'bg-white/80 text-purple-900 border-purple-200 hover:bg-white shadow-sm'
               }`}
             >
               {tab.label}
@@ -181,21 +181,21 @@ export const ConferenceMatrix: React.FC = () => {
         </div>
 
         {/* Schedule Matrix Container with Frosted Teaser Lock Overlay */}
-        <div className="relative rounded-3xl overflow-hidden border-2 border-slate-900 shadow-[6px_6px_0px_#0F172A] bg-white">
+        <div className="relative rounded-3xl overflow-hidden border-2 border-purple-200 shadow-[0_20px_50px_rgba(76,29,149,0.12)] bg-white/90">
           
           {/* Blurred Background Schedule */}
-          <div className="p-6 sm:p-8 blur-[7px] opacity-30 pointer-events-none select-none space-y-4">
+          <div className="p-6 sm:p-8 blur-[7px] opacity-25 pointer-events-none select-none space-y-4">
             {filteredSessions.slice(0, 4).map((session) => (
               <div
                 key={session.id}
-                className="p-5 rounded-2xl border-2 border-slate-900 bg-slate-50 flex items-center justify-between"
+                className="p-5 rounded-2xl border border-purple-200 bg-purple-50/50 flex items-center justify-between"
               >
                 <div>
                   <span className="text-xs font-mono font-bold text-amber-600">{session.time}</span>
-                  <h4 className="text-base font-black text-slate-900">{session.title}</h4>
-                  <p className="text-xs text-slate-500 mt-1">{session.summary}</p>
+                  <h4 className="text-base font-black text-purple-950">{session.title}</h4>
+                  <p className="text-xs text-purple-600 mt-1">{session.summary}</p>
                 </div>
-                <span className="text-xs font-mono px-2 py-1 bg-slate-900 text-white rounded">
+                <span className="text-xs font-mono px-2 py-1 bg-purple-950 text-amber-300 rounded">
                   {session.tag}
                 </span>
               </div>
@@ -203,25 +203,25 @@ export const ConferenceMatrix: React.FC = () => {
           </div>
 
           {/* Central Frosted Teaser Badge */}
-          <div className="absolute inset-0 z-20 flex items-center justify-center p-6 bg-slate-950/25 backdrop-blur-[6px]">
-            <div className="max-w-md w-full p-8 rounded-3xl bg-white border-3 border-slate-950 shadow-[8px_8px_0px_#0F172A] text-center">
-              <div className="w-16 h-16 rounded-2xl bg-amber-400 border-2 border-slate-950 text-slate-950 flex items-center justify-center mx-auto mb-4 shadow-[3px_3px_0px_#0F172A]">
-                <Clock className="w-8 h-8 animate-pulse" />
+          <div className="absolute inset-0 z-20 flex items-center justify-center p-6 bg-purple-950/20 backdrop-blur-[6px]">
+            <div className="max-w-md w-full p-8 rounded-3xl bg-white border-2 border-purple-200 shadow-[0_20px_50px_rgba(76,29,149,0.2)] text-center">
+              <div className="w-16 h-16 rounded-2xl bg-amber-400 border border-amber-500 text-purple-950 flex items-center justify-center mx-auto mb-4 shadow-md">
+                <Clock className="w-8 h-8 text-purple-950 animate-pulse" />
               </div>
 
-              <span className="px-3 py-1 rounded-full bg-slate-950 text-amber-400 font-mono text-[11px] font-black uppercase tracking-wider inline-block mb-3">
+              <span className="px-3 py-1 rounded-full bg-purple-950 text-amber-300 font-mono text-[11px] font-black uppercase tracking-wider inline-block mb-3">
                 🔒 AGENDA REVEALING SOON
               </span>
 
-              <h3 className="text-2xl font-black text-slate-950 mb-2">
+              <h3 className="text-2xl font-black text-[#260B49] mb-2">
                 Curated Lineup Under Wraps
               </h3>
 
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium mb-4">
+              <p className="text-xs sm:text-sm text-purple-900/80 leading-relaxed font-normal mb-4">
                 Our student committee and AWS architects are fine-tuning the sequential session rundown. All keynotes, panels, and workshops will run sequentially inside the grand hall.
               </p>
 
-              <div className="p-2.5 rounded-xl bg-amber-50 border border-amber-300 text-[11px] font-mono font-bold text-amber-900">
+              <div className="p-2.5 rounded-xl bg-purple-50 border border-purple-200 text-[11px] font-mono font-bold text-purple-900">
                 ⚡ Full schedule dropping shortly for registered builders
               </div>
             </div>

@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { StudioNavbar } from './components/StudioNavbar';
-import { InteractiveHeroStudio } from './components/InteractiveHeroStudio';
-import { MarqueeCarousel } from './components/MarqueeCarousel';
+import { ShutterGateHero } from './components/ShutterGateHero';
+import { StorytellingSection } from './components/StorytellingSection';
 import { CloudCityMap } from './components/CloudCityMap';
+import { PolaroidFlashbackGallery } from './components/PolaroidFlashbackGallery';
 import { ServiceCircuitJammer } from './components/ServiceCircuitJammer';
 import { ConferenceMatrix } from './components/ConferenceMatrix';
 import { SpeakerShowcase } from './components/SpeakerShowcase';
@@ -43,50 +44,55 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA] text-slate-900 font-sans selection:bg-amber-400 selection:text-slate-950 relative overflow-x-hidden">
+    <div className="min-h-screen bg-[#F8F5FF] text-[#1F0B38] font-sans selection:bg-purple-200 selection:text-purple-950 relative overflow-x-hidden">
       {/* 1. Studio Sticky Navigation Bar */}
       <StudioNavbar onRegisterClick={() => handleOpenRegistration('Early Bird Pass (₹299)')} />
 
       {/* Main Content Area */}
       <main className="relative z-10">
-        {/* 2. Advert Hero with Live Ticket Status Marquee & Countdown to 07 Feb 2027 */}
-        <InteractiveHeroStudio onRegisterClick={(pass) => handleOpenRegistration(pass || 'Early Bird Pass (₹299)')} />
+        {/* 2. Dynamic Scroll-Driven Sci-Fi Shutter Gate Landing Hero Section */}
+        <ShutterGateHero onRegisterClick={(pass) => handleOpenRegistration(pass || 'Early Bird Pass (₹299)')} />
 
-        {/* 3. Flashback to SCD 2026: Real Authentic Community Moments */}
-        <MarqueeCarousel />
+        {/* 3. Storytelling Section with Scroll-Driven Text Reveal & 4 Pillars (Big Ideas. Bigger Community) */}
+        <section id="storytelling">
+          <StorytellingSection />
+        </section>
 
-        {/* 4. Top-Down Architectural Cloud City District Map (6 Zones Layout) */}
+        {/* 4. Interactive Pastel 3D Isometric Cityscape & Location Pins with Left-Side Sliding Info Drawer */}
         <CloudCityMap />
 
-        {/* 5. Interactive Arcade Alley Game: Service Circuit Jammer & Serverless Simulator */}
+        {/* 5. Tactile Polaroid Camera Flashback Gallery (Replacing Horizontal Marquee) */}
+        <PolaroidFlashbackGallery />
+
+        {/* 6. Interactive Arcade Alley Game: Service Circuit Jammer */}
         <ServiceCircuitJammer />
 
-        {/* 6. Agenda & Sessions Matrix (Locked Frosted Teaser Mode) */}
+        {/* 7. Agenda & Sessions Matrix */}
         <ConferenceMatrix />
 
-        {/* 7. Featured Speakers & Call for Speakers (CFP) Showcase */}
+        {/* 8. Featured Speakers & Call for Speakers (CFP) Showcase */}
         <SpeakerShowcase onOpenCFPModal={() => setIsCFPModalOpen(true)} />
 
-        {/* 8. Official Swag Box & Perks Vault (Curated Mystery Loot Box Preview) */}
+        {/* 9. Official Swag Box & Perks Vault */}
         <LootBoxVault />
 
-        {/* 9. Pass Dispensary (Early Bird ₹299 LIVE NOW, KonfHub Direct Provision) */}
+        {/* 10. Pass Dispensary (Early Bird ₹299 LIVE NOW, KonfHub Direct Provision) */}
         <TicketDispenser onRegisterClick={(pass) => handleOpenRegistration(pass)} />
 
-        {/* 10. Sponsors & Ecosystem Partners Showcase */}
+        {/* 11. Sponsors & Ecosystem Partners Showcase */}
         <SponsorShowcase onOpenSponsorModal={() => setIsSponsorModalOpen(true)} />
 
-        {/* 11. Venue Blueprint & Embedded Google Maps Visual */}
+        {/* 12. Venue Blueprint & Embedded Google Maps Visual */}
         <VenueBlueprint />
 
-        {/* 12. Frequently Asked Questions Studio */}
+        {/* 13. Frequently Asked Questions Studio */}
         <FAQStudio />
       </main>
 
-      {/* 13. Studio Footer */}
+      {/* 14. Studio Footer matching Poster 3 (Your Next Chapter Starts Here) */}
       <StudioFooter onOpenCodeOfConduct={() => setIsCodeOfConductOpen(true)} />
 
-      {/* Student Verification Registration Modal (Fallback for non-KonfHub modes) */}
+      {/* Student Verification Registration Modal */}
       <RegistrationModal
         isOpen={isRegistrationModalOpen}
         onClose={handleCloseRegistration}

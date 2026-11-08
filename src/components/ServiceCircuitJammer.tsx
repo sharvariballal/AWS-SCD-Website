@@ -125,19 +125,19 @@ export const ServiceCircuitJammer: React.FC = () => {
   };
 
   return (
-    <section id="circuit-jammer" className="py-20 px-4 sm:px-6 lg:px-8 bg-white border-b-2 border-slate-900">
+    <section id="circuit-jammer" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[#FAF7FF] via-[#F5EFFE] to-[#FAF7FF] border-b-2 border-purple-900/10">
       <div className="max-w-7xl mx-auto">
         
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border-2 border-slate-900 bg-amber-400 text-slate-950 text-xs font-mono font-black uppercase mb-3 shadow-[2px_2px_0px_#0F172A]">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-purple-300 bg-purple-100 text-purple-900 text-xs font-mono font-black uppercase mb-3 shadow-[2px_2px_0px_#0F172A]">
               <span>Interactive Builder Lab</span>
             </div>
-            <h2 className="text-3xl sm:text-5xl font-black text-slate-950 tracking-tight">
+            <h2 className="text-3xl sm:text-5xl font-black text-[#260B49] tracking-tight">
               Cloud Service Circuit Jammer
             </h2>
-            <p className="text-sm sm:text-base text-slate-600 mt-2 max-w-xl font-medium">
+            <p className="text-sm sm:text-base text-purple-950/75 mt-2 max-w-xl font-medium">
               Tap the tactile pads to trigger serverless events, execute AI agent prompts, and see simulated telemetry feedback.
             </p>
           </div>
@@ -201,7 +201,7 @@ export const ServiceCircuitJammer: React.FC = () => {
                   {pad.category}
                 </div>
 
-                <p className="text-xs text-slate-600 leading-relaxed">
+                <p className="text-xs text-purple-950/75 leading-relaxed">
                   {pad.desc}
                 </p>
 
@@ -259,3 +259,4 @@ export const ServiceCircuitJammer: React.FC = () => {
     </section>
   );
 };
+

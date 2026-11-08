@@ -1,403 +1,401 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Sparkles, 
+  DoorOpen, 
   Mic2, 
   Coffee, 
   Gamepad2, 
-  Trees, 
-  DoorOpen, 
-  Layers, 
-  Info,
-  CheckCircle2,
-  Navigation
+  MapPin, 
+  Sparkles, 
+  Clock, 
+  Users, 
+  Gift, 
+  X, 
+  ArrowRight,
+  Compass
 } from 'lucide-react';
 import { playSound } from '../utils/audio';
+import { ScrollReveal } from './ScrollReveal';
 
-interface DistrictZone {
+export interface DistrictData {
   id: string;
   name: string;
+  tagline: string;
   codename: string;
-  gridArea: string;
   icon: React.FC<{ className?: string }>;
-  accentColor: string;
-  borderColor: string;
-  tagColor: string;
-  shortDesc: string;
-  fullDesc: string;
-  highlights: string[];
+  // Coordinates relative to map container in percentage
+  x: number; 
+  y: number;
+  venueDetail: string;
+  timing: string;
   capacity: string;
+  description: string;
+  perks: string[];
+  sessions: string[];
+  badgeColor: string;
 }
 
-const cityDistricts: DistrictZone[] = [
+const districts: DistrictData[] = [
   {
     id: 'welcome-gate',
     name: 'The Welcome Gate',
-    codename: 'ZONE 01 • CENTRAL ATRIUM',
-    gridArea: 'welcome',
+    tagline: 'Main Ingress, Check-in & Badge Distribution',
+    codename: 'ZONE 01 • FOYER PORTAL',
     icon: DoorOpen,
-    accentColor: 'bg-amber-100/90 text-amber-950',
-    borderColor: 'border-amber-500',
-    tagColor: 'bg-amber-400 text-slate-950',
-    shortDesc: 'Main entry archway, student PRN verification, and badge distribution.',
-    fullDesc: 'The primary ingress portal for Cloud City inside Dakkhan Banquet Hall. Attendees scan their KonfHub QR ticket, present college PRN / ID, receive their custom event lanyard badge, and get oriented with the volunteer builder team.',
-    highlights: ['QR Pass Scan & PRN Verification', 'Official Cloud City Badge Collection', 'Information & Volunteer Helpdesk'],
-    capacity: 'Rapid Throughput Ingress',
+    x: 50,
+    y: 72,
+    venueDetail: 'Ground Floor Grand Foyer, Dakkhan Banquet Hall, Pune',
+    timing: '08:30 AM – 10:00 AM (Ongoing)',
+    capacity: 'Rapid Throughput Check-In',
+    description: 'The monumental entrance into Cloud City. Every attendee scans their KonfHub QR ticket, validates their student PRN or college ID, and receives their exclusive holographic Cloud City credential badge and welcome swag pouch.',
+    perks: [
+      'Official Cloud City Holographic Lanyard Badge',
+      'AWS Builder Sticker Pack & Welcome Kit',
+      'Fast-track Registration QR Scanners',
+      'Volunteer Guide Desk & Venue Navigator',
+    ],
+    sessions: [
+      '08:30 AM - Doors Open & Badge Collection',
+      '09:15 AM - Morning Networking Foyer Gathering',
+    ],
+    badgeColor: 'bg-purple-600 text-white',
   },
   {
     id: 'speakers-district',
-    name: "Speaker's District",
-    codename: 'ZONE 02 • MAIN STAGE',
-    gridArea: 'stage',
+    name: 'Speakers District',
+    tagline: 'Central Grand Stage & Keynote Epicenter',
+    codename: 'ZONE 02 • MAIN AUDITORIUM',
     icon: Mic2,
-    accentColor: 'bg-purple-100/90 text-purple-950',
-    borderColor: 'border-purple-500',
-    tagColor: 'bg-purple-400 text-slate-950',
-    shortDesc: 'Central auditorium stage for keynotes, tech panels, and sequential deep dives.',
-    fullDesc: 'The intellectual epicenter of Cloud City. Equipped with a high-definition LED backdrop and surround sound, this single grand stage hosts all keynote addresses, architecture panels, and live coding demos sequentially with no clashing schedules.',
-    highlights: ['AWS Community Heroes & Architect Keynotes', 'Interactive Live Coding & Stage Demos', 'Career Panels & Q&A Open Mic'],
-    capacity: '1,000+ Seated Capacity',
+    x: 52,
+    y: 28,
+    venueDetail: 'Central Auditorium Hall with 4K LED Backdrop & Surround Acoustics',
+    timing: '10:00 AM – 04:30 PM (Sequential)',
+    capacity: '1,000+ Seated Attendees',
+    description: 'The intellectual heart of the summit. Featuring a colossal ultra-wide LED stage where AWS Community Heroes, Principal Solutions Architects, and Industry Leaders present sequential deep-dives with zero conflicting schedules.',
+    perks: [
+      'Live Keynotes from AWS Heroes & Leaders',
+      'Generative AI & Serverless Deep Dives',
+      'Interactive Open-Mic Q&A with Speakers',
+      'Live Stage Architecture Demonstrations',
+    ],
+    sessions: [
+      '10:00 AM - Opening Keynote: State of Cloud in 2027',
+      '11:15 AM - Architecting Resilient Serverless Workflows',
+      '02:00 PM - GenAI on AWS Bedrock: From Concept to Prod',
+      '03:45 PM - Career Panel: Breaking into Cloud Engineering',
+    ],
+    badgeColor: 'bg-amber-500 text-purple-950',
   },
   {
     id: 'compute-cafe',
     name: 'Compute Café',
-    codename: 'ZONE 03 • REFUEL LOUNGE',
-    gridArea: 'cafe',
+    tagline: 'Gourmet Catering & Networking Refuel Lounge',
+    codename: 'ZONE 03 • REFUEL WING',
     icon: Coffee,
-    accentColor: 'bg-rose-100/90 text-rose-950',
-    borderColor: 'border-rose-500',
-    tagColor: 'bg-rose-400 text-slate-950',
-    shortDesc: 'Spacious dining hall for hot breakfast, lavish buffet lunch, and evening tea.',
-    fullDesc: 'Dedicated dining wing within the hall designed to keep builder minds energized. Features hot South Indian morning breakfast, a lavish multi-course afternoon buffet lunch, and evening high tea with snacks included with every pass.',
-    highlights: ['All-Day Catering Included in Every Pass', 'Hot Buffet Lunch & Evening High-Tea', 'Standing Networking Cocktail Tables'],
-    capacity: 'Continuous Buffet Service',
-  },
-  {
-    id: 'coffee-kiosk',
-    name: 'Coffee Kiosk',
-    codename: 'ZONE 04 • CAFFEINE NODE',
-    gridArea: 'coffee',
-    icon: Sparkles,
-    accentColor: 'bg-amber-100/90 text-amber-950',
-    borderColor: 'border-amber-500',
-    tagColor: 'bg-amber-400 text-slate-950',
-    shortDesc: 'Specialty coffee & tea brewing bar powered by community partners.',
-    fullDesc: 'A dedicated artisanal espresso and filter coffee counter positioned right next to the networking corridor. Builders can grab freshly brewed hot beverages throughout the event between keynote intervals.',
-    highlights: ['Artisan Filter Coffee & Fresh Espresso', 'Quick Refreshment Grab & Go', 'Community Partner Meetup Spot'],
-    capacity: 'Zero-Latency Fuel Bar',
+    x: 21,
+    y: 40,
+    venueDetail: 'Dedicated Dining Hall Wing, Dakkhan Banquet Hall',
+    timing: '08:30 AM – 05:00 PM (All-Day)',
+    capacity: 'Continuous Catering Wing',
+    description: 'A lavish culinary wing designed to fuel high-velocity thinking. Every registered builder enjoys a full hot South Indian breakfast, an elaborate multi-course buffet lunch, and afternoon high-tea with artisanal coffee included with their pass.',
+    perks: [
+      'Full Multi-Course Buffet Lunch Included',
+      'Fresh Artisanal Filter Coffee & High-Tea Snacks',
+      'High-Top Networking Cocktail Tables',
+      'Continuous Hydration Stations',
+    ],
+    sessions: [
+      '08:30 AM - Morning South Indian Breakfast & Coffee',
+      '01:00 PM - Grand Multi-Course Networking Lunch',
+      '04:30 PM - High-Tea, Cookies & Farewell Chit-Chat',
+    ],
+    badgeColor: 'bg-rose-500 text-white',
   },
   {
     id: 'arcade-alley',
     name: 'Arcade Alley',
-    codename: 'ZONE 05 • DIY TECH CARNIVAL',
-    gridArea: 'arcade',
+    tagline: 'DIY Tech Carnival & Partner Experience Labs',
+    codename: 'ZONE 04 • INNOVATION EXPO',
     icon: Gamepad2,
-    accentColor: 'bg-cyan-100/90 text-cyan-950',
-    borderColor: 'border-cyan-500',
-    tagColor: 'bg-cyan-400 text-slate-950',
-    shortDesc: 'Interactive DIY carnival games, architecture challenges, and tech stalls.',
-    fullDesc: 'A vibrant district crafted with low-cost DIY materials, cardboard tech installations, and hands-on gaming stalls. Test your cloud knowledge with trivia buzzers, solve rapid serverless puzzles, and win community goodies.',
-    highlights: ['DIY Cardboard Carnival & Cloud Trivia', 'Interactive Architecture Challenge Stalls', 'Student Project Display Pods'],
-    capacity: 'Interactive Walk-Through',
-  },
-  {
-    id: 'community-park',
-    name: 'Community Park',
-    codename: 'ZONE 06 • GREEN COMMONS',
-    gridArea: 'park',
-    icon: Trees,
-    accentColor: 'bg-emerald-100/90 text-emerald-950',
-    borderColor: 'border-emerald-500',
-    tagColor: 'bg-emerald-400 text-slate-950',
-    shortDesc: 'Relaxed green lawn space for peer networking, 1-on-1s, and mentor chats.',
-    fullDesc: 'A quiet, low-decibel green zone inside the banquet hall furnished with comfortable beanbags and grass-carpeted seating. Ideal for meeting attendees from other colleges, reviewing resumes, or discussing startup ideas.',
-    highlights: ['1-on-1 Mentorship & Resume Reviews', 'Chill Out Lounge with Beanbags', 'Cross-College Networking Circle'],
-    capacity: 'Open Casual Seating',
+    x: 71,
+    y: 36,
+    venueDetail: 'East Wing Promenade & Stalls Terrace',
+    timing: '11:00 AM – 04:30 PM (Interactive)',
+    capacity: 'Interactive Walk-Through Gallery',
+    description: 'A bustling interactive district filled with low-cost DIY cardboard tech installations, cloud trivia buzzers, student demo pods, and sponsor tech booths. Test your skills in the Service Circuit Jammer and collect badges!',
+    perks: [
+      'Hands-On Service Circuit Jammer Simulator',
+      'AWS Swag Vault & Mystery Box Giveaways',
+      'Resume Review & Mock Tech Interviews',
+      'Student Cloud Project Exhibition Pods',
+    ],
+    sessions: [
+      '11:30 AM - Circuit Jammer Serverless Speed Challenge',
+      '02:30 PM - Cloud Trivia Showdown & Goodie Drops',
+      '03:30 PM - Lightning Demos by Student Builders',
+    ],
+    badgeColor: 'bg-indigo-600 text-white',
   },
 ];
 
 export const CloudCityMap: React.FC = () => {
-  const [selectedDistrict, setSelectedDistrict] = useState<string>('speakers-district');
+  const [selectedDistrict, setSelectedDistrict] = useState<DistrictData>(districts[0]);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(true);
 
-  const activeZone = cityDistricts.find((d) => d.id === selectedDistrict) || cityDistricts[1];
-  const ActiveIcon = activeZone.icon;
-
-  const handleSelectDistrict = (id: string) => {
+  const handleSelectDistrict = (district: DistrictData) => {
     playSound('click');
-    setSelectedDistrict(id);
+    setSelectedDistrict(district);
+    setIsDrawerOpen(true);
   };
 
   return (
-    <section id="cloud-city-map" className="py-20 px-4 sm:px-6 lg:px-8 bg-white border-b-2 border-slate-900">
-      <div className="max-w-7xl mx-auto">
+    <section 
+      id="city-interactive-map"
+      className="relative py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[#F8F5FF] via-[#EFE6FD] to-[#F5EFFE] overflow-hidden border-b-2 border-purple-900/10"
+    >
+      {/* Background ambient lighting */}
+      <div className="absolute top-0 right-1/4 w-96 h-96 rounded-full bg-purple-300/20 blur-3xl pointer-events-none" />
+      <div className="absolute bottom-10 left-10 w-80 h-80 rounded-full bg-indigo-300/20 blur-3xl pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto relative z-10">
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-          <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border-2 border-slate-900 bg-amber-400 text-slate-950 text-xs font-mono font-black uppercase mb-3 shadow-[2px_2px_0px_#0F172A]">
-              <Layers className="w-3.5 h-3.5" />
-              <span>Architectural Floorplan</span>
+        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+          <ScrollReveal delay={0.1}>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-100 border border-purple-300 text-purple-900 text-xs sm:text-sm font-mono font-bold uppercase tracking-wider mb-3 shadow-sm">
+              <Compass className="w-4 h-4 text-purple-700" />
+              <span>ISOMETRIC DISTRICT EXPLORER</span>
             </div>
-            <h2 className="text-3xl sm:text-5xl font-black text-slate-950 tracking-tight">
-              Cloud City District Map
-            </h2>
-            <p className="text-sm sm:text-base text-slate-600 mt-2 max-w-2xl font-medium">
-              Dakkhan Banquet Hall is partitioned into 6 distinct urban tech districts. Tap any district on the floorplan to explore what is included.
-            </p>
-          </div>
+          </ScrollReveal>
 
-          <div className="p-3 rounded-2xl border-2 border-slate-900 bg-slate-50 shadow-[3px_3px_0px_#0F172A] self-start md:self-auto flex items-center gap-2 text-xs font-mono font-bold text-slate-700">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span>UNIFIED SINGLE-HALL VENUE • NO CLASHING TRACKS</span>
-          </div>
+          <ScrollReveal delay={0.2}>
+            <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black text-[#260B49] tracking-tight leading-tight mb-4">
+              Explore the Districts of{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-700 via-indigo-600 to-purple-900">
+                Cloud City
+              </span>
+            </h2>
+          </ScrollReveal>
+
+          <ScrollReveal delay={0.3}>
+            <p className="text-sm sm:text-base text-purple-950/75 max-w-2xl mx-auto font-medium">
+              Click on any hotspot pin across the pastel cityscape to inspect district facilities, schedule details, and exclusive attendee perks.
+            </p>
+          </ScrollReveal>
         </div>
 
-        {/* Floorplan Map Container: 2 Columns */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {/* Quick District Selector Pills (Mobile & Tablet Friendly) */}
+        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-6">
+          {districts.map((district) => {
+            const isSelected = selectedDistrict.id === district.id;
+            const Icon = district.icon;
+            return (
+              <button
+                key={district.id}
+                onClick={() => handleSelectDistrict(district)}
+                className={`px-3.5 py-2 rounded-2xl text-xs sm:text-sm font-mono font-bold flex items-center gap-2 transition-all cursor-pointer ${
+                  isSelected
+                    ? 'bg-purple-900 text-amber-300 shadow-md shadow-purple-950/20 scale-105 border-2 border-purple-700'
+                    : 'bg-white/80 hover:bg-white text-purple-900 border border-purple-200/80 shadow-sm'
+                }`}
+              >
+                <Icon className={`w-4 h-4 ${isSelected ? 'text-amber-300' : 'text-purple-600'}`} />
+                <span>{district.name}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Main Interactive Map & Sliding Drawer Canvas Container */}
+        <div className="relative rounded-3xl overflow-hidden border-2 border-purple-300/80 shadow-[0_20px_50px_rgba(76,29,149,0.15)] bg-[#E9DEFA] min-h-[580px] lg:h-[720px] flex flex-col lg:flex-row">
           
-          {/* Left Column: Stylized Architectural Floorplan Map Illustration (7 cols) */}
-          <div className="lg:col-span-7">
-            <div className="neo-card p-4 sm:p-6 bg-slate-900 border-3 border-slate-950 shadow-[6px_6px_0px_#0F172A] relative overflow-hidden">
-              
-              {/* Map Blueprint Controls & Title */}
-              <div className="flex items-center justify-between pb-3 mb-4 border-b border-slate-800 text-xs font-mono text-slate-300">
-                <div className="flex items-center gap-2">
-                  <Navigation className="w-4 h-4 text-amber-400" />
-                  <span className="font-bold text-amber-400">DAKKHAN HALL METROPOLIS BLUEPRINT</span>
-                </div>
-                <span className="text-[10px] bg-slate-800 px-2 py-0.5 rounded text-slate-400">
-                  TOP-DOWN ARCHITECTURAL VIEW
-                </span>
-              </div>
-
-              {/* The Actual Visual Map Floorplan Grid */}
-              <div className="relative bg-slate-950 rounded-2xl p-3 sm:p-5 border-2 border-slate-800 shadow-inner">
-                {/* Subtle blueprint grid overlay */}
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:24px_24px] opacity-40 pointer-events-none rounded-2xl" />
-
-                {/* Spatial Floorplan Layout */}
-                <div className="relative z-10 space-y-3.5">
-                  
-                  {/* TOP ROW: SPEAKER'S DISTRICT (Full Width North Stage) */}
-                  <div
-                    onClick={() => handleSelectDistrict('speakers-district')}
-                    className={`p-4 rounded-xl border-2 transition-all cursor-pointer relative overflow-hidden ${
-                      selectedDistrict === 'speakers-district'
-                        ? 'border-purple-400 bg-purple-950/70 shadow-[0_0_20px_rgba(168,85,247,0.35)] scale-[1.01]'
-                        : 'border-slate-700 bg-slate-900/80 hover:border-purple-500/60 hover:bg-slate-900'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-lg bg-purple-500/20 border border-purple-400/50 flex items-center justify-center text-purple-300 shrink-0">
-                          <Mic2 className="w-5 h-5" />
-                        </div>
-                        <div>
-                          <span className="text-[10px] font-mono font-bold text-purple-400 tracking-wider uppercase">
-                            ZONE 02 • NORTH WING
-                          </span>
-                          <h4 className="text-base font-black text-white">Speaker&apos;s District (Grand Keynote Stage)</h4>
-                          <span className="text-xs text-slate-400 font-mono">Sequential Keynotes • Architect Panels • 1,000 Seats</span>
-                        </div>
+          {/* 3. Smooth Left-Side Info Drawer / Card */}
+          <div className="relative z-30 lg:absolute lg:inset-y-0 lg:left-0 lg:w-[420px] p-4 sm:p-6 flex flex-col pointer-events-auto">
+            <AnimatePresence mode="wait">
+              {isDrawerOpen && selectedDistrict && (
+                <motion.div
+                  key={selectedDistrict.id}
+                  initial={{ opacity: 0, x: -40, scale: 0.96 }}
+                  animate={{ opacity: 1, x: 0, scale: 1 }}
+                  exit={{ opacity: 0, x: -30, scale: 0.96 }}
+                  transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                  className="bg-white/95 backdrop-blur-xl rounded-3xl p-6 sm:p-7 border-2 border-purple-200 shadow-[0_12px_40px_rgba(76,29,149,0.18)] flex-1 flex flex-col justify-between overflow-y-auto max-h-[85vh] lg:max-h-full"
+                >
+                  <div>
+                    {/* Drawer Header */}
+                    <div className="flex items-start justify-between gap-3 mb-4 pb-3 border-b border-purple-100">
+                      <div>
+                        <span className="text-[10px] font-mono font-black uppercase tracking-wider px-2.5 py-1 rounded-full bg-purple-100 text-purple-800 border border-purple-200">
+                          {selectedDistrict.codename}
+                        </span>
+                        <h3 className="text-2xl font-black text-[#260B49] mt-2">
+                          {selectedDistrict.name}
+                        </h3>
+                        <p className="text-xs text-purple-700 font-semibold mt-0.5">
+                          {selectedDistrict.tagline}
+                        </p>
                       </div>
-                      <span className={`px-2.5 py-1 rounded-md text-[10px] font-mono font-bold uppercase shrink-0 hidden sm:inline-block ${
-                        selectedDistrict === 'speakers-district' ? 'bg-purple-400 text-slate-950' : 'bg-slate-800 text-slate-400'
-                      }`}>
-                        {selectedDistrict === 'speakers-district' ? 'ACTIVE' : 'INSPECT'}
-                      </span>
-                    </div>
 
-                    {/* Stage Visual Indicator */}
-                    <div className="mt-3 pt-2.5 border-t border-purple-500/20 flex items-center justify-center gap-1.5 text-[10px] font-mono text-purple-300">
-                      <span className="w-2 h-2 rounded-full bg-purple-400 animate-ping" />
-                      <span>[ HIGH-DEF LED MAIN SCREEN &amp; AUDIO PODIUM ]</span>
-                    </div>
-                  </div>
-
-                  {/* CENTRAL MAIN WALKWAY & MIDDLE CORRIDOR */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                    
-                    {/* LEFT MIDDLE: ARCADE ALLEY */}
-                    <div
-                      onClick={() => handleSelectDistrict('arcade-alley')}
-                      className={`p-4 rounded-xl border-2 transition-all cursor-pointer relative ${
-                        selectedDistrict === 'arcade-alley'
-                          ? 'border-cyan-400 bg-cyan-950/70 shadow-[0_0_20px_rgba(6,182,212,0.35)] scale-[1.01]'
-                          : 'border-slate-700 bg-slate-900/80 hover:border-cyan-500/60 hover:bg-slate-900'
-                      }`}
-                    >
-                      <div className="flex items-start gap-3">
-                        <div className="w-9 h-9 rounded-lg bg-cyan-500/20 border border-cyan-400/50 flex items-center justify-center text-cyan-300 shrink-0">
-                          <Gamepad2 className="w-4 h-4" />
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        <div className="w-10 h-10 rounded-2xl bg-purple-100 border border-purple-200 text-purple-700 flex items-center justify-center shadow-sm">
+                          <selectedDistrict.icon className="w-5 h-5" />
                         </div>
-                        <div>
-                          <span className="text-[10px] font-mono font-bold text-cyan-400 uppercase">
-                            ZONE 05 • WEST BAY
-                          </span>
-                          <h4 className="text-sm font-black text-white">Arcade Alley</h4>
-                          <p className="text-xs text-slate-400 mt-0.5">DIY Carnival Stalls &amp; Architecture Challenge Pods</p>
+                        <button
+                          onClick={() => setIsDrawerOpen(false)}
+                          className="p-1 rounded-xl text-purple-500 hover:text-purple-900 hover:bg-purple-100 cursor-pointer lg:hidden"
+                          aria-label="Close drawer"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Venue & Timing Metadata */}
+                    <div className="space-y-2 mb-4 text-xs font-mono">
+                      <div className="flex items-start gap-2 text-purple-900 bg-purple-50/80 p-2.5 rounded-xl border border-purple-100">
+                        <MapPin className="w-4 h-4 text-purple-600 shrink-0 mt-0.5" />
+                        <span>{selectedDistrict.venueDetail}</span>
+                      </div>
+                      
+                      <div className="grid grid-cols-2 gap-2">
+                        <div className="flex items-center gap-1.5 text-purple-800 bg-purple-50/80 p-2 rounded-xl border border-purple-100">
+                          <Clock className="w-3.5 h-3.5 text-purple-600 shrink-0" />
+                          <span className="truncate">{selectedDistrict.timing}</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 text-purple-800 bg-purple-50/80 p-2 rounded-xl border border-purple-100">
+                          <Users className="w-3.5 h-3.5 text-purple-600 shrink-0" />
+                          <span className="truncate">{selectedDistrict.capacity}</span>
                         </div>
                       </div>
                     </div>
 
-                    {/* RIGHT MIDDLE: COMPUTE CAFÉ & COFFEE KIOSK */}
-                    <div className="space-y-2">
-                      <div
-                        onClick={() => handleSelectDistrict('compute-cafe')}
-                        className={`p-3 rounded-xl border-2 transition-all cursor-pointer ${
-                          selectedDistrict === 'compute-cafe'
-                            ? 'border-rose-400 bg-rose-950/70 shadow-[0_0_20px_rgba(244,63,94,0.35)] scale-[1.01]'
-                            : 'border-slate-700 bg-slate-900/80 hover:border-rose-500/60'
-                        }`}
-                      >
-                        <div className="flex items-center gap-2.5">
-                          <Coffee className="w-4 h-4 text-rose-400 shrink-0" />
-                          <div className="truncate">
-                            <span className="text-[9px] font-mono text-rose-400 block">ZONE 03 • EAST WING</span>
-                            <span className="text-xs font-bold text-white">Compute Café (Buffet Lunch)</span>
+                    {/* District Narrative Description */}
+                    <p className="text-xs sm:text-sm text-purple-950/80 leading-relaxed font-normal mb-5">
+                      {selectedDistrict.description}
+                    </p>
+
+                    {/* Attendee Perks */}
+                    <div className="mb-5">
+                      <h4 className="text-xs font-mono font-black text-purple-900 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                        <Gift className="w-3.5 h-3.5 text-amber-500" />
+                        District Perks & Highlights
+                      </h4>
+                      <ul className="space-y-1.5">
+                        {selectedDistrict.perks.map((perk, i) => (
+                          <li key={i} className="flex items-start gap-2 text-xs text-purple-900/90 font-medium">
+                            <span className="w-1.5 h-1.5 rounded-full bg-purple-600 mt-1.5 shrink-0" />
+                            <span>{perk}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* Key Sessions */}
+                    <div>
+                      <h4 className="text-xs font-mono font-black text-purple-900 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                        <Sparkles className="w-3.5 h-3.5 text-purple-600" />
+                        Key Activities
+                      </h4>
+                      <div className="space-y-1.5">
+                        {selectedDistrict.sessions.map((sess, i) => (
+                          <div key={i} className="text-[11px] font-mono text-purple-900 bg-purple-100/50 p-2 rounded-lg border border-purple-200/60">
+                            {sess}
                           </div>
-                        </div>
-                      </div>
-
-                      <div
-                        onClick={() => handleSelectDistrict('coffee-kiosk')}
-                        className={`p-3 rounded-xl border-2 transition-all cursor-pointer ${
-                          selectedDistrict === 'coffee-kiosk'
-                            ? 'border-amber-400 bg-amber-950/70 shadow-[0_0_20px_rgba(251,191,36,0.35)] scale-[1.01]'
-                            : 'border-slate-700 bg-slate-900/80 hover:border-amber-500/60'
-                        }`}
-                      >
-                        <div className="flex items-center gap-2.5">
-                          <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
-                          <div className="truncate">
-                            <span className="text-[9px] font-mono text-amber-400 block">ZONE 04 • REFUEL NODE</span>
-                            <span className="text-xs font-bold text-white">Coffee Kiosk (Espresso Bar)</span>
-                          </div>
-                        </div>
+                        ))}
                       </div>
                     </div>
-
                   </div>
 
-                  {/* BOTTOM ROW: COMMUNITY PARK & WELCOME GATE */}
-                  <div className="grid grid-cols-1 sm:grid-cols-12 gap-3.5">
-                    
-                    {/* SOUTH-WEST: COMMUNITY PARK */}
-                    <div
-                      onClick={() => handleSelectDistrict('community-park')}
-                      className={`sm:col-span-6 p-4 rounded-xl border-2 transition-all cursor-pointer ${
-                        selectedDistrict === 'community-park'
-                          ? 'border-emerald-400 bg-emerald-950/70 shadow-[0_0_20px_rgba(16,185,129,0.35)] scale-[1.01]'
-                          : 'border-slate-700 bg-slate-900/80 hover:border-emerald-500/60'
-                      }`}
+                  {/* Drawer Footer CTA */}
+                  <div className="pt-5 mt-4 border-t border-purple-100 flex items-center justify-between gap-3">
+                    <span className="text-[11px] font-mono text-purple-600 font-bold">
+                      AWS SCD 2027 Pune
+                    </span>
+                    <a
+                      href="#ticket-dispenser"
+                      onClick={() => playSound('click')}
+                      className="px-4 py-2 rounded-xl bg-purple-900 hover:bg-purple-800 text-amber-300 font-black text-xs flex items-center gap-1.5 shadow-md shadow-purple-950/20 transition-transform hover:scale-105"
                     >
-                      <div className="flex items-start gap-3">
-                        <div className="w-9 h-9 rounded-lg bg-emerald-500/20 border border-emerald-400/50 flex items-center justify-center text-emerald-300 shrink-0">
-                          <Trees className="w-4 h-4" />
-                        </div>
-                        <div>
-                          <span className="text-[10px] font-mono font-bold text-emerald-400 uppercase">
-                            ZONE 06 • SOUTH-WEST
-                          </span>
-                          <h4 className="text-sm font-black text-white">Community Park</h4>
-                          <p className="text-xs text-slate-400 mt-0.5">Green Lawn Lounge &amp; Peer 1-on-1s</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* SOUTH ENTRY: THE WELCOME GATE */}
-                    <div
-                      onClick={() => handleSelectDistrict('welcome-gate')}
-                      className={`sm:col-span-6 p-4 rounded-xl border-2 transition-all cursor-pointer ${
-                        selectedDistrict === 'welcome-gate'
-                          ? 'border-amber-400 bg-amber-950/70 shadow-[0_0_20px_rgba(251,191,36,0.35)] scale-[1.01]'
-                          : 'border-slate-700 bg-slate-900/80 hover:border-amber-500/60'
-                      }`}
-                    >
-                      <div className="flex items-start gap-3">
-                        <div className="w-9 h-9 rounded-lg bg-amber-500/20 border border-amber-400/50 flex items-center justify-center text-amber-300 shrink-0">
-                          <DoorOpen className="w-4 h-4" />
-                        </div>
-                        <div>
-                          <span className="text-[10px] font-mono font-bold text-amber-400 uppercase">
-                            ZONE 01 • MAIN ENTRY
-                          </span>
-                          <h4 className="text-sm font-black text-white">The Welcome Gate</h4>
-                          <p className="text-xs text-slate-400 mt-0.5">Check-in, PRN Scan &amp; Badge Pickup</p>
-                        </div>
-                      </div>
-                    </div>
-
+                      <span>Join District</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </a>
                   </div>
-
-                </div>
-
-                {/* Bottom Map Footnote */}
-                <div className="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-[11px] font-mono text-slate-400">
-                  <span>📍 Dakkhan Banquet Hall Floorplan</span>
-                  <span className="text-amber-400">Interactive Map Preview</span>
-                </div>
-              </div>
-
-            </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
-          {/* Right Column: Detailed District Inspector Card (5 cols) */}
-          <div className="lg:col-span-5">
-            <div className="neo-card p-6 sm:p-7 bg-white border-3 border-slate-950 shadow-[6px_6px_0px_#0F172A]">
-              
-              <div className="flex items-center justify-between mb-4">
-                <span className={`text-[10px] font-mono font-black px-2.5 py-1 rounded border border-slate-900 uppercase ${activeZone.tagColor}`}>
-                  {activeZone.codename}
-                </span>
-                <span className="text-xs font-mono font-bold text-emerald-700 flex items-center gap-1">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                  <span>Full Access Included</span>
-                </span>
-              </div>
+          {/* Interactive Illustrated Isometric Map Canvas (Matching User's Uploaded Map!) */}
+          <div className="relative flex-1 w-full h-[450px] lg:h-full overflow-hidden select-none">
+            
+            {/* The Pastel Isometric City Background Image */}
+            <div 
+              className="absolute inset-0 w-full h-full bg-cover bg-center transition-all duration-700"
+              style={{
+                backgroundImage: `url('/posters/city-map-districts.jpg')`,
+              }}
+            />
 
-              {/* Title & Icon */}
-              <div className="flex items-center gap-3.5 mb-4">
-                <div className="w-12 h-12 rounded-2xl bg-amber-400 border-2 border-slate-900 flex items-center justify-center text-slate-950 shadow-[2px_2px_0px_#0F172A] shrink-0">
-                  <ActiveIcon className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="text-xl sm:text-2xl font-black text-slate-950">
-                    {activeZone.name}
-                  </h3>
-                  <span className="text-xs font-mono text-slate-500 font-bold">
-                    Capacity: {activeZone.capacity}
-                  </span>
-                </div>
-              </div>
+            {/* Soft Ambient Pastel Purple Tint & Vignette */}
+            <div className="absolute inset-0 bg-gradient-to-t from-purple-950/20 via-transparent to-purple-900/10 pointer-events-none" />
+            <div className="absolute inset-0 shadow-[inset_0_0_80px_rgba(76,29,149,0.2)] pointer-events-none" />
 
-              {/* Full Description */}
-              <p className="text-sm text-slate-700 leading-relaxed font-medium mb-6">
-                {activeZone.fullDesc}
-              </p>
+            {/* Overlay Clickable Hotspot Pins across the 4 Districts */}
+            {districts.map((district) => {
+              const isSelected = selectedDistrict.id === district.id;
+              const Icon = district.icon;
 
-              {/* District Highlights Breakdown */}
-              <div className="space-y-3 mb-6">
-                <h4 className="text-xs font-mono font-bold text-slate-500 uppercase tracking-wider">
-                  What is Located in this District
-                </h4>
-                {activeZone.highlights.map((h, idx) => (
-                  <div
-                    key={idx}
-                    className="p-3 rounded-xl bg-slate-50 border-2 border-slate-900 flex items-center gap-2.5 text-xs font-bold text-slate-800"
+              return (
+                <div
+                  key={district.id}
+                  style={{
+                    left: `${district.x}%`,
+                    top: `${district.y}%`,
+                  }}
+                  className="absolute -translate-x-1/2 -translate-y-1/2 z-20 group"
+                >
+                  {/* Subtle Pulsing Beacon Ring */}
+                  <div className="absolute -inset-3 rounded-full bg-purple-400/40 animate-ping pointer-events-none opacity-60" />
+
+                  {/* Clickable Pin Button */}
+                  <motion.button
+                    onClick={() => handleSelectDistrict(district)}
+                    whileHover={{ scale: 1.15 }}
+                    whileTap={{ scale: 0.95 }}
+                    className={`relative flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-2xl cursor-pointer transition-all duration-300 ${
+                      isSelected
+                        ? 'bg-purple-950 text-amber-300 border-2 border-amber-300 shadow-[0_0_25px_rgba(251,191,36,0.7)] scale-110 z-30'
+                        : 'bg-white/90 hover:bg-white text-purple-950 border-2 border-purple-400 shadow-[0_4px_16px_rgba(76,29,149,0.25)] hover:border-purple-600'
+                    }`}
                   >
-                    <span className="w-2 h-2 rounded-full bg-amber-500 shrink-0" />
-                    <span>{h}</span>
-                  </div>
-                ))}
-              </div>
+                    {/* Pin Icon with Glow */}
+                    <div className={`w-6 h-6 rounded-xl flex items-center justify-center shrink-0 ${
+                      isSelected ? 'bg-amber-400 text-purple-950 font-black' : 'bg-purple-100 text-purple-800'
+                    }`}>
+                      <Icon className="w-3.5 h-3.5" />
+                    </div>
 
-              {/* Universal Pass Notice */}
-              <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-300 flex items-center gap-2 text-xs font-mono font-bold text-amber-950">
-                <Info className="w-4 h-4 text-amber-700 shrink-0" />
-                <span>Every pass tier grants unlimited free access to all 6 districts.</span>
-              </div>
+                    <span className="text-xs sm:text-sm font-black tracking-tight whitespace-nowrap">
+                      {district.name}
+                    </span>
 
+                    {/* Active Indicator Beacon */}
+                    {isSelected && (
+                      <span className="w-2 h-2 rounded-full bg-amber-300 animate-pulse" />
+                    )}
+                  </motion.button>
+                </div>
+              );
+            })}
+
+            {/* Instruction Badge at bottom right of the map */}
+            <div className="absolute bottom-4 right-4 z-20 pointer-events-none hidden sm:block">
+              <div className="px-3.5 py-1.5 rounded-xl bg-purple-950/80 backdrop-blur-md border border-purple-400/30 text-purple-200 text-xs font-mono flex items-center gap-2 shadow-lg">
+                <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-spin" style={{ animationDuration: '8s' }} />
+                <span>Click any pin to inspect district</span>
+              </div>
             </div>
+
           </div>
 
         </div>

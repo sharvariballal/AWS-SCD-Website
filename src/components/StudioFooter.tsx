@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mail, ArrowUp, FileText } from 'lucide-react';
+import { Mail, ArrowUp, Sparkles, Send } from 'lucide-react';
 import { LinkedInIcon, InstagramIcon, TwitterXIcon, DiscordIcon, GitHubIcon } from './BrandIcons';
 import { playSound } from '../utils/audio';
 
@@ -14,33 +14,81 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({ onOpenCodeOfConduct 
   };
 
   return (
-    <footer className="bg-slate-950 text-white border-t-4 border-slate-900 pt-16 pb-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
+    <footer className="relative bg-gradient-to-b from-[#1C0733] via-[#160429] to-[#0E021B] text-white pt-20 pb-12 px-4 sm:px-6 lg:px-8 border-t-2 border-purple-800/40 overflow-hidden">
+      
+      {/* Ambient background glows */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-64 bg-purple-600/10 blur-[100px] pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto relative z-10">
         
-        {/* Main Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-slate-800">
+        {/* Pre-Footer Hero Banner (Directly Matching Poster #3!) */}
+        <div className="relative rounded-3xl bg-gradient-to-r from-purple-900/60 via-purple-950/80 to-indigo-950/70 border-2 border-purple-400/30 p-8 sm:p-14 mb-16 text-center overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
           
-          {/* Brand Col (2 cols) */}
-          <div className="lg:col-span-2 space-y-4">
-            <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-xl bg-amber-400 border-2 border-white text-slate-950 flex items-center justify-center font-black text-sm shadow-[2px_2px_0px_#FFFFFF]">
-                AWS
-              </div>
-              <div className="leading-tight">
-                <span className="text-base font-black text-white block uppercase tracking-tight">
-                  AWS Student Community Day 2027
-                </span>
-                <span className="text-xs font-mono text-amber-400 font-bold">
-                  PICT Pune Chapter
-                </span>
-              </div>
+          <div className="relative z-10 max-w-3xl mx-auto space-y-4">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-500/20 border border-purple-300/30 text-amber-300 text-xs font-mono font-bold uppercase tracking-wider">
+              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+              <span>THE EXPEDITION CONTINUES</span>
             </div>
 
-            <p className="text-xs sm:text-sm text-slate-400 max-w-sm font-medium leading-relaxed">
-              Organized with passion by AWS Student Builder Group at Pune Institute of Computer Technology. Empowering collegiate builders with real cloud engineering competencies.
+            <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight">
+              YOUR NEXT CHAPTER <br className="hidden sm:inline" />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-200 via-amber-200 to-purple-300">
+                STARTS HERE
+              </span>
+            </h2>
+
+            <p className="text-sm sm:text-lg text-purple-200/90 font-medium max-w-xl mx-auto">
+              Bring your curiosity. We'll meet you in Cloud City.
             </p>
 
-            <div className="flex items-center gap-2.5 pt-2">
+            <div className="pt-3 flex flex-wrap items-center justify-center gap-4">
+              <a
+                href="#ticket-dispenser"
+                onClick={() => playSound('click')}
+                className="px-7 py-3.5 rounded-2xl bg-gradient-to-r from-amber-400 via-amber-500 to-amber-400 hover:from-amber-300 hover:to-amber-400 text-purple-950 font-black text-sm sm:text-base flex items-center gap-2 shadow-lg shadow-amber-400/30 transition-transform hover:scale-105"
+              >
+                <span>Get Event Passes & Updates</span>
+                <Send className="w-4 h-4" />
+              </a>
+            </div>
+
+            <p className="text-xs font-mono text-purple-300/70 tracking-widest uppercase pt-2">
+              REGISTRATION DETAILS & EARLY BIRD LIVE NOW • 07 FEB
+            </p>
+          </div>
+
+          {/* Background image preview from poster */}
+          <div 
+            className="absolute inset-0 bg-cover bg-center opacity-15 pointer-events-none"
+            style={{
+              backgroundImage: `url('/posters/poster-footer.jpg')`,
+            }}
+          />
+        </div>
+
+        {/* 3-Column Footer Grid matching Poster #3 footer bar */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-purple-900/60">
+          
+          {/* Column 1: CLOUD CITY brand */}
+          <div className="md:col-span-5 space-y-4">
+            <div>
+              <h3 className="text-2xl font-black text-white tracking-tight">
+                CLOUD CITY
+              </h3>
+              <p className="text-sm font-bold text-amber-300 mt-0.5">
+                AWS Student Community Day Pune
+              </p>
+              <p className="text-xs font-mono text-purple-300 mt-1 uppercase tracking-wider">
+                Build. Connect. Explore.
+              </p>
+            </div>
+
+            <p className="text-xs sm:text-sm text-purple-200/70 max-w-sm leading-relaxed font-normal">
+              A flagship collegiate technology summit brought to life by the AWS Student Builder Group at Pune Institute of Computer Technology.
+            </p>
+
+            {/* Social Icons */}
+            <div className="flex items-center gap-2 pt-2">
               {[
                 { icon: LinkedInIcon, href: 'https://linkedin.com', label: 'LinkedIn' },
                 { icon: InstagramIcon, href: 'https://instagram.com', label: 'Instagram' },
@@ -56,93 +104,96 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({ onOpenCodeOfConduct 
                     target="_blank"
                     rel="noreferrer"
                     aria-label={item.label}
-                    className="w-9 h-9 rounded-xl bg-slate-900 border border-slate-700 hover:border-amber-400 hover:text-amber-400 text-slate-300 flex items-center justify-center transition-colors"
+                    className="w-9 h-9 rounded-xl bg-purple-950/80 border border-purple-700/50 hover:border-amber-400 hover:text-amber-300 text-purple-300 flex items-center justify-center transition-colors"
                   >
-                    <Icon className="w-4 h-4" />
+                    <Icon className="w-4 h-4 fill-current" />
                   </a>
                 );
               })}
             </div>
           </div>
 
-          {/* Quick Nav Col */}
-          <div>
-            <h4 className="text-xs font-mono font-black text-amber-400 uppercase tracking-widest mb-4">
-              Summit Map
+          {/* Column 2: QUICK LINKS */}
+          <div className="md:col-span-3 space-y-3">
+            <h4 className="text-xs font-mono font-black text-purple-300 uppercase tracking-widest">
+              QUICK LINKS
             </h4>
-            <ul className="space-y-2.5 text-xs sm:text-sm font-semibold text-slate-400">
-              <li><a href="#hero-studio" className="hover:text-white transition-colors">Lab Station</a></li>
-              <li><a href="#circuit-jammer" className="hover:text-white transition-colors">Circuit Jammer</a></li>
-              <li><a href="#agenda-matrix" className="hover:text-white transition-colors">Schedule Matrix</a></li>
-              <li><a href="#speakers-studio" className="hover:text-white transition-colors">Featured Speakers</a></li>
-              <li><a href="#loot-box" className="hover:text-white transition-colors">Attendee Loot</a></li>
-              <li><a href="#ticket-dispenser" className="hover:text-white transition-colors">Pass Dispensary</a></li>
+            <ul className="space-y-2 text-sm text-purple-200/80 font-medium">
+              <li>
+                <a href="#hero-gate-journey" className="hover:text-amber-300 transition-colors">
+                  About Cloud City
+                </a>
+              </li>
+              <li>
+                <a href="#city-interactive-map" className="hover:text-amber-300 transition-colors">
+                  Districts & Venue
+                </a>
+              </li>
+              <li>
+                <a href="#speakers-studio" className="hover:text-amber-300 transition-colors">
+                  Speakers & CFP
+                </a>
+              </li>
+              <li>
+                <a href="#flashback-gallery" className="hover:text-amber-300 transition-colors">
+                  Flashback Gallery
+                </a>
+              </li>
+              <li>
+                <a href="#ticket-dispenser" className="hover:text-amber-300 transition-colors">
+                  Passes & Tickets
+                </a>
+              </li>
+              <li>
+                <button
+                  onClick={onOpenCodeOfConduct}
+                  className="hover:text-amber-300 transition-colors cursor-pointer text-left"
+                >
+                  Code of Conduct
+                </button>
+              </li>
             </ul>
           </div>
 
-          {/* Event Telemetry Col */}
-          <div>
-            <h4 className="text-xs font-mono font-black text-amber-400 uppercase tracking-widest mb-4">
-              Summit Telemetry
+          {/* Column 3: COMMUNITY & PICT */}
+          <div className="md:col-span-4 space-y-3">
+            <h4 className="text-xs font-mono font-black text-purple-300 uppercase tracking-widest">
+              COMMUNITY
             </h4>
-            <ul className="space-y-2.5 text-xs sm:text-sm text-slate-400 font-mono">
-              <li>📅 07 February 2027</li>
-              <li>📍 Dakkhan Banquet Hall, Pune</li>
-              <li>👥 1,000+ Builder Capacity</li>
-              <li>⚡ ap-south-1 Deployment</li>
-              <li>🍕 Lunch &amp; Chai Included</li>
-            </ul>
-          </div>
-
-          {/* Contact & Conduct Col */}
-          <div>
-            <h4 className="text-xs font-mono font-black text-amber-400 uppercase tracking-widest mb-4">
-              Direct Contact
-            </h4>
-            <div className="space-y-3 text-xs text-slate-400">
-              <a
-                href="mailto:team@awssbgpict.org"
-                className="hover:text-amber-400 transition-colors flex items-center gap-1.5 font-mono"
-              >
+            <div className="text-xs sm:text-sm text-purple-200/80 space-y-2 font-medium">
+              <p className="font-bold text-white">
+                AWS Student Builder Group • PICT
+              </p>
+              <p>Pune Institute of Computer Technology</p>
+              <p className="text-purple-300">
+                Survey No. 27, Near Trimurti Chowk, Dhankawadi, Pune, Maharashtra 411043
+              </p>
+              <div className="pt-1 flex items-center gap-2">
                 <Mail className="w-4 h-4 text-amber-400" />
-                <span>team@awssbgpict.org</span>
-              </a>
-
-              <button
-                type="button"
-                onClick={onOpenCodeOfConduct}
-                className="hover:text-amber-400 transition-colors flex items-center gap-1.5 font-mono cursor-pointer text-left"
-              >
-                <FileText className="w-4 h-4 text-purple-400" />
-                <span>Code of Conduct</span>
-              </button>
-
-              <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-[11px] font-mono text-slate-400 leading-relaxed">
-                Emergency desk active on summit day: <strong>+91 98220 XXXXX</strong>
+                <a
+                  href="mailto:awscloudclubpict@gmail.com"
+                  className="text-amber-300 hover:underline font-mono text-xs"
+                >
+                  awscloudclubpict@gmail.com
+                </a>
               </div>
             </div>
           </div>
 
         </div>
 
-        {/* Bottom Disclaimer */}
-        <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-mono">
-          <div className="max-w-3xl text-center md:text-left leading-relaxed">
-            <p className="mb-1 text-slate-400 font-bold">
-              © 2027 AWS Student Builder Group PICT. All rights reserved.
-            </p>
-            <p className="text-[11px] text-slate-600">
-              Disclaimer: AWS Student Builder Group PICT is an independent student club at Pune Institute of Computer Technology. Amazon Web Services, AWS, and the AWS logo are trademarks of Amazon.com, Inc. or its affiliates.
-            </p>
+        {/* Bottom Bar with Back to Top */}
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-purple-400">
+          <div>
+            © {new Date().getFullYear()} AWS Student Community Day Pune • All rights reserved.
           </div>
 
           <button
-            type="button"
             onClick={scrollToTop}
-            className="neo-btn bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-xl text-xs font-mono font-bold flex items-center gap-1.5 cursor-pointer border border-slate-700 shrink-0"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-purple-950/80 border border-purple-700/50 hover:border-amber-400 hover:text-amber-300 text-purple-200 transition-colors cursor-pointer"
           >
-            <span>Back to Top</span>
-            <ArrowUp className="w-3.5 h-3.5 text-amber-400" />
+            <span>Back to top</span>
+            <ArrowUp className="w-3.5 h-3.5" />
           </button>
         </div>
 

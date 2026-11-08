@@ -44,147 +44,147 @@ export const VenueBlueprint: React.FC = () => {
   ];
 
   return (
-    <section id="venue-blueprint" className="py-20 px-4 sm:px-6 lg:px-8 bg-white border-b-2 border-slate-900">
+    <section id="venue-blueprint" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[#FAF7FF] via-[#F5EFFE] to-[#FAF7FF] border-b-2 border-purple-900/10">
       <div className="max-w-7xl mx-auto">
         
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border-2 border-slate-900 bg-amber-400 text-slate-950 text-xs font-mono font-black uppercase mb-3 shadow-[2px_2px_0px_#0F172A]">
-            <MapPin className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-purple-300 bg-purple-100 text-purple-900 text-xs font-mono font-black uppercase mb-3 shadow-sm">
+            <MapPin className="w-3.5 h-3.5 text-purple-700" />
             <span>Summit Location &amp; Travel</span>
           </div>
 
-          <h2 className="text-3xl sm:text-5xl font-black text-slate-950 tracking-tight">
+          <h2 className="text-3xl sm:text-5xl font-black text-[#260B49] tracking-tight">
             Venue &amp; Accessibility
           </h2>
 
-          <p className="text-sm sm:text-base text-slate-600 mt-2 font-medium">
-            Join us in person on Sunday, 7th February 2027 in Southern Pune.
+          <p className="text-sm sm:text-base text-purple-950/75 mt-2 font-medium">
+            Conveniently situated on the southern bypass highway with rapid access from all major Pune transit nodes.
           </p>
         </div>
 
-        {/* Venue Master Card */}
-        <div className="neo-card p-6 sm:p-8 bg-slate-50 border-3 border-slate-950 shadow-[6px_6px_0px_#0F172A] mb-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        {/* 2-Column Venue Map & Travel Blueprint */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          {/* Left Column: Venue Details & Transit (7 cols) */}
+          <div className="lg:col-span-7 space-y-6">
             
-            <div className="lg:col-span-7 space-y-4">
-              <span className="text-[10px] font-mono font-black px-2.5 py-1 rounded bg-amber-400 text-slate-950 uppercase border border-slate-900">
-                OFFICIAL SUMMIT HALL
-              </span>
-
-              <h3 className="text-2xl sm:text-4xl font-black text-slate-950">
-                Dakkhan Banquet Hall
-              </h3>
-
-              <p className="text-sm sm:text-base font-semibold text-slate-700 flex items-center gap-2">
-                <MapPin className="w-5 h-5 text-amber-600 shrink-0" />
-                <span>Ambegoan | Katraj | Nahre, Pune, Maharashtra 411046</span>
-              </p>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono font-bold text-slate-700">
-                <div className="flex items-center gap-2 p-2.5 rounded-xl bg-white border-2 border-slate-900 shadow-[2px_2px_0px_#0F172A]">
-                  <Calendar className="w-4 h-4 text-purple-600" />
-                  <span>Sunday, 07 February 2027</span>
+            {/* Primary Venue Box */}
+            <div className="p-6 sm:p-8 rounded-3xl bg-white border-2 border-purple-200 shadow-[0_12px_35px_rgba(76,29,149,0.1)]">
+              <div className="flex items-start justify-between gap-4 mb-4">
+                <div>
+                  <span className="text-[10px] font-mono font-black px-2.5 py-1 rounded-full bg-purple-100 text-purple-800 border border-purple-200 uppercase">
+                    OFFICIAL DESTINATION
+                  </span>
+                  <h3 className="text-2xl sm:text-3xl font-black text-[#260B49] mt-2">
+                    Dakkhan Banquet Hall
+                  </h3>
+                  <p className="text-xs sm:text-sm text-purple-700 font-semibold">
+                    Ambegoan | Katraj | Nahre Corridor, Pune
+                  </p>
                 </div>
-                <div className="flex items-center gap-2 p-2.5 rounded-xl bg-white border-2 border-slate-900 shadow-[2px_2px_0px_#0F172A]">
-                  <Clock className="w-4 h-4 text-purple-600" />
-                  <span>08:30 AM – 06:00 PM IST</span>
-                </div>
-              </div>
 
-              {/* Hardware Specs Grid */}
-              <div className="grid grid-cols-2 gap-2.5 pt-2">
-                {specs.map((item, idx) => {
-                  const Icon = item.icon;
-                  return (
-                    <div key={idx} className="flex items-center gap-2 text-xs font-bold text-slate-800">
-                      <div className="w-6 h-6 rounded-lg bg-amber-200 border border-slate-900 flex items-center justify-center shrink-0">
-                        <Icon className="w-3.5 h-3.5 text-slate-900" />
-                      </div>
-                      <span className="truncate">{item.label}</span>
-                    </div>
-                  );
-                })}
-              </div>
-
-              <div className="pt-3">
                 <a
                   href="https://maps.google.com/?q=Dakkhan+Banquet+Hall+Katraj+Pune"
                   target="_blank"
                   rel="noreferrer"
                   onClick={() => playSound('click')}
-                  className="neo-btn bg-slate-950 text-white hover:bg-slate-800 px-6 py-3 rounded-2xl text-xs sm:text-sm font-black inline-flex items-center gap-2 cursor-pointer shadow-[3px_3px_0px_#FF9900]"
+                  className="px-4 py-2 rounded-xl bg-purple-950 hover:bg-purple-900 text-amber-300 font-mono text-xs font-bold flex items-center gap-1.5 shadow-md shadow-purple-950/20 cursor-pointer shrink-0 transition-transform hover:scale-105"
                 >
-                  <Navigation className="w-4 h-4 text-amber-400" />
-                  <span>Open Directions in Google Maps</span>
+                  <Navigation className="w-3.5 h-3.5" />
+                  <span>Open Maps</span>
                 </a>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono pt-4 border-t border-purple-100">
+                <div className="flex items-center gap-2 text-purple-900 bg-purple-50 p-2.5 rounded-xl border border-purple-100">
+                  <Calendar className="w-4 h-4 text-purple-600" />
+                  <span>Sunday, 07 February 2027</span>
+                </div>
+                <div className="flex items-center gap-2 text-purple-900 bg-purple-50 p-2.5 rounded-xl border border-purple-100">
+                  <Clock className="w-4 h-4 text-purple-600" />
+                  <span>08:30 AM – 06:00 PM IST</span>
+                </div>
+              </div>
+
+              {/* Specs Pills */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-4">
+                {specs.map((item, idx) => {
+                  const Icon = item.icon;
+                  return (
+                    <div
+                      key={idx}
+                      className="p-2.5 rounded-xl bg-purple-50/70 border border-purple-200 text-center flex flex-col items-center justify-center gap-1"
+                    >
+                      <Icon className="w-4 h-4 text-purple-700" />
+                      <span className="text-[10px] font-bold text-purple-900 leading-tight">
+                        {item.label}
+                      </span>
+                    </div>
+                  );
+                })}
               </div>
             </div>
 
-            {/* Interactive Google Maps Visual Box */}
-            <div className="lg:col-span-5 h-80 rounded-2xl bg-slate-900 border-2 border-slate-900 flex flex-col justify-between text-white shadow-[4px_4px_0px_#0F172A] relative overflow-hidden group">
-              {/* Top Banner Overlay */}
-              <div className="absolute top-0 inset-x-0 z-10 p-3 bg-slate-950/85 backdrop-blur-sm border-b border-slate-800 flex items-center justify-between font-mono text-[11px] text-amber-400 font-bold">
-                <span className="flex items-center gap-1.5">
-                  <MapPin className="w-3.5 h-3.5 text-amber-400" />
-                  <span>Dakkhan Banquet Hall, Pune</span>
-                </span>
-                <span className="text-emerald-400 flex items-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  GATE ACCESS ACTIVE
-                </span>
-              </div>
+            {/* Transit Options */}
+            <div className="space-y-3">
+              <h4 className="text-xs font-mono font-black text-purple-900 uppercase tracking-widest">
+                Transit &amp; Distance Benchmarks
+              </h4>
 
-              {/* Embedded Google Maps Visual */}
-              <div className="w-full h-full relative">
-                <iframe
-                  title="Dakkhan Banquet Hall Venue Location Map"
-                  src="https://maps.google.com/maps?q=Dakkhan+Banquet+Hall+Katraj+Ambegaon+Pune&t=&z=15&ie=UTF8&iwloc=&output=embed"
-                  className="w-full h-full border-0 grayscale-[20%] hover:grayscale-0 transition-all duration-300"
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  allowFullScreen
-                />
-              </div>
-
-              {/* Bottom Quick Directions Overlay */}
-              <div className="absolute bottom-2 inset-x-2 z-10 flex items-center justify-between gap-2 p-2.5 rounded-xl bg-slate-950/90 backdrop-blur-md border border-slate-700/80 text-[11px] font-mono text-slate-300">
-                <span className="truncate">18.4485° N, 73.8588° E • Next to NH-4</span>
-                <a
-                  href="https://maps.google.com/?q=Dakkhan+Banquet+Hall+Katraj+Pune"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="shrink-0 px-2 py-0.5 rounded bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-[10px] transition-colors"
-                >
-                  Get Route ↗
-                </a>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {transitOptions.map((opt, idx) => {
+                  const Icon = opt.icon;
+                  return (
+                    <div
+                      key={idx}
+                      className="p-4 rounded-2xl bg-white border-2 border-purple-100 shadow-sm flex flex-col justify-between"
+                    >
+                      <div>
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center">
+                            <Icon className="w-4 h-4" />
+                          </div>
+                          <span className="text-[10px] font-mono font-bold text-amber-600">
+                            {opt.time}
+                          </span>
+                        </div>
+                        <h5 className="text-sm font-bold text-purple-950 mb-1">{opt.title}</h5>
+                        <p className="text-[11px] text-purple-800/70 leading-relaxed font-normal">
+                          {opt.desc}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
 
           </div>
-        </div>
 
-        {/* 3 Transit Guides */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {transitOptions.map((opt, idx) => {
-            const Icon = opt.icon;
-            return (
-              <div key={idx} className="neo-card p-5 bg-white">
-                <div className="w-10 h-10 rounded-xl bg-purple-100 border-2 border-slate-900 flex items-center justify-center text-purple-700 mb-3 shadow-[2px_2px_0px_#0F172A]">
-                  <Icon className="w-5 h-5" />
-                </div>
-                <div className="flex items-center justify-between mb-1">
-                  <h4 className="text-sm font-black text-slate-950">{opt.title}</h4>
-                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-amber-100 border border-amber-300 text-amber-900">
-                    {opt.time}
-                  </span>
-                </div>
-                <p className="text-xs text-slate-600 leading-relaxed font-medium mt-1">
-                  {opt.desc}
-                </p>
+          {/* Right Column: Google Maps Embed (5 cols) */}
+          <div className="lg:col-span-5 h-full">
+            <div className="relative rounded-3xl overflow-hidden border-2 border-purple-200 shadow-[0_12px_35px_rgba(76,29,149,0.12)] bg-white h-[420px] lg:h-[480px]">
+              <iframe
+                title="Dakkhan Banquet Hall Location"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3784.5772378906936!2d73.8447883!3d18.4574928!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2953841a106f3%3A0xe54e3cbcc12e557!2sDakkhan%20Banquet%20Hall!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen={false}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="w-full h-full grayscale-[0.2] contrast-[1.05]"
+              />
+
+              <div className="absolute top-4 left-4 z-10 pointer-events-none">
+                <span className="px-3 py-1.5 rounded-xl bg-purple-950/85 backdrop-blur-md text-amber-300 text-xs font-mono font-black border border-purple-400/30 shadow-md">
+                  📍 Dakkhan Hall • Pune
+                </span>
               </div>
-            );
-          })}
+            </div>
+          </div>
+
         </div>
 
       </div>

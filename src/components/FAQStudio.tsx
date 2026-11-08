@@ -36,7 +36,7 @@ const faqs: FAQEntry[] = [
   },
   {
     q: 'When and how will certificates and swag be delivered?',
-    a: 'Physical swag kits (oversized cotton tee, holographic sticker pack, smart NFC badge) are handed to you in person at the morning check-in counter. Verifiable digital credentials with unique verification IDs are issued via AWS SBG PICT directly to your registered email.',
+    a: 'Physical swag kits (oversized cotton tee, holographic sticker pack, smart badge) are handed to you in person at the morning check-in counter. Verifiable digital credentials with unique verification IDs are issued via AWS SBG PICT directly to your registered email.',
     tag: 'CREDENTIALS',
   },
 ];
@@ -50,61 +50,57 @@ export const FAQStudio: React.FC = () => {
   };
 
   return (
-    <section id="faq-studio" className="py-20 px-4 sm:px-6 lg:px-8 bg-blueprint-grid border-b-2 border-slate-900">
+    <section id="faq-studio" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[#F5EFFE] via-[#EFE6FD] to-[#F8F5FF] border-b-2 border-purple-900/10">
       <div className="max-w-4xl mx-auto">
         
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border-2 border-slate-900 bg-amber-400 text-slate-950 text-xs font-mono font-black uppercase mb-3 shadow-[2px_2px_0px_#0F172A]">
-            <HelpCircle className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-purple-300 bg-purple-100 text-purple-900 text-xs font-mono font-black uppercase mb-3 shadow-sm">
+            <HelpCircle className="w-3.5 h-3.5 text-purple-700" />
             <span>Got Questions?</span>
           </div>
 
-          <h2 className="text-3xl sm:text-5xl font-black text-slate-950 tracking-tight">
+          <h2 className="text-3xl sm:text-5xl font-black text-[#260B49] tracking-tight">
             Frequently Asked Questions
           </h2>
 
-          <p className="text-sm sm:text-base text-slate-600 mt-2 font-medium">
-            Everything you need to know about passes, venue guidelines, and hands-on lab participation.
+          <p className="text-sm sm:text-base text-purple-950/75 mt-2 font-medium">
+            Everything you need to know about passes, venue logistics, hackathon tracks, and student eligibility.
           </p>
         </div>
 
-        {/* Accordion */}
+        {/* Accordion List */}
         <div className="space-y-4">
           {faqs.map((faq, idx) => {
             const isOpen = openIdx === idx;
             return (
               <div
                 key={idx}
-                className={`neo-card transition-all overflow-hidden ${
-                  isOpen ? 'bg-amber-50 border-3 border-slate-950 shadow-[4px_4px_0px_#0F172A]' : 'bg-white'
-                }`}
+                className="rounded-2xl border-2 border-purple-200 bg-white/90 backdrop-blur-sm overflow-hidden shadow-sm transition-all"
               >
                 <button
                   type="button"
                   onClick={() => toggle(idx)}
-                  className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 cursor-pointer focus:outline-none"
+                  className="w-full p-5 text-left flex items-center justify-between gap-4 cursor-pointer hover:bg-purple-50/50 transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="text-[10px] font-mono font-black px-2 py-0.5 rounded bg-slate-900 text-amber-400">
+                    <span className="text-[10px] font-mono font-black px-2 py-0.5 rounded bg-purple-100 text-purple-800 border border-purple-200 shrink-0">
                       {faq.tag}
                     </span>
-                    <span className="text-base sm:text-lg font-black text-slate-950">
+                    <span className="text-sm sm:text-base font-black text-[#260B49]">
                       {faq.q}
                     </span>
                   </div>
 
-                  <div
-                    className={`w-8 h-8 rounded-xl border-2 border-slate-900 bg-white flex items-center justify-center shrink-0 transition-transform ${
-                      isOpen ? 'rotate-180 bg-amber-400' : ''
+                  <ChevronDown
+                    className={`w-5 h-5 text-purple-600 shrink-0 transition-transform duration-200 ${
+                      isOpen ? 'rotate-180' : ''
                     }`}
-                  >
-                    <ChevronDown className="w-4 h-4 text-slate-950" />
-                  </div>
+                  />
                 </button>
 
                 {isOpen && (
-                  <div className="px-5 sm:px-6 pb-6 pt-1 text-xs sm:text-sm text-slate-700 font-medium leading-relaxed border-t border-slate-200">
+                  <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-purple-950/80 leading-relaxed font-normal border-t border-purple-100">
                     {faq.a}
                   </div>
                 )}

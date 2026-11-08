@@ -94,21 +94,21 @@ export const TicketDispenser: React.FC<TicketDispenserProps> = ({ onRegisterClic
   };
 
   return (
-    <section id="ticket-dispenser" className="py-20 px-4 sm:px-6 lg:px-8 bg-blueprint-grid border-b-2 border-slate-900">
+    <section id="ticket-dispenser" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[#F5EFFE] via-[#EFE6FD] to-[#F8F5FF] border-b-2 border-purple-900/10">
       <div className="max-w-7xl mx-auto">
         
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border-2 border-slate-900 bg-amber-400 text-slate-950 text-xs font-mono font-black uppercase mb-3 shadow-[2px_2px_0px_#0F172A]">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-purple-300 bg-purple-100 text-purple-900 text-xs font-mono font-black uppercase mb-3 shadow-[2px_2px_0px_#0F172A]">
             <Ticket className="w-3.5 h-3.5" />
             <span>Pass Dispensary</span>
           </div>
 
-          <h2 className="text-3xl sm:text-5xl font-black text-slate-950 tracking-tight">
+          <h2 className="text-3xl sm:text-5xl font-black text-[#260B49] tracking-tight">
             Claim Your Cloud City Pass
           </h2>
 
-          <p className="text-sm sm:text-base text-slate-600 mt-2 font-medium">
+          <p className="text-sm sm:text-base text-purple-950/75 mt-2 font-medium">
             Subsidized student admission for Sunday, 7th February 2027 at Dakkhan Banquet Hall, Pune. Valid college PRN required.
           </p>
         </div>
@@ -343,3 +343,4 @@ export const TicketDispenser: React.FC<TicketDispenserProps> = ({ onRegisterClic
     </section>
   );
 };
+
