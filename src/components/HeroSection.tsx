@@ -7,6 +7,7 @@ import {
   ExternalLink 
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { CloudCity360 } from './CloudCity360';
 
 interface HeroSectionProps {
   onRegisterClick?: () => void;
@@ -50,7 +51,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onRegisterClick }) => 
         particleCount: 100,
         spread: 80,
         origin: { y: 0.6 },
-        colors: ['#FF9900', '#FFC72C', '#6C5CE7', '#0D1B2A'],
+        colors: ['#8B5CF6', '#3B82F6', '#38BDF8', '#C084FC', '#FFFFFF'],
       });
     } catch {
       // ignore
@@ -64,56 +65,64 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onRegisterClick }) => 
   };
 
   return (
-    <section id="home" className="relative min-h-[90vh] pt-36 pb-20 flex flex-col justify-center overflow-hidden">
+    <section id="home" className="relative min-h-[90vh] pt-32 pb-20 flex flex-col justify-center overflow-hidden">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full text-center">
         
-        {/* AWS Emblem Top Badge matching Reference Image */}
-        <div className="flex flex-col items-center justify-center mb-5">
-          <div className="flex items-center gap-2 mb-2">
-            <svg className="h-8 w-auto text-white fill-current" viewBox="0 0 100 60">
-              <path d="M43.8 28.5c0 3.8-1.1 6.8-3.3 9-2.2 2.2-5.3 3.3-9.2 3.3-4.1 0-7.3-1.1-9.5-3.4-2.2-2.3-3.3-5.3-3.3-9.1 0-3.9 1.1-7 3.3-9.2 2.2-2.3 5.4-3.4 9.5-3.4 3.9 0 7 1.1 9.2 3.3 2.2 2.3 3.3 5.4 3.3 9.5zm-6.6 0c0-2.3-.5-4.1-1.6-5.4-1.1-1.3-2.6-1.9-4.7-1.9-2 0-3.6.6-4.7 1.9-1.1 1.3-1.6 3.1-1.6 5.4 0 2.2.5 4 1.6 5.3 1.1 1.3 2.7 2 4.7 2 2.1 0 3.6-.7 4.7-2 1.1-1.3 1.6-3.1 1.6-5.3zm29.8-12.4l-7.8 24.3h-6.2l-5.6-18.4-5.6 18.4h-6.2l-7.8-24.3h6.6l4.4 15.6 5.5-15.6h6.2l5.5 15.6 4.5-15.6h6.5zm19.4 6.8c-1.4-1.6-3.4-2.4-6-2.4-2.4 0-4.3.7-5.6 2-1.3 1.4-2 3.1-2 5.1 0 1.9.6 3.4 1.9 4.6 1.3 1.1 3.2 2.1 5.7 2.8 2.6.7 4.5 1.4 5.6 2.1 1.1.7 1.7 1.8 1.7 3.2 0 1.6-.7 2.8-2 3.8-1.3 1-3.2 1.4-5.6 1.4-2.2 0-4.2-.5-5.9-1.6-1.7-1-2.8-2.6-3.2-4.6l-5.9 1.3c.7 3.4 2.4 6 5.1 7.8 2.7 1.8 6.1 2.7 10.1 2.7 4.3 0 7.7-1 10.2-2.9 2.5-1.9 3.8-4.6 3.8-8 0-2.2-.7-4-2.1-5.4-1.4-1.4-3.5-2.5-6.3-3.3-2.5-.7-4.2-1.4-5.1-2-.9-.7-1.4-1.5-1.4-2.6 0-1.2.5-2.2 1.6-2.9 1.1-.8 2.6-1.1 4.5-1.1 1.8 0 3.3.4 4.5 1.1 1.2.8 2 2 2.4 3.6l5.7-1.4c-.7-2.7-2.1-4.9-4.2-6.5z" />
-              <path d="M12.4 47.2c16.5 7.9 36.9 8.2 55.4.7 2.8-1.1 5.9.9 5.3 3.9-.9 4.3-5 5.9-8.4 7.2-18.7 7.2-41.2 5.3-57.5-6.4-1.8-1.3-.2-3.8 2-3.8 1.1 0 2.2-.8 3.2-1.6z" fill="#FF9900" />
-              <path d="M72.2 46.5l3.8 6.9-7.8-.3 4-6.6z" fill="#FF9900" />
-            </svg>
+        {/* SBG Emblem Top Badge (AWS arrow logo removed as requested) */}
+        <div className="flex flex-col items-center justify-center mb-6">
+          <div className="flex items-center gap-2 mb-3">
+            <div className="relative group">
+              <div className="absolute -inset-1.5 bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-500 rounded-2xl blur-xs opacity-75 group-hover:opacity-100 transition duration-300" />
+              <img
+                src="/sbg-logo.png"
+                alt="Student Builder Group Logo"
+                className="relative w-12 h-12 object-contain rounded-xl p-1 bg-[#0F0828] border border-purple-400/50 shadow-lg"
+              />
+            </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="h-px w-10 sm:w-16 bg-gradient-to-r from-transparent to-amber-400/80" />
-            <span className="text-xs sm:text-sm font-bold tracking-[0.25em] text-amber-400 uppercase">
+            <span className="h-px w-10 sm:w-16 bg-gradient-to-r from-transparent to-purple-400/80" />
+            <span className="text-xs sm:text-sm font-bold tracking-[0.25em] text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-indigo-200 to-cyan-300 uppercase">
               STUDENT BUILDER GROUP PICT PRESENTS
             </span>
-            <span className="h-px w-10 sm:w-16 bg-gradient-to-l from-transparent to-amber-400/80" />
+            <span className="h-px w-10 sm:w-16 bg-gradient-to-l from-transparent to-purple-400/80" />
           </div>
         </div>
 
-        {/* Clean, Bold Main Headline matching reference */}
+        {/* Clean, Bold Main Headline in Purple & Blue Palette */}
         <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-white leading-[1.08] mb-3">
           <span className="block text-slate-100 drop-shadow-sm">
             COMMUNITY DAY
           </span>
-          <span className="inline-block bg-gradient-to-r from-[#FF9900] via-[#FFB703] to-[#FFC72C] bg-clip-text text-transparent tracking-tight mt-1">
+          <span className="inline-block bg-gradient-to-r from-purple-400 via-violet-300 to-cyan-400 bg-clip-text text-transparent tracking-tight mt-1">
             CLOUD CITY 2027
           </span>
         </h1>
 
-        <p className="text-sm sm:text-base font-semibold text-slate-300 tracking-wide max-w-2xl mx-auto mb-6">
-          Organized by AWS Student Builder Group • Pune Institute of Computer Technology
+        <p className="text-sm sm:text-base font-semibold text-purple-200/90 tracking-wide max-w-2xl mx-auto mb-6">
+          Organized by Student Builder Group • Pune Institute of Computer Technology
         </p>
 
-        {/* Date & Venue Pill matching reference */}
-        <div className="inline-flex flex-wrap items-center justify-center gap-2 sm:gap-3 px-5 py-2.5 rounded-full bg-slate-900/80 backdrop-blur-md border border-slate-700/80 text-xs sm:text-sm font-semibold text-slate-200 mb-10 shadow-lg">
-          <div className="flex items-center gap-1.5 text-amber-400">
-            <Calendar className="w-4 h-4" />
+        {/* Date & Venue Pill in Purple & Blue styling */}
+        <div className="inline-flex flex-wrap items-center justify-center gap-2 sm:gap-3 px-5 py-2.5 rounded-full bg-[#120B30]/90 backdrop-blur-md border border-purple-500/40 text-xs sm:text-sm font-semibold text-purple-100 mb-8 shadow-lg">
+          <div className="flex items-center gap-1.5 text-cyan-300">
+            <Calendar className="w-4 h-4 text-cyan-400" />
             <span>Jan 31, 2027</span>
           </div>
-          <span className="text-slate-600 hidden sm:inline">•</span>
-          <div className="flex items-center gap-1.5 text-slate-300">
-            <MapPin className="w-4 h-4 text-violet-400" />
+          <span className="text-purple-400/60 hidden sm:inline">•</span>
+          <div className="flex items-center gap-1.5 text-purple-200">
+            <MapPin className="w-4 h-4 text-purple-400" />
             <span>Dakkhan Banquet Hall | Ambegoan | Katraj | Nahre, Pune</span>
           </div>
         </div>
 
-        {/* Countdown Timer matching reference */}
+        {/* 360 Interactive Cloud City Viewer (Cursor controlled 360° rotation in Night Sky!) */}
+        <div className="my-8 max-w-5xl mx-auto">
+          <CloudCity360 height="520px" />
+        </div>
+
+        {/* Countdown Timer in Night Purple/Blue Palette */}
         <div className="max-w-md mx-auto mb-10">
           <div className="grid grid-cols-4 gap-2.5 sm:gap-3">
             {[
@@ -124,13 +133,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onRegisterClick }) => 
             ].map((item, idx) => (
               <div
                 key={idx}
-                className="bg-slate-900/90 backdrop-blur-md rounded-2xl py-3.5 px-2 text-white border border-slate-700/80 shadow-[0_8px_20px_rgba(0,0,0,0.5)] relative overflow-hidden"
+                className="bg-[#120A30]/85 backdrop-blur-md rounded-2xl py-3.5 px-2 text-white border border-purple-500/40 shadow-[0_8px_25px_rgba(139,92,246,0.25)] relative overflow-hidden group hover:border-purple-400/70 transition-colors"
               >
-                <div className="absolute top-0 inset-x-0 h-0.5 bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500" />
-                <span className="font-mono text-2xl sm:text-3xl font-extrabold text-amber-300 block">
+                <div className="absolute top-0 inset-x-0 h-0.5 bg-gradient-to-r from-purple-500 via-indigo-400 to-cyan-400" />
+                <span className="font-mono text-2xl sm:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-b from-white to-cyan-200 block">
                   {String(item.val).padStart(2, '0')}
                 </span>
-                <span className="block text-[10px] uppercase font-bold text-slate-400 tracking-wider mt-1">
+                <span className="block text-[10px] uppercase font-bold text-purple-300/80 tracking-wider mt-1">
                   {item.label}
                 </span>
               </div>
@@ -138,31 +147,31 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onRegisterClick }) => 
           </div>
         </div>
 
-        {/* Primary Call to Action */}
+        {/* Primary Call to Action in Glowing Purple/Blue */}
         <div className="flex justify-center mb-8">
           <button
             onClick={handleRegister}
-            className="group relative inline-flex items-center justify-center gap-3 px-10 py-4 rounded-full font-black text-base text-slate-950 bg-gradient-to-r from-[#FF9900] via-[#FFB703] to-[#FFC72C] shadow-[0_10px_35px_rgba(255,153,0,0.55)] hover:shadow-[0_15px_45px_rgba(255,153,0,0.75)] hover:scale-105 active:scale-95 transition-all duration-300 border border-amber-300/80 cursor-pointer overflow-hidden"
+            className="group relative inline-flex items-center justify-center gap-3 px-10 py-4 rounded-full font-black text-base text-white bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 shadow-[0_10px_35px_rgba(139,92,246,0.5)] hover:shadow-[0_15px_45px_rgba(139,92,246,0.7)] hover:scale-105 active:scale-95 transition-all duration-300 border border-purple-400/50 cursor-pointer overflow-hidden"
           >
-            <Sparkles className="w-5 h-5 text-slate-950" />
+            <Sparkles className="w-5 h-5 text-cyan-300 animate-pulse" />
             <span>Register Now</span>
-            <ArrowRight className="w-4 h-4 text-slate-950 group-hover:translate-x-1 transition-transform" />
-            <ExternalLink className="w-3.5 h-3.5 text-slate-950/70" />
+            <ArrowRight className="w-4 h-4 text-white group-hover:translate-x-1 transition-transform" />
+            <ExternalLink className="w-3.5 h-3.5 text-purple-200" />
           </button>
         </div>
 
-        {/* Simple Footer Tags matching reference (no speaker count, no clutter) */}
-        <div className="flex items-center justify-center gap-6 sm:gap-10 text-xs font-semibold text-slate-400">
+        {/* Simple Footer Tags */}
+        <div className="flex items-center justify-center gap-6 sm:gap-10 text-xs font-semibold text-purple-300/70">
           <span className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
             1-Day Flagship Summit
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-violet-400" />
+            <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
             Pune, Maharashtra
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
             Hands-on Learning
           </span>
         </div>

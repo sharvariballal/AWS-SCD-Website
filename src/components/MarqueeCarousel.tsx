@@ -20,7 +20,7 @@ const eventPhotos: PhotoItem[] = [
   {
     id: '3',
     url: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80',
-    caption: 'Hands-on AWS Workshop',
+    caption: 'Hands-on Cloud Workshop',
   },
   {
     id: '4',
@@ -49,35 +49,35 @@ export const MarqueeCarousel: React.FC = () => {
   const duplicatedPhotos = [...eventPhotos, ...eventPhotos];
 
   return (
-    <section className="py-16 bg-[#0D1B2A]/90 border-y border-slate-800 relative overflow-hidden select-none">
+    <section className="py-16 bg-[#09051C]/90 border-y border-purple-500/20 relative overflow-hidden select-none">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 text-center">
-        {/* Flashback Pill matching Image 4 */}
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-pink-500/10 border border-pink-500/30 text-pink-400 text-xs font-bold uppercase tracking-wider mb-3">
-          <span className="w-1.5 h-1.5 rounded-full bg-pink-400 animate-ping" />
+        {/* Flashback Pill */}
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/15 border border-purple-500/30 text-purple-300 text-xs font-bold uppercase tracking-wider mb-3">
+          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
           <span>Flashback</span>
         </div>
 
         <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-2">
           Moments in the Cloud
         </h2>
-        <p className="text-sm font-medium text-slate-400 max-w-xl mx-auto">
+        <p className="text-sm font-medium text-purple-200/70 max-w-xl mx-auto">
           Glimpse the energy, collaborative builds, and community spirit from our previous editions.
         </p>
       </div>
 
-      {/* Infinite Rolling Track with PURE PHOTOS ONLY */}
+      {/* Infinite Rolling Track with Photos */}
       <div className="relative w-full overflow-hidden">
         {/* Soft edge blur gradients */}
-        <div className="absolute left-0 top-0 bottom-0 w-28 bg-gradient-to-r from-[#0D1B2A] to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-28 bg-gradient-to-l from-[#0D1B2A] to-transparent z-10 pointer-events-none" />
+        <div className="absolute left-0 top-0 bottom-0 w-28 bg-gradient-to-r from-[#09051C] to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-28 bg-gradient-to-l from-[#09051C] to-transparent z-10 pointer-events-none" />
 
         <div className="animate-marquee flex gap-5 py-4">
           {duplicatedPhotos.map((photo, index) => (
             <div
               key={`${photo.id}-${index}`}
-              className="w-72 sm:w-80 h-52 shrink-0 group rounded-2xl overflow-hidden border border-slate-700/80 shadow-lg relative cursor-pointer transition-all duration-300 hover:scale-105 hover:border-amber-400 hover:shadow-[0_0_25px_rgba(255,153,0,0.35)]"
+              className="w-72 sm:w-80 h-52 shrink-0 group rounded-2xl overflow-hidden border border-purple-500/30 shadow-lg relative cursor-pointer transition-all duration-300 hover:scale-105 hover:border-purple-400 hover:shadow-[0_0_25px_rgba(139,92,246,0.4)]"
             >
-              {/* Pure High-Quality Image */}
+              {/* Image */}
               <img
                 src={photo.url}
                 alt={photo.caption}
@@ -85,9 +85,9 @@ export const MarqueeCarousel: React.FC = () => {
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               />
 
-              {/* Sleek bottom gradient overlay with subtle clean caption */}
-              <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent flex items-end p-3.5">
-                <span className="text-xs font-bold text-slate-100 group-hover:text-amber-300 transition-colors drop-shadow-sm truncate">
+              {/* Sleek bottom gradient overlay with caption */}
+              <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#060314]/95 via-[#060314]/50 to-transparent flex items-end p-3.5">
+                <span className="text-xs font-bold text-slate-100 group-hover:text-cyan-300 transition-colors drop-shadow-sm truncate">
                   {photo.caption}
                 </span>
               </div>
