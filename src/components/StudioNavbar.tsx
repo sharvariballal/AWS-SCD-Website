@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, X, Sparkles, Volume2, VolumeX, ArrowUpRight } from 'lucide-react';
-import { setSoundEnabled, playSound } from '../utils/audio';
+import { Menu, X, Sparkles, ArrowUpRight, Compass } from 'lucide-react';
 
 interface StudioNavbarProps {
   onRegisterClick: () => void;
@@ -9,17 +8,8 @@ interface StudioNavbarProps {
 
 export const StudioNavbar: React.FC<StudioNavbarProps> = ({ onRegisterClick, onReplayGate }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [soundOn, setSoundOn] = useState(false);
-
-  const toggleSound = () => {
-    const next = !soundOn;
-    setSoundOn(next);
-    setSoundEnabled(next);
-    if (next) playSound('click');
-  };
 
   const handleRegister = () => {
-    playSound('click');
     onRegisterClick();
   };
 
@@ -34,7 +24,7 @@ export const StudioNavbar: React.FC<StudioNavbarProps> = ({ onRegisterClick, onR
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-[#FAF7FF]/90 backdrop-blur-md border-b-2 border-purple-200/90 px-4 sm:px-6 py-3.5 transition-all">
+    <header className="sticky top-0 z-50 bg-[#FAF7FF]/95 backdrop-blur-md border-b-2 border-purple-200/90 px-4 sm:px-6 py-3.5 transition-all">
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
         
         {/* Brand & Region Indicator */}
@@ -42,7 +32,6 @@ export const StudioNavbar: React.FC<StudioNavbarProps> = ({ onRegisterClick, onR
           <a
             href="#hero-studio"
             onClick={() => {
-              playSound('click');
               if (onReplayGate) onReplayGate();
             }}
             title="Click to replay gate entrance"
@@ -58,12 +47,12 @@ export const StudioNavbar: React.FC<StudioNavbarProps> = ({ onRegisterClick, onR
                 <span className="text-sm font-black text-[#260B49] uppercase tracking-tight">
                   SCD 2027
                 </span>
-                <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-amber-400 text-purple-950 border border-purple-900/30 uppercase">
-                  PICT
+                <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-purple-100 text-purple-900 border border-purple-300">
+                  PUNE
                 </span>
               </div>
-              <span className="text-[11px] font-mono font-semibold text-purple-700">
-                Student Builder Group
+              <span className="text-[11px] font-mono text-purple-700 font-semibold block">
+                AWS Student Builder Group PICT
               </span>
             </div>
           </a>
@@ -81,7 +70,6 @@ export const StudioNavbar: React.FC<StudioNavbarProps> = ({ onRegisterClick, onR
             <a
               key={link.label}
               href={link.href}
-              onClick={() => playSound('click')}
               className="px-3.5 py-1 rounded-full text-xs font-bold text-purple-900 hover:text-purple-950 hover:bg-purple-100/70 transition-colors"
             >
               {link.label}
@@ -95,29 +83,15 @@ export const StudioNavbar: React.FC<StudioNavbarProps> = ({ onRegisterClick, onR
           {onReplayGate && (
             <button
               onClick={() => {
-                playSound('click');
                 onReplayGate();
               }}
               title="Replay Gate Opening"
-              className="hidden sm:flex px-2.5 py-1.5 rounded-xl border border-purple-300 text-xs font-mono font-bold text-purple-700 bg-white hover:bg-purple-50 items-center gap-1 cursor-pointer transition-colors shadow-sm"
+              className="hidden sm:flex px-2.5 py-1.5 rounded-xl border border-purple-300 text-xs font-mono font-bold text-purple-700 bg-white hover:bg-purple-50 items-center gap-1.5 cursor-pointer transition-colors shadow-sm"
             >
-              <span>🚪 Portal</span>
+              <Compass className="w-3.5 h-3.5 text-purple-600" />
+              <span>Portal Intro</span>
             </button>
           )}
-
-          {/* Sound Toggle */}
-          <button
-            onClick={toggleSound}
-            title={soundOn ? 'Mute builder sound effects' : 'Enable builder sound effects'}
-            className={`px-3 py-1.5 rounded-xl border border-purple-300 text-xs font-bold font-mono transition-all flex items-center gap-1.5 cursor-pointer ${
-              soundOn
-                ? 'bg-amber-400 text-purple-950 shadow-sm'
-                : 'bg-white text-purple-800 hover:bg-purple-50'
-            }`}
-          >
-            {soundOn ? <Volume2 className="w-3.5 h-3.5 text-purple-950" /> : <VolumeX className="w-3.5 h-3.5 text-purple-700" />}
-            <span className="hidden sm:inline">{soundOn ? 'SFX ON' : 'SFX OFF'}</span>
-          </button>
 
           {/* Primary CTA */}
           <button
@@ -143,31 +117,19 @@ export const StudioNavbar: React.FC<StudioNavbarProps> = ({ onRegisterClick, onR
 
       {/* Mobile Drawer */}
       {isMobileMenuOpen && (
-        <div className="xl:hidden mt-3 p-4 bg-white rounded-2xl border-2 border-purple-200 shadow-xl space-y-2 animate-in fade-in">
+        <div className="xl:hidden mt-3 p-4 bg-white/98 backdrop-blur-xl rounded-2xl border-2 border-purple-200 shadow-xl space-y-2 animate-in fade-in">
           {navLinks.map((link) => (
             <a
               key={link.label}
               href={link.href}
               onClick={() => {
-                playSound('click');
                 setIsMobileMenuOpen(false);
               }}
-              className="block px-3 py-2 rounded-xl font-bold text-sm text-purple-900 hover:bg-purple-100/70 transition-colors"
+              className="block px-3 py-2 rounded-xl font-bold text-sm text-purple-950 hover:bg-purple-50 transition-colors"
             >
               {link.label}
             </a>
           ))}
-          {onReplayGate && (
-            <button
-              onClick={() => {
-                setIsMobileMenuOpen(false);
-                onReplayGate();
-              }}
-              className="w-full text-left px-3 py-2 rounded-xl font-mono text-xs font-bold text-purple-700 hover:bg-purple-50"
-            >
-              🚪 Replay Gate Entrance
-            </button>
-          )}
           <div className="pt-2 border-t border-purple-100">
             <button
               onClick={() => {

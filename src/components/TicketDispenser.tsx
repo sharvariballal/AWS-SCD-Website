@@ -7,7 +7,6 @@ import {
   Lock,
   Info
 } from 'lucide-react';
-import { playSound } from '../utils/audio';
 import { TICKETING_CONFIG } from '../config/ticketing';
 
 interface TicketDispenserProps {
@@ -16,9 +15,6 @@ interface TicketDispenserProps {
 
 export const TicketDispenser: React.FC<TicketDispenserProps> = ({ onRegisterClick }) => {
   const [selectedTier, setSelectedTier] = useState<number>(0);
-  const [couponCode, setCouponCode] = useState('');
-  const [discountPercent, setDiscountPercent] = useState<number>(0);
-  const [couponStatus, setCouponStatus] = useState<{ text: string; isError: boolean } | null>(null);
 
   const passes = [
     {
@@ -29,7 +25,7 @@ export const TicketDispenser: React.FC<TicketDispenserProps> = ({ onRegisterClic
       isLive: true,
       displayPrice: '₹299',
       subtitle: 'Phase 1 official live quota • Limited seats',
-      badge: '● LIVE NOW',
+      badge: 'LIVE NOW',
       accentColor: 'bg-amber-400',
     },
     {
@@ -40,7 +36,7 @@ export const TicketDispenser: React.FC<TicketDispenserProps> = ({ onRegisterClic
       isLive: false,
       displayPrice: 'Revealing Soon',
       subtitle: 'Launches after Early Bird phase concludes',
-      badge: '🔒 COMING SOON',
+      badge: 'COMING SOON',
       accentColor: 'bg-slate-200',
     },
     {
@@ -51,37 +47,15 @@ export const TicketDispenser: React.FC<TicketDispenserProps> = ({ onRegisterClic
       isLive: false,
       displayPrice: 'Revealing Soon',
       subtitle: 'Discounted squad booking for teams of 3 or more',
-      badge: '🔒 COMING SOON',
+      badge: 'COMING SOON',
       accentColor: 'bg-emerald-100',
     },
   ];
 
-  const handleApplyCoupon = (e: React.FormEvent) => {
-    e.preventDefault();
-    const clean = couponCode.trim().toUpperCase();
-    if (!clean) return;
-
-    if (clean === 'PICTBUILDER') {
-      setDiscountPercent(15);
-      setCouponStatus({ text: '🎉 15% PICT Student Builder Discount Applied!', isError: false });
-      playSound('click');
-    } else if (clean === 'AWSSBG2027') {
-      setDiscountPercent(20);
-      setCouponStatus({ text: '🚀 20% AWS Community Special Discount Applied!', isError: false });
-      playSound('click');
-    } else {
-      setDiscountPercent(0);
-      setCouponStatus({ text: '❌ Invalid coupon. Try "PICTBUILDER" or "AWSSBG2027"', isError: true });
-    }
-  };
-
   const currentPass = passes[selectedTier];
-  const finalPrice = discountPercent > 0 && currentPass.isLive
-    ? Math.round(currentPass.basePrice * (1 - discountPercent / 100)) 
-    : currentPass.basePrice;
+  const finalPrice = currentPass.basePrice;
 
   const handleDispenseTicket = () => {
-    playSound('click');
     if (!currentPass.isLive) {
       alert('This tier launches in the next phase! Please book the active Early Bird pass (₹299).');
       return;
@@ -99,8 +73,8 @@ export const TicketDispenser: React.FC<TicketDispenserProps> = ({ onRegisterClic
         
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-purple-300 bg-purple-100 text-purple-900 text-xs font-mono font-black uppercase mb-3 shadow-[2px_2px_0px_#0F172A]">
-            <Ticket className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-purple-300 bg-purple-100 text-purple-900 text-xs font-mono font-bold uppercase mb-3 shadow-sm">
+            <Ticket className="w-3.5 h-3.5 text-purple-700" />
             <span>Pass Dispensary</span>
           </div>
 
@@ -109,15 +83,15 @@ export const TicketDispenser: React.FC<TicketDispenserProps> = ({ onRegisterClic
           </h2>
 
           <p className="text-sm sm:text-base text-purple-950/75 mt-2 font-medium">
-            Subsidized student admission for Sunday, 7th February 2027 at Dakkhan Banquet Hall, Pune. Valid college PRN required.
+            Subsidized student admission for Sunday, 7th February 2027 at Dakkhan Banquet Hall, Pune. Valid college PRN or ID required.
           </p>
         </div>
 
         {/* 100% Universal Access Notice Banner */}
-        <div className="mb-8 p-4 rounded-2xl bg-amber-50 border-2 border-slate-900 shadow-[3px_3px_0px_#0F172A] flex items-center gap-3 max-w-4xl mx-auto">
-          <Info className="w-5 h-5 text-amber-700 shrink-0" />
-          <p className="text-xs sm:text-sm font-bold text-slate-900">
-            <strong>Universal Full-Access Guarantee:</strong> There is zero difference in access between ticket categories! Every pass grants 100% full admission to all keynotes, technical workshops, buffet lunch, specialty coffee, and official swag kit. Only the booking phase price differs.
+        <div className="mb-8 p-4 rounded-2xl bg-white border border-purple-200 shadow-sm flex items-center gap-3 max-w-4xl mx-auto">
+          <Info className="w-5 h-5 text-purple-700 shrink-0" />
+          <p className="text-xs sm:text-sm font-semibold text-purple-950">
+            <strong>Universal Full-Access Guarantee:</strong> There is zero difference in access between ticket categories. Every pass grants 100% full admission to all keynotes, technical workshops, buffet lunch, specialty coffee, and the official swag kit. Only the booking phase price differs.
           </p>
         </div>
 
@@ -127,152 +101,127 @@ export const TicketDispenser: React.FC<TicketDispenserProps> = ({ onRegisterClic
           {/* Left Column: Pass Tier Selector (7 cols) */}
           <div className="lg:col-span-7 space-y-4">
             
-            <div className="text-xs font-mono font-bold text-slate-500 uppercase flex items-center justify-between">
+            <div className="text-xs font-mono font-bold text-purple-900 uppercase flex items-center justify-between">
               <span>Choose Your Pass Tier</span>
-              <span className="text-emerald-600 font-bold">● Phase 1 Active</span>
+              <span className="text-emerald-700 font-bold flex items-center gap-1">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                Phase 1 Active
+              </span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {passes.map((pass, pIdx) => {
-                const isSelected = selectedTier === pIdx;
-                const pFinal = discountPercent > 0 && pass.isLive
-                  ? Math.round(pass.basePrice * (1 - discountPercent / 100)) 
-                  : pass.basePrice;
-
+              {passes.map((tier, idx) => {
+                const isSelected = selectedTier === idx;
                 return (
                   <button
-                    key={pass.id}
+                    key={tier.id}
                     type="button"
                     onClick={() => {
-                      playSound('click');
-                      setSelectedTier(pIdx);
+                      setSelectedTier(idx);
                     }}
-                    className={`neo-card p-5 text-left relative overflow-hidden transition-all cursor-pointer ${
+                    className={`p-5 rounded-2xl border-2 transition-all text-left relative overflow-hidden cursor-pointer ${
                       isSelected
-                        ? 'border-3 border-slate-950 bg-amber-50 shadow-[6px_6px_0px_#0F172A]'
-                        : 'bg-white opacity-90 hover:opacity-100'
+                        ? 'border-purple-900 bg-white shadow-md scale-[1.02]'
+                        : 'border-purple-200 bg-white/70 hover:bg-white hover:border-purple-400'
                     }`}
                   >
-                    <div className="flex items-center justify-between mb-2">
-                      <span className={`text-[10px] font-mono font-black px-2 py-0.5 rounded ${
-                        pass.isLive ? 'bg-slate-950 text-amber-400' : 'bg-slate-200 text-slate-700'
-                      }`}>
-                        {pass.badge}
+                    {/* Top Tag & Status */}
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-[10px] font-mono font-black px-2 py-0.5 rounded bg-purple-100 text-purple-900 border border-purple-200">
+                        {tier.tag}
                       </span>
-                      {isSelected && pass.isLive && (
-                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                      {tier.isLive ? (
+                        <span className="text-[10px] font-mono font-bold text-emerald-700 flex items-center gap-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                          LIVE
+                        </span>
+                      ) : (
+                        <span className="text-[10px] font-mono font-bold text-purple-400 flex items-center gap-1">
+                          <Lock className="w-3 h-3" />
+                        </span>
                       )}
                     </div>
 
-                    <h3 className="text-base sm:text-lg font-black text-slate-950 mb-1">
-                      {pass.title}
+                    <h3 className="text-base font-black text-purple-950 mb-1">
+                      {tier.title}
                     </h3>
-                    <p className="text-[11px] text-slate-500 mb-3 font-medium leading-tight">
-                      {pass.subtitle}
+
+                    <p className="text-xs text-purple-700/80 mb-3 min-h-[32px]">
+                      {tier.subtitle}
                     </p>
 
-                    <div className="flex items-baseline gap-1.5">
-                      {pass.isLive ? (
-                        <>
-                          <span className="text-2xl sm:text-3xl font-black text-slate-950 font-mono">
-                            ₹{pFinal}
-                          </span>
-                          {discountPercent > 0 && (
-                            <span className="text-xs line-through text-slate-400 font-mono font-bold">
-                              ₹{pass.basePrice}
-                            </span>
-                          )}
-                          <span className="text-[10px] font-mono font-bold text-slate-500 uppercase">
-                            NET
-                          </span>
-                        </>
-                      ) : (
-                        <div className="text-xs font-mono font-bold text-slate-600 bg-slate-100 px-2 py-1 rounded border border-slate-300">
-                          🔒 Next Phase
-                        </div>
-                      )}
+                    <div className="pt-2 border-t border-purple-100 flex items-baseline justify-between">
+                      <span className="text-2xl font-black text-purple-950 font-mono">
+                        {tier.displayPrice}
+                      </span>
+                      <span className="text-[10px] font-mono text-purple-500 font-bold">
+                        {tier.isLive ? 'INR NET' : 'PHASE 2'}
+                      </span>
                     </div>
+
+                    {isSelected && (
+                      <div className="absolute top-0 right-0 w-3 h-3 bg-purple-900 rounded-bl-lg" />
+                    )}
                   </button>
                 );
               })}
             </div>
 
-            {/* Coupon Code Tool */}
-            <div className="neo-card p-4 bg-white">
-              <span className="text-xs font-mono font-bold text-slate-600 uppercase block mb-2">
-                Have a Student Club or Community Coupon?
-              </span>
-              <form onSubmit={handleApplyCoupon} className="flex gap-2">
-                <div className="relative flex-1">
-                  <input
-                    type="text"
-                    value={couponCode}
-                    onChange={(e) => setCouponCode(e.target.value)}
-                    placeholder="Enter coupon (e.g. PICTBUILDER)"
-                    className="w-full px-3 py-2 text-xs font-mono font-bold uppercase rounded-xl border-2 border-slate-900 bg-slate-50 text-slate-900 outline-none"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="neo-btn bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-xl text-xs font-bold cursor-pointer"
-                >
-                  Apply
-                </button>
-              </form>
-
-              {couponStatus && (
-                <div
-                  className={`mt-2 p-2 rounded-lg text-xs font-mono font-bold text-center ${
-                    couponStatus.isError
-                      ? 'bg-rose-100 text-rose-800 border border-rose-300'
-                      : 'bg-emerald-100 text-emerald-800 border border-emerald-300'
-                  }`}
-                >
-                  {couponStatus.text}
-                </div>
-              )}
+            {/* Clean Promo Code Advisory (No Dummy Input) */}
+            <div className="p-4 rounded-2xl bg-white border border-purple-200 shadow-sm flex items-start gap-3">
+              <div className="w-8 h-8 rounded-xl bg-purple-100 border border-purple-200 flex items-center justify-center text-purple-700 shrink-0 mt-0.5">
+                <Sparkles className="w-4 h-4 text-purple-600" />
+              </div>
+              <div>
+                <h5 className="text-xs font-mono font-bold text-purple-950 uppercase">
+                  Student Club &amp; Community Promo Codes
+                </h5>
+                <p className="text-xs text-purple-800/80 mt-1 leading-relaxed">
+                  Have an institutional or partner discount code from your college club? You can enter it directly on the KonfHub checkout screen to claim your instant registration concession.
+                </p>
+              </div>
             </div>
 
           </div>
 
           {/* Right Column: Physical Perforated Tear-off Ticket Stub (5 cols) */}
           <div className="lg:col-span-5">
-            <div className="text-xs font-mono font-bold text-slate-500 uppercase mb-2">
+            <div className="text-xs font-mono font-bold text-purple-900 uppercase mb-2">
               Generated Pass Preview
             </div>
 
-            <div className="neo-card p-6 bg-amber-400 text-slate-950 border-3 border-slate-950 shadow-[8px_8px_0px_#0F172A] relative overflow-hidden">
+            <div className="p-6 rounded-3xl bg-amber-400 text-slate-950 border-3 border-purple-950 shadow-[0_16px_40px_rgba(245,158,11,0.25)] relative overflow-hidden">
               
               {/* Ticket Top Header */}
-              <div className="flex items-center justify-between pb-3 mb-4 border-b-2 border-slate-950">
+              <div className="flex items-center justify-between pb-3 mb-4 border-b-2 border-purple-950/20">
                 <div>
-                  <div className="text-[10px] font-mono font-black uppercase tracking-wider text-slate-900">
+                  <div className="text-[10px] font-mono font-black uppercase tracking-wider text-purple-950/80">
                     ADMIT ONE • COMMUNITY PASS
                   </div>
-                  <h4 className="text-xl font-black uppercase tracking-tight">
+                  <h4 className="text-xl font-black uppercase tracking-tight text-purple-950">
                     {currentPass.title}
                   </h4>
                 </div>
-                <div className="w-10 h-10 rounded-xl bg-slate-950 text-amber-400 flex items-center justify-center font-black text-sm border-2 border-slate-950">
+                <div className="w-10 h-10 rounded-xl bg-purple-950 text-amber-300 flex items-center justify-center font-black text-sm border border-purple-900">
                   AWS
                 </div>
               </div>
 
               {/* Price Banner */}
-              <div className="p-3.5 bg-white rounded-xl border-2 border-slate-950 shadow-[3px_3px_0px_#0F172A] mb-4 flex items-center justify-between">
+              <div className="p-3.5 bg-white rounded-2xl border-2 border-purple-950/20 shadow-sm mb-4 flex items-center justify-between">
                 <div>
-                  <span className="text-[10px] font-mono font-bold text-slate-400 uppercase block">
+                  <span className="text-[10px] font-mono font-bold text-purple-700 uppercase block">
                     TOTAL INVESTMENT
                   </span>
-                  <div className="text-3xl font-black text-slate-950 font-mono">
+                  <div className="text-3xl font-black text-purple-950 font-mono">
                     {currentPass.isLive ? `₹${finalPrice}` : 'Phase 2 Launch'}
                   </div>
                 </div>
                 <div className="text-right">
-                  <span className="text-[10px] font-mono font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-300 inline-block">
+                  <span className="text-[10px] font-mono font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-300 inline-block">
                     ● ALL MEALS &amp; SWAG INCLUDED
                   </span>
-                  <div className="text-[11px] font-mono font-semibold text-slate-500 mt-1">
+                  <div className="text-[11px] font-mono font-semibold text-purple-800 mt-1">
                     07 Feb 2027 • Pune
                   </div>
                 </div>
@@ -280,23 +229,23 @@ export const TicketDispenser: React.FC<TicketDispenserProps> = ({ onRegisterClic
 
               {/* Universal access guarantee list */}
               <div className="space-y-2 mb-6">
-                <span className="text-[10px] font-mono font-black uppercase tracking-wider text-slate-900 block">
+                <span className="text-[10px] font-mono font-black uppercase tracking-wider text-purple-950 block">
                   ALL PASSES INCLUDE:
                 </span>
-                <div className="flex items-center gap-2 text-xs font-bold text-slate-900">
-                  <Check className="w-4 h-4 text-slate-950 shrink-0" />
+                <div className="flex items-center gap-2 text-xs font-bold text-purple-950">
+                  <Check className="w-4 h-4 text-purple-950 shrink-0" />
                   <span>Full Day All-District Summit Access</span>
                 </div>
-                <div className="flex items-center gap-2 text-xs font-bold text-slate-900">
-                  <Check className="w-4 h-4 text-slate-950 shrink-0" />
+                <div className="flex items-center gap-2 text-xs font-bold text-purple-950">
+                  <Check className="w-4 h-4 text-purple-950 shrink-0" />
                   <span>Keynote District &amp; In-Person Cloud Workshops</span>
                 </div>
-                <div className="flex items-center gap-2 text-xs font-bold text-slate-900">
-                  <Check className="w-4 h-4 text-slate-950 shrink-0" />
+                <div className="flex items-center gap-2 text-xs font-bold text-purple-950">
+                  <Check className="w-4 h-4 text-purple-950 shrink-0" />
                   <span>Compute Café Full Buffet Lunch &amp; Coffee</span>
                 </div>
-                <div className="flex items-center gap-2 text-xs font-bold text-slate-900">
-                  <Check className="w-4 h-4 text-slate-950 shrink-0" />
+                <div className="flex items-center gap-2 text-xs font-bold text-purple-950">
+                  <Check className="w-4 h-4 text-purple-950 shrink-0" />
                   <span>Official Builder Swag Kit &amp; Certificate</span>
                 </div>
               </div>
@@ -307,32 +256,45 @@ export const TicketDispenser: React.FC<TicketDispenserProps> = ({ onRegisterClic
                   <button
                     type="button"
                     onClick={handleDispenseTicket}
-                    className="w-full neo-btn bg-slate-950 hover:bg-slate-900 text-amber-400 py-3.5 rounded-2xl text-sm font-black flex items-center justify-center gap-2 cursor-pointer shadow-[4px_4px_0px_#FFFFFF]"
+                    className="w-full py-3.5 rounded-2xl text-sm font-black flex items-center justify-center gap-2 cursor-pointer bg-purple-950 hover:bg-purple-900 text-amber-300 shadow-lg transition-transform hover:scale-[1.02]"
                   >
-                    <Sparkles className="w-4 h-4 text-amber-400" />
+                    <Sparkles className="w-4 h-4 text-amber-300" />
                     <span>Book Early Bird Pass (₹{finalPrice}) →</span>
                   </button>
-                  <div className="text-[10px] font-mono text-center text-slate-800 font-bold mt-2">
-                    🔒 Instant reservation via KonfHub gateway
+                  <div className="text-[10px] font-mono text-center text-purple-950/80 font-bold mt-2 flex items-center justify-center gap-1">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-800" />
+                    <span>Instant reservation via KonfHub secure gateway</span>
                   </div>
                 </>
               ) : (
-                <div className="w-full p-3.5 rounded-2xl bg-slate-900 text-slate-300 text-xs font-mono font-bold text-center border-2 border-slate-950 flex items-center justify-center gap-2">
-                  <Lock className="w-4 h-4 text-amber-400" />
+                <div className="w-full p-3.5 rounded-2xl bg-purple-950 text-purple-200 text-xs font-mono font-bold text-center border border-purple-800 flex items-center justify-center gap-2">
+                  <Lock className="w-4 h-4 text-amber-300" />
                   <span>This tier unlocks in the next phase!</span>
                 </div>
               )}
 
-              {/* Barcode Strip */}
-              <div className="mt-4 pt-3 border-t-2 border-dashed border-slate-950/40 flex items-center justify-between text-[10px] font-mono font-bold text-slate-800">
-                <span>BARCODE: ||||| | |||| ||| ||||</span>
-                <span>PICT PUNE CHAPTER</span>
+              {/* Clean SVG Barcode Graphic */}
+              <div className="mt-4 pt-3 border-t-2 border-dashed border-purple-950/30 flex items-center justify-between text-[10px] font-mono font-bold text-purple-950">
+                <div className="flex items-center gap-1 opacity-80" title="Pass Barcode">
+                  <span className="inline-block w-0.5 h-5 bg-purple-950" />
+                  <span className="inline-block w-1.5 h-5 bg-purple-950" />
+                  <span className="inline-block w-0.5 h-5 bg-purple-950" />
+                  <span className="inline-block w-1 h-5 bg-purple-950" />
+                  <span className="inline-block w-2 h-5 bg-purple-950" />
+                  <span className="inline-block w-0.5 h-5 bg-purple-950" />
+                  <span className="inline-block w-1 h-5 bg-purple-950" />
+                  <span className="inline-block w-0.5 h-5 bg-purple-950" />
+                  <span className="inline-block w-1.5 h-5 bg-purple-950" />
+                  <span className="inline-block w-0.5 h-5 bg-purple-950" />
+                  <span className="inline-block w-1 h-5 bg-purple-950" />
+                </div>
+                <span>PICT PUNE CHAPTER • SCD 2027</span>
               </div>
             </div>
 
-            <div className="mt-4 p-3 rounded-xl bg-white border border-slate-300 text-xs text-slate-600 flex items-center gap-2">
+            <div className="mt-4 p-3 rounded-2xl bg-white border border-purple-200 text-xs text-purple-800/80 flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span>Passes are fully transferable within 48 hours of event date.</span>
+              <span>Passes are fully transferable up to 48 hours before the event date.</span>
             </div>
 
           </div>
@@ -343,4 +305,3 @@ export const TicketDispenser: React.FC<TicketDispenserProps> = ({ onRegisterClic
     </section>
   );
 };
-

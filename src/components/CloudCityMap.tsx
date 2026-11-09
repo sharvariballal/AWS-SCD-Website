@@ -122,7 +122,7 @@ const districts: DistrictData[] = [
     venueDetail: 'East Wing Promenade & Stalls Terrace',
     timing: '11:00 AM – 04:30 PM (Interactive)',
     capacity: 'Interactive Walk-Through Gallery',
-    description: 'A bustling interactive district filled with low-cost DIY cardboard tech installations, cloud trivia buzzers, student demo pods, and sponsor tech booths. Test your skills in the Service Circuit Jammer and collect badges!',
+    description: 'A bustling interactive district filled with custom architectural installations, interactive cloud trivia stations, student demo pods, and technology exhibits. Test your architecture knowledge and explore community creations!',
     perks: [
       'Hands-On Service Circuit Jammer Simulator',
       'AWS Swag Vault & Mystery Box Giveaways',

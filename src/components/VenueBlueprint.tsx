@@ -167,7 +167,7 @@ export const VenueBlueprint: React.FC = () => {
             <div className="relative rounded-3xl overflow-hidden border-2 border-purple-200 shadow-[0_12px_35px_rgba(76,29,149,0.12)] bg-white h-[420px] lg:h-[480px]">
               <iframe
                 title="Dakkhan Banquet Hall Location"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3784.5772378906936!2d73.8447883!3d18.4574928!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2953841a106f3%3A0xe54e3cbcc12e557!2sDakkhan%20Banquet%20Hall!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+                src="https://maps.google.com/maps?q=Dakkhan+Banquet+Hall+Katraj+Ambegaon+Pune&t=&z=15&ie=UTF8&iwloc=&output=embed"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
@@ -179,7 +179,7 @@ export const VenueBlueprint: React.FC = () => {
 
               <div className="absolute top-4 left-4 z-10 pointer-events-none">
                 <span className="px-3 py-1.5 rounded-xl bg-purple-950/85 backdrop-blur-md text-amber-300 text-xs font-mono font-black border border-purple-400/30 shadow-md">
-                  📍 Dakkhan Hall • Pune
+                  📍 Dakkhan Banquet Hall, Pune • Live Venue Pin
                 </span>
               </div>
             </div>

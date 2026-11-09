@@ -5,9 +5,10 @@ import {
   MapPin, 
   Layers, 
   Flame,
-  Ticket
+  Ticket,
+  Sparkles,
+  CheckCircle2
 } from 'lucide-react';
-import { playSound } from '../utils/audio';
 
 interface InteractiveHeroStudioProps {
   onRegisterClick: (passType?: string) => void;
@@ -44,11 +45,11 @@ export const InteractiveHeroStudio: React.FC<InteractiveHeroStudioProps> = ({ on
         <div className="p-2 sm:p-2.5 rounded-2xl bg-white/90 border border-purple-200 shadow-sm flex items-center gap-3 overflow-hidden">
           <div className="px-2.5 py-1 rounded-xl bg-purple-950 text-amber-300 text-[10px] sm:text-xs font-mono font-black uppercase tracking-wider shrink-0 flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            LIVE TICKETING STATUS
+            LIVE STATUS
           </div>
           <div className="overflow-hidden whitespace-nowrap w-full">
-            <div className="animate-marquee inline-block text-xs sm:text-sm font-black text-purple-950 font-mono">
-              🔥 EARLY BIRD PASSES ARE OFFICIALLY LIVE AT ₹299! • LIMITED SLOTS FOR PHASE 1 • REGULAR &amp; GROUP DISCOUNT PASSES COMING IN NEXT PHASES • 07 FEB 2027 @ DAKKHAN BANQUET HALL, PUNE • SINGLE LARGE HALL IMMERSIVE CLOUD CITY EXPERIENCE • 
+            <div className="animate-marquee inline-block text-xs sm:text-sm font-bold text-purple-950 font-mono">
+              ⚡ Ticket Status: Early Bird Passes Live at ₹299 • Phase 1 Allocations Open • Sunday, 07 February 2027 • Dakkhan Banquet Hall, Pune • Universal Full Access Across All Passes • 
             </div>
           </div>
         </div>
@@ -101,7 +102,7 @@ export const InteractiveHeroStudio: React.FC<InteractiveHeroStudioProps> = ({ on
             <div className="p-4 sm:p-5 bg-white/95 backdrop-blur-md rounded-3xl border-2 border-purple-200 shadow-[0_10px_30px_rgba(76,29,149,0.08)] max-w-xl">
               <div className="flex items-center justify-between mb-3 text-xs font-mono font-bold text-purple-800 uppercase tracking-wider">
                 <span className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
                   Summit Day Countdown
                 </span>
                 <span className="text-amber-600 font-bold">07 Feb 2027 • 08:30 AM IST</span>
@@ -130,7 +131,6 @@ export const InteractiveHeroStudio: React.FC<InteractiveHeroStudioProps> = ({ on
             <div className="flex flex-wrap items-center gap-4 pt-1">
               <button
                 onClick={() => {
-                  playSound('click');
                   onRegisterClick('Early Bird Pass (₹299)');
                 }}
                 className="px-7 py-3.5 rounded-2xl text-base font-black flex items-center gap-2 cursor-pointer bg-gradient-to-r from-amber-400 via-amber-500 to-amber-400 text-purple-950 shadow-lg shadow-amber-400/30 transition-transform hover:scale-105"
@@ -142,7 +142,6 @@ export const InteractiveHeroStudio: React.FC<InteractiveHeroStudioProps> = ({ on
 
               <a
                 href="#city-interactive-map"
-                onClick={() => playSound('click')}
                 className="bg-white hover:bg-purple-50 text-purple-900 border border-purple-200 px-6 py-3.5 rounded-2xl text-sm font-bold flex items-center gap-2 cursor-pointer shadow-sm transition-transform hover:scale-105"
               >
                 <Layers className="w-4 h-4 text-purple-600" />
@@ -152,14 +151,17 @@ export const InteractiveHeroStudio: React.FC<InteractiveHeroStudioProps> = ({ on
 
             {/* Event Highlights Snapshot */}
             <div className="flex flex-wrap items-center gap-2 pt-2">
-              <span className="px-3 py-1 rounded-xl bg-purple-100 border border-purple-300 text-purple-900 text-xs font-mono font-bold">
-                ✓ Full Access Across All Tickets
+              <span className="px-3 py-1 rounded-xl bg-purple-100 border border-purple-300 text-purple-900 text-xs font-mono font-bold flex items-center gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-purple-700" />
+                <span>Full Access Across All Tickets</span>
               </span>
-              <span className="px-3 py-1 rounded-xl bg-amber-100 border border-amber-300 text-purple-950 text-xs font-mono font-bold">
-                ✓ Full Buffet Lunch &amp; High-Tea Included
+              <span className="px-3 py-1 rounded-xl bg-amber-100 border border-amber-300 text-purple-950 text-xs font-mono font-bold flex items-center gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-amber-700" />
+                <span>Full Buffet Lunch &amp; High-Tea Included</span>
               </span>
-              <span className="px-3 py-1 rounded-xl bg-purple-100 border border-purple-300 text-purple-900 text-xs font-mono font-bold">
-                ✓ Official AWS SBG PICT Certificate
+              <span className="px-3 py-1 rounded-xl bg-purple-100 border border-purple-300 text-purple-900 text-xs font-mono font-bold flex items-center gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-purple-700" />
+                <span>Official AWS SBG PICT Certificate</span>
               </span>
             </div>
 
@@ -179,8 +181,9 @@ export const InteractiveHeroStudio: React.FC<InteractiveHeroStudioProps> = ({ on
                     Early Bird Pass
                   </h3>
                 </div>
-                <span className="px-3 py-1 rounded-full bg-purple-950 text-amber-300 font-mono text-xs font-black uppercase shadow-md animate-pulse">
-                  ● LIVE NOW
+                <span className="px-3 py-1 rounded-full bg-purple-950 text-amber-300 font-mono text-xs font-black uppercase shadow-md flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  LIVE NOW
                 </span>
               </div>
 
@@ -195,18 +198,17 @@ export const InteractiveHeroStudio: React.FC<InteractiveHeroStudioProps> = ({ on
                 </div>
 
                 <p className="text-xs sm:text-sm font-medium leading-relaxed">
-                  Phase 1 limited inventory. Grants 100% full admission to all keynotes, hands-on lab workstations, buffet lunch, and official swag kit.
+                  Phase 1 limited inventory. Grants 100% full admission to all keynotes, technical workshops, buffet lunch, and official swag kit.
                 </p>
 
                 <div className="pt-2">
                   <button
                     onClick={() => {
-                      playSound('click');
                       onRegisterClick('Early Bird Pass (₹299)');
                     }}
                     className="w-full py-3.5 rounded-2xl bg-purple-950 hover:bg-purple-900 text-amber-300 font-mono font-black text-sm flex items-center justify-center gap-2 shadow-lg transition-transform hover:scale-[1.02] cursor-pointer"
                   >
-                    <Ticket className="w-4 h-4 text-amber-300" />
+                    <Sparkles className="w-4 h-4 text-amber-300" />
                     <span>Claim Early Bird (₹299)</span>
                   </button>
                 </div>

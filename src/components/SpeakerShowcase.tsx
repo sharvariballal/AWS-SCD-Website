@@ -1,35 +1,12 @@
 import React from 'react';
-import { Mic2, Sparkles, ArrowRight, CheckCircle2 } from 'lucide-react';
-import { playSound } from '../utils/audio';
+import { Mic2, Sparkles, ArrowRight } from 'lucide-react';
 
 interface SpeakerShowcaseProps {
   onOpenCFPModal?: () => void;
 }
 
 export const SpeakerShowcase: React.FC<SpeakerShowcaseProps> = ({ onOpenCFPModal }) => {
-  const teaserSpeakers = [
-    {
-      role: 'AWS Community Hero',
-      specialty: 'Autonomous Multi-Agent Grids & Serverless',
-      badge: 'KEYNOTE',
-      avatarColor: 'bg-amber-400 text-purple-950',
-    },
-    {
-      role: 'Principal Solutions Architect',
-      specialty: 'Petabyte-Scale Data Lakes & Bedrock AI',
-      badge: 'ARCHITECT PANEL',
-      avatarColor: 'bg-purple-400 text-purple-950',
-    },
-    {
-      role: 'Staff Platform Engineer',
-      specialty: 'EKS Clusters & Zero-Cold-Start Strategies',
-      badge: 'TECH DEEP-DIVE',
-      avatarColor: 'bg-indigo-300 text-purple-950',
-    },
-  ];
-
   const handleOpenCFP = () => {
-    playSound('click');
     if (onOpenCFPModal) {
       onOpenCFPModal();
     } else {
@@ -76,7 +53,7 @@ export const SpeakerShowcase: React.FC<SpeakerShowcaseProps> = ({ onOpenCFPModal
             {/* Status Pill */}
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-purple-900/80 border border-purple-400/40 text-amber-300 text-xs font-mono font-black uppercase tracking-wider">
               <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-              <span>🔒 SPEAKERS REVEALING IN PHASE 2</span>
+              <span>SPEAKERS REVEALING IN PHASE 2</span>
             </div>
 
             <h3 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
@@ -84,34 +61,25 @@ export const SpeakerShowcase: React.FC<SpeakerShowcaseProps> = ({ onOpenCFPModal
             </h3>
 
             <p className="text-sm sm:text-base text-purple-200/90 leading-relaxed font-normal max-w-2xl mx-auto">
-              Our review committee is finalizing keynotes from prominent AWS Community Heroes, AWS User Group mentors, and pioneering student founders. All sessions will be held sequentially on the grand stage inside Dakkhan Hall.
+              Our review committee is finalizing keynotes from prominent AWS Community Heroes, AWS User Group mentors, and student builders. All sessions will be held sequentially on the grand stage inside Dakkhan Hall.
             </p>
 
-            {/* Silhouette Teaser Row */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
-              {teaserSpeakers.map((sp, idx) => (
+            {/* Blank Card Silhouettes (No Text) */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 opacity-50 blur-[0.5px]">
+              {[1, 2, 3].map((i) => (
                 <div
-                  key={idx}
-                  className="p-4 rounded-2xl bg-purple-950/70 border border-purple-400/30 backdrop-blur-sm text-left flex flex-col justify-between"
+                  key={i}
+                  className="p-5 rounded-2xl bg-purple-950/60 border border-purple-400/20 backdrop-blur-sm text-left flex flex-col justify-between space-y-4 shadow-inner"
                 >
-                  <div>
-                    <div className="flex items-center justify-between mb-3">
-                      <div className={`w-9 h-9 rounded-xl ${sp.avatarColor} border border-purple-900 flex items-center justify-center font-black text-sm`}>
-                        <Mic2 className="w-4 h-4" />
-                      </div>
-                      <span className="text-[10px] font-mono font-black px-2 py-0.5 rounded bg-purple-900 text-purple-200 border border-purple-700/60">
-                        {sp.badge}
-                      </span>
-                    </div>
-
-                    <h4 className="text-sm font-black text-white">{sp.role}</h4>
-                    <p className="text-xs text-purple-300/80 mt-1 font-medium">{sp.specialty}</p>
+                  <div className="flex items-center justify-between">
+                    <div className="w-10 h-10 rounded-xl bg-purple-800/60 animate-pulse" />
+                    <div className="w-16 h-4 rounded-md bg-purple-800/40" />
                   </div>
-
-                  <div className="mt-3 pt-2 border-t border-purple-800/60 flex items-center gap-1.5 text-[10px] font-mono text-amber-300">
-                    <CheckCircle2 className="w-3 h-3 text-emerald-400" />
-                    <span>Confirmed Roster</span>
+                  <div className="space-y-2 pt-1">
+                    <div className="w-3/4 h-4 rounded bg-purple-700/50" />
+                    <div className="w-full h-3 rounded bg-purple-800/30" />
                   </div>
+                  <div className="w-1/2 h-3 rounded bg-purple-800/20 pt-2" />
                 </div>
               ))}
             </div>
