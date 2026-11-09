@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { StudioNavbar } from './components/StudioNavbar';
 import { ShutterGateHero } from './components/ShutterGateHero';
+import { InteractiveHeroStudio } from './components/InteractiveHeroStudio';
 import { StorytellingSection } from './components/StorytellingSection';
 import { CloudCityMap } from './components/CloudCityMap';
 import { PolaroidFlashbackGallery } from './components/PolaroidFlashbackGallery';
@@ -20,6 +21,7 @@ import { CodeOfConductModal } from './components/CodeOfConductModal';
 import { TICKETING_CONFIG } from './config/ticketing';
 
 export function App() {
+  const [isGateUnlocked, setIsGateUnlocked] = useState(false);
   const [isRegistrationModalOpen, setIsRegistrationModalOpen] = useState(false);
   const [isCFPModalOpen, setIsCFPModalOpen] = useState(false);
   const [isSponsorModalOpen, setIsSponsorModalOpen] = useState(false);
@@ -44,54 +46,77 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8F5FF] text-[#1F0B38] font-sans selection:bg-purple-200 selection:text-purple-950 relative overflow-x-hidden">
-      
-      {/* 1. Cinematic Scroll-Driven Sci-Fi Shutter Gate Video Scrub Hero (Entrance Page with NO Navbar) */}
-      <ShutterGateHero onRegisterClick={(pass) => handleOpenRegistration(pass || 'Early Bird Pass (₹299)')} />
+    <div
+      className={`min-h-screen bg-[#F8F5FF] text-[#1F0B38] font-sans selection:bg-purple-200 selection:text-purple-950 relative ${
+        !isGateUnlocked ? 'h-screen overflow-hidden' : 'overflow-x-hidden'
+      }`}
+    >
+      {/* 1. True Locked-Viewport Scrollytelling Portal:
+          Locks viewport on load, scrubs video 0.0 to 0.8, and seamlessly transitions to homepage 0.8 to 1.0 */}
+      <ShutterGateHero
+        isUnlocked={isGateUnlocked}
+        onUnlock={() => setIsGateUnlocked(true)}
+        onReplay={() => setIsGateUnlocked(false)}
+      />
 
-      {/* 2. Studio Sticky Navigation Bar (Revealed on the actual homepage once the entrance animation finishes) */}
-      <StudioNavbar onRegisterClick={() => handleOpenRegistration('Early Bird Pass (₹299)')} />
+      {/* 2. Studio Sticky Navigation Bar:
+          Hidden during gate entrance; revealed once gate opens and transitions to homepage */}
+      {isGateUnlocked && (
+        <StudioNavbar
+          onRegisterClick={() => handleOpenRegistration('Early Bird Pass (₹299)')}
+          onReplayGate={() => setIsGateUnlocked(false)}
+        />
+      )}
 
-      {/* Main Content Area: The Home Page */}
-      <main className="relative z-10">
-        {/* 3. Storytelling Section with Scroll-Driven Text Reveal & 4 Pillars (Big Ideas. Bigger Community) */}
+      {/* Main Content Area: The Home Page (Unlocked after gate sequence finishes) */}
+      <main
+        className={`relative z-10 transition-opacity duration-700 ${
+          !isGateUnlocked ? 'opacity-0 pointer-events-none' : 'opacity-100 pointer-events-auto'
+        }`}
+      >
+        {/* Summit Announcement Billboard */}
+        <InteractiveHeroStudio onRegisterClick={(pass) => handleOpenRegistration(pass || 'Early Bird Pass (₹299)')} />
+
+        {/* Storytelling Section with Scroll-Driven Text Reveal & 4 Pillars (Big Ideas. Bigger Community) */}
         <section id="storytelling">
           <StorytellingSection />
         </section>
 
-        {/* 4. Interactive Pastel 3D Isometric Cityscape & Location Pins with Left-Side Sliding Info Drawer */}
+        {/* Interactive Pastel 3D Isometric Cityscape & Location Pins with Left-Side Sliding Info Drawer */}
         <CloudCityMap />
 
-        {/* 5. Tactile Polaroid Camera Flashback Gallery (Replacing Horizontal Marquee) */}
+        {/* Tactile Polaroid Camera Flashback Gallery (Replacing Horizontal Marquee) */}
         <PolaroidFlashbackGallery />
 
-        {/* 6. Interactive Arcade Alley Game: Service Circuit Jammer */}
+        {/* Interactive Arcade Alley Game: Service Circuit Jammer */}
         <ServiceCircuitJammer />
 
-        {/* 7. Agenda & Sessions Matrix */}
+        {/* Agenda & Sessions Matrix */}
         <ConferenceMatrix />
 
-        {/* 8. Featured Speakers & Call for Speakers (CFP) Showcase */}
+        {/* Featured Speakers & Call for Speakers (CFP) Showcase */}
         <SpeakerShowcase onOpenCFPModal={() => setIsCFPModalOpen(true)} />
 
-        {/* 9. Official Swag Box & Perks Vault */}
+        {/* Official Swag Box & Perks Vault */}
         <LootBoxVault />
 
-        {/* 10. Pass Dispensary (Early Bird ₹299 LIVE NOW, KonfHub Direct Provision) */}
+        {/* Pass Dispensary (Early Bird ₹299 LIVE NOW, KonfHub Direct Provision) */}
         <TicketDispenser onRegisterClick={(pass) => handleOpenRegistration(pass)} />
 
-        {/* 11. Sponsors & Ecosystem Partners Showcase */}
+        {/* Sponsors & Ecosystem Partners Showcase */}
         <SponsorShowcase onOpenSponsorModal={() => setIsSponsorModalOpen(true)} />
 
-        {/* 12. Venue Blueprint & Embedded Google Maps Visual */}
+        {/* Venue Blueprint & Embedded Google Maps Visual */}
         <VenueBlueprint />
 
-        {/* 13. Frequently Asked Questions Studio */}
+        {/* Frequently Asked Questions Studio */}
         <FAQStudio />
       </main>
 
-      {/* 14. Studio Footer matching Poster 3 (Your Next Chapter Starts Here) */}
-      <StudioFooter onOpenCodeOfConduct={() => setIsCodeOfConductOpen(true)} />
+      {/* Studio Footer (Shown once on homepage) */}
+      {isGateUnlocked && (
+        <StudioFooter onOpenCodeOfConduct={() => setIsCodeOfConductOpen(true)} />
+      )}
 
       {/* Student Verification Registration Modal */}
       <RegistrationModal

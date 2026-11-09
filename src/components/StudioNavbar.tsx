@@ -4,9 +4,10 @@ import { setSoundEnabled, playSound } from '../utils/audio';
 
 interface StudioNavbarProps {
   onRegisterClick: () => void;
+  onReplayGate?: () => void;
 }
 
-export const StudioNavbar: React.FC<StudioNavbarProps> = ({ onRegisterClick }) => {
+export const StudioNavbar: React.FC<StudioNavbarProps> = ({ onRegisterClick, onReplayGate }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [soundOn, setSoundOn] = useState(false);
 
@@ -23,7 +24,6 @@ export const StudioNavbar: React.FC<StudioNavbarProps> = ({ onRegisterClick }) =
   };
 
   const navLinks = [
-    { label: 'Gate', href: '#hero-gate-journey' },
     { label: 'Overview', href: '#storytelling' },
     { label: 'City Map', href: '#city-interactive-map' },
     { label: 'Flashback', href: '#flashback-gallery' },
@@ -40,8 +40,12 @@ export const StudioNavbar: React.FC<StudioNavbarProps> = ({ onRegisterClick }) =
         {/* Brand & Region Indicator */}
         <div className="flex items-center gap-3">
           <a
-            href="#hero-gate-journey"
-            onClick={() => playSound('click')}
+            href="#hero-studio"
+            onClick={() => {
+              playSound('click');
+              if (onReplayGate) onReplayGate();
+            }}
+            title="Click to replay gate entrance"
             className="flex items-center gap-2 group cursor-pointer"
           >
             {/* Custom AWS SBG Chip Emblem */}
@@ -87,6 +91,20 @@ export const StudioNavbar: React.FC<StudioNavbarProps> = ({ onRegisterClick }) =
 
         {/* Controls & CTA */}
         <div className="flex items-center gap-2.5">
+          {/* Replay Gate Button */}
+          {onReplayGate && (
+            <button
+              onClick={() => {
+                playSound('click');
+                onReplayGate();
+              }}
+              title="Replay Gate Opening"
+              className="hidden sm:flex px-2.5 py-1.5 rounded-xl border border-purple-300 text-xs font-mono font-bold text-purple-700 bg-white hover:bg-purple-50 items-center gap-1 cursor-pointer transition-colors shadow-sm"
+            >
+              <span>🚪 Portal</span>
+            </button>
+          )}
+
           {/* Sound Toggle */}
           <button
             onClick={toggleSound}
@@ -139,6 +157,17 @@ export const StudioNavbar: React.FC<StudioNavbarProps> = ({ onRegisterClick }) =
               {link.label}
             </a>
           ))}
+          {onReplayGate && (
+            <button
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                onReplayGate();
+              }}
+              className="w-full text-left px-3 py-2 rounded-xl font-mono text-xs font-bold text-purple-700 hover:bg-purple-50"
+            >
+              🚪 Replay Gate Entrance
+            </button>
+          )}
           <div className="pt-2 border-t border-purple-100">
             <button
               onClick={() => {
