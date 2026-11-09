@@ -185,7 +185,7 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({ onOpenCodeOfConduct 
         {/* Bottom Bar with Back to Top */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-purple-400">
           <div>
-            © {new Date().getFullYear()} AWS Student Community Day Pune • All rights reserved.
+            © 2027 AWS Student Community Day Pune • All rights reserved.
           </div>
 
           <button

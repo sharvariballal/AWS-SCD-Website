@@ -57,6 +57,7 @@ export function App() {
         isUnlocked={isGateUnlocked}
         onUnlock={() => setIsGateUnlocked(true)}
         onReplay={() => setIsGateUnlocked(false)}
+        onQuickRegister={() => handleOpenRegistration('Early Bird Pass (₹299)')}
       />
 
       {/* 2. Studio Sticky Navigation Bar:

@@ -1,16 +1,18 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
-import { ChevronDown, Sparkles, Loader2 } from 'lucide-react';
+import { ChevronDown, Sparkles, Loader2, Ticket } from 'lucide-react';
 import { playSound } from '../utils/audio';
 
 interface ShutterGateHeroProps {
   isUnlocked: boolean;
   onUnlock: () => void;
   onReplay?: () => void;
+  onQuickRegister?: () => void;
 }
 
 export const ShutterGateHero: React.FC<ShutterGateHeroProps> = ({
   isUnlocked,
   onUnlock,
+  onQuickRegister,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
@@ -20,6 +22,7 @@ export const ShutterGateHero: React.FC<ShutterGateHeroProps> = ({
   const targetProgressRef = useRef(0);
   const currentProgressRef = useRef(0);
   const rafIdRef = useRef<number | null>(null);
+  const updateScrubRef = useRef<() => void>(() => {});
 
   // React state for reactive rendering
   const [displayProgress, setDisplayProgress] = useState(0);
@@ -93,14 +96,18 @@ export const ShutterGateHero: React.FC<ShutterGateHeroProps> = ({
 
     // Continue loop if not settled
     if (!isUnlocked) {
-      rafIdRef.current = requestAnimationFrame(updateScrub);
+      rafIdRef.current = requestAnimationFrame(() => updateScrubRef.current());
     }
   }, [isUnlocked, onUnlock]);
+
+  useEffect(() => {
+    updateScrubRef.current = updateScrub;
+  });
 
   // Start / restart RAF loop
   useEffect(() => {
     if (!isUnlocked) {
-      rafIdRef.current = requestAnimationFrame(updateScrub);
+      rafIdRef.current = requestAnimationFrame(() => updateScrubRef.current());
       return () => {
         if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
       };
@@ -247,6 +254,27 @@ export const ShutterGateHero: React.FC<ShutterGateHeroProps> = ({
           <p className="text-sm sm:text-base font-light text-purple-200/80 tracking-widest uppercase">
             Sunday, 07 February 2027 • Dakkhan Banquet Hall
           </p>
+
+          <div className="pt-3 flex flex-wrap items-center justify-center gap-3">
+            <button
+              onClick={handleAutoEnter}
+              className="px-6 py-2.5 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-purple-950 font-black text-xs sm:text-sm shadow-lg shadow-amber-400/30 hover:scale-105 transition-transform flex items-center gap-2 cursor-pointer"
+            >
+              <span>Enter Cloud City ➔</span>
+            </button>
+            {onQuickRegister && (
+              <button
+                onClick={() => {
+                  handleAutoEnter();
+                  onQuickRegister();
+                }}
+                className="px-5 py-2.5 rounded-2xl bg-purple-900/80 hover:bg-purple-800/90 border border-purple-300/40 text-amber-300 font-bold text-xs sm:text-sm backdrop-blur-md hover:scale-105 transition-transform flex items-center gap-1.5 cursor-pointer"
+              >
+                <Ticket className="w-4 h-4 text-amber-300" />
+                <span>Claim Early Bird Pass • ₹299</span>
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
