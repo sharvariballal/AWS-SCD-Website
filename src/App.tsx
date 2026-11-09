@@ -45,14 +45,15 @@ export function App() {
 
   return (
     <div className="min-h-screen bg-[#F8F5FF] text-[#1F0B38] font-sans selection:bg-purple-200 selection:text-purple-950 relative overflow-x-hidden">
-      {/* 1. Studio Sticky Navigation Bar */}
+      
+      {/* 1. Cinematic Scroll-Driven Sci-Fi Shutter Gate Video Scrub Hero (Entrance Page with NO Navbar) */}
+      <ShutterGateHero onRegisterClick={(pass) => handleOpenRegistration(pass || 'Early Bird Pass (₹299)')} />
+
+      {/* 2. Studio Sticky Navigation Bar (Revealed on the actual homepage once the entrance animation finishes) */}
       <StudioNavbar onRegisterClick={() => handleOpenRegistration('Early Bird Pass (₹299)')} />
 
-      {/* Main Content Area */}
+      {/* Main Content Area: The Home Page */}
       <main className="relative z-10">
-        {/* 2. Dynamic Scroll-Driven Sci-Fi Shutter Gate Landing Hero Section */}
-        <ShutterGateHero onRegisterClick={(pass) => handleOpenRegistration(pass || 'Early Bird Pass (₹299)')} />
-
         {/* 3. Storytelling Section with Scroll-Driven Text Reveal & 4 Pillars (Big Ideas. Bigger Community) */}
         <section id="storytelling">
           <StorytellingSection />

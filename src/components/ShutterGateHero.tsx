@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
 import { 
   Sparkles, 
   ArrowDown, 
@@ -8,8 +8,7 @@ import {
   Ticket, 
   ArrowRight, 
   Compass, 
-  ShieldCheck, 
-  Flame
+  Loader2
 } from 'lucide-react';
 import { playSound } from '../utils/audio';
 
@@ -19,37 +18,83 @@ interface ShutterGateHeroProps {
 
 export const ShutterGateHero: React.FC<ShutterGateHeroProps> = ({ onRegisterClick }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Bind scroll progress directly to this container
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+  const [videoError, setVideoError] = useState(false);
+  const targetTimeRef = useRef(0);
+  const rafIdRef = useRef<number | null>(null);
+
+  // 1. Sticky Scroll Container: 300vh runway
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
   });
 
-  // Phase 1: 0% to 50% scroll: Gate panels slide left and right
-  const gateLeftX = useTransform(scrollYProgress, [0, 0.5], ['0%', '-105%']);
-  const gateRightX = useTransform(scrollYProgress, [0, 0.5], ['0%', '105%']);
-  
-  // Initial prompt & title fade out quickly as scroll begins
-  const promptOpacity = useTransform(scrollYProgress, [0, 0.12], [1, 0]);
-  const promptScale = useTransform(scrollYProgress, [0, 0.12], [1, 0.92]);
-  const promptPointerEvents = useTransform(scrollYProgress, (v) => (v > 0.1 ? 'none' : 'auto'));
+  // Check video readiness even if loaded from disk cache
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
 
-  // Golden crevice beam transforms: bursts bright then dissipates as gates part
-  const creviceGlowOpacity = useTransform(scrollYProgress, [0, 0.08, 0.35, 0.5], [0.95, 1, 0.4, 0]);
-  const creviceScaleX = useTransform(scrollYProgress, [0, 0.12, 0.4], [1, 6, 0.2]);
+    const onLoaded = () => {
+      video.pause();
+      setIsVideoLoaded(true);
+    };
 
-  // Phase 2: 30% to 80% scroll: dense cloud mist layer scale up (1 to 1.5) and fade out (1 to 0)
-  const cloudScale = useTransform(scrollYProgress, [0.3, 0.8], [1, 1.5]);
-  const cloudOpacity = useTransform(scrollYProgress, [0.3, 0.7, 0.82], [1, 0.6, 0]);
-  const cloudPointerEvents = useTransform(scrollYProgress, (v) => (v > 0.75 ? 'none' : 'auto'));
+    if (video.readyState >= 1) {
+      onLoaded();
+    } else {
+      video.addEventListener('loadedmetadata', onLoaded);
+      return () => video.removeEventListener('loadedmetadata', onLoaded);
+    }
+  }, []);
 
-  // Revealed city hero backdrop & main banner
-  const heroRevealOpacity = useTransform(scrollYProgress, [0.15, 0.45], [0, 1]);
-  const heroRevealScale = useTransform(scrollYProgress, [0.15, 0.55], [0.88, 1]);
-  const heroRevealY = useTransform(scrollYProgress, [0.15, 0.55], [40, 0]);
+  // 2. Scroll-Driven Video Scrubbing Mechanics (Framer Motion + useRef)
+  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
+    const video = videoRef.current;
+    if (!video || !video.duration || isNaN(video.duration)) return;
 
-  // Live countdown to summit
+    // Map scroll progress (0 to 1) directly to HTML5 video element's currentTime property (0 to duration)
+    const clampedProgress = Math.min(Math.max(latest, 0), 1);
+    targetTimeRef.current = clampedProgress * video.duration;
+
+    if (rafIdRef.current === null) {
+      rafIdRef.current = requestAnimationFrame(() => {
+        if (videoRef.current && !isNaN(targetTimeRef.current)) {
+          // Setting currentTime scrubs through the video frames frame-by-frame
+          videoRef.current.currentTime = targetTimeRef.current;
+        }
+        rafIdRef.current = null;
+      });
+    }
+  });
+
+  const handleLoadedMetadata = () => {
+    if (videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
+      setIsVideoLoaded(true);
+    }
+  };
+
+  const handleVideoError = () => {
+    console.warn('Scrub video failed to load, falling back to static poster.');
+    setVideoError(true);
+  };
+
+  // 3. Overlay Elements & Typography
+  // Initial State (Scroll 0% to 30%): Centered elegant title + bouncing scroll prompt ("Scroll down ⇡")
+  const initialTitleOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
+  const initialTitleScale = useTransform(scrollYProgress, [0, 0.3], [1, 0.92]);
+  const initialPointerEvents = useTransform(scrollYProgress, (v) => (v > 0.28 ? 'none' : 'auto'));
+
+  // Final State (Scroll 80% to 100%): Main website hero content / navigation fades in seamlessly
+  const finalHeroOpacity = useTransform(scrollYProgress, [0.8, 1.0], [0, 1]);
+  const finalHeroScale = useTransform(scrollYProgress, [0.8, 1.0], [0.92, 1]);
+  const finalHeroY = useTransform(scrollYProgress, [0.8, 1.0], [30, 0]);
+  const finalPointerEvents = useTransform(scrollYProgress, (v) => (v < 0.78 ? 'none' : 'auto'));
+
+  // Countdown timer to event
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   useEffect(() => {
     const target = new Date('2027-02-07T09:00:00+05:30').getTime();
@@ -70,10 +115,11 @@ export const ShutterGateHero: React.FC<ShutterGateHeroProps> = ({ onRegisterClic
     return () => clearInterval(interval);
   }, []);
 
-  const handleSkip = () => {
+  // Quick skip button: scrolls directly to the end of the 300vh runway into the homepage
+  const handleSkipToHome = () => {
     playSound('click');
     if (containerRef.current) {
-      const targetY = containerRef.current.offsetTop + containerRef.current.offsetHeight - window.innerHeight;
+      const targetY = containerRef.current.offsetTop + containerRef.current.offsetHeight - window.innerHeight + 10;
       window.scrollTo({ top: targetY, behavior: 'smooth' });
     }
   };
@@ -82,48 +128,134 @@ export const ShutterGateHero: React.FC<ShutterGateHeroProps> = ({ onRegisterClic
     <div
       ref={containerRef}
       id="hero-gate-journey"
-      className="relative w-full h-[280vh] bg-gradient-to-b from-[#1E0B36] via-[#2A114B] to-[#F5EFFE]"
+      className="relative w-full h-[300vh] bg-[#18082A]"
     >
-      {/* 1. Fullscreen Viewport Sticky Container */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center select-none">
+      {/* 1. Fullscreen Viewport Sticky Locked Container */}
+      <div className="sticky top-0 h-screen w-full overflow-hidden select-none bg-black flex items-center justify-center">
         
-        {/* Background Revealed View: Cloud City Panorama */}
-        <motion.div 
-          style={{ opacity: heroRevealOpacity, scale: heroRevealScale, y: heroRevealY }}
-          className="absolute inset-0 w-full h-full z-0 flex items-center justify-center overflow-hidden"
-        >
-          {/* Panoramic background illustration overlay */}
-          <div 
-            className="absolute inset-0 bg-cover bg-center transition-all duration-700"
-            style={{
-              backgroundImage: `url('/posters/poster-hero.jpg')`,
-              filter: 'brightness(0.92) contrast(1.05)',
-            }}
+        {/* 4. HTML5 Scrub-to-Scroll Video Element with playsInline, muted, and preload="auto" */}
+        {!videoError ? (
+          <video
+            ref={videoRef}
+            src="/video_1.mp4"
+            playsInline
+            muted
+            preload="auto"
+            autoPlay={false}
+            controls={false}
+            onLoadedMetadata={handleLoadedMetadata}
+            onError={handleVideoError}
+            className="w-full h-full object-cover transition-opacity duration-700"
+            style={{ opacity: isVideoLoaded ? 1 : 0.4 }}
           />
-          {/* Lavender and soft purple ambient gradients */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#2A0E4E]/85 via-purple-950/40 to-[#1A0730]/75" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(192,132,252,0.18)_0%,transparent_70%)]" />
+        ) : (
+          /* Fallback image if video fails */
+          <div 
+            className="w-full h-full bg-cover bg-center"
+            style={{ backgroundImage: `url('/posters/gate-portal-sky.jpg')` }}
+          />
+        )}
 
-          {/* Interactive Revealed Summit Billboard */}
-          <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center text-white pt-12 sm:pt-6">
+        {/* Fallback state while video is buffering / loading */}
+        {!isVideoLoaded && !videoError && (
+          <div className="absolute inset-0 bg-gradient-to-b from-[#210D3A] via-[#2F1057] to-[#1A0730] flex flex-col items-center justify-center text-purple-200 gap-3 z-0">
+            <Loader2 className="w-8 h-8 animate-spin text-amber-400" />
+            <span className="text-xs font-mono tracking-widest uppercase">Initializing Portal Feed...</span>
+          </div>
+        )}
+
+        {/* Ambient Pastel Purple & Vignette Overlays */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#1C0733]/70 via-transparent to-[#1C0733]/50 pointer-events-none" />
+        <div className="absolute inset-0 bg-radial from-transparent via-purple-950/20 to-purple-950/60 pointer-events-none" />
+
+        {/* 3. Initial State (Scroll 0% to 30%): Over closed gates, centered title + bouncing scroll prompt ("Scroll down ⇡") */}
+        <motion.div
+          style={{
+            opacity: initialTitleOpacity,
+            scale: initialTitleScale,
+            pointerEvents: initialPointerEvents as any,
+          }}
+          className="absolute inset-0 z-20 flex flex-col items-center justify-center px-4 text-center pointer-events-auto"
+        >
+          {/* Subtle soft backdrop for readability */}
+          <div className="absolute inset-0 bg-gradient-to-b from-purple-950/40 via-purple-950/25 to-purple-950/60 pointer-events-none" />
+
+          <div className="relative z-10 max-w-3xl mx-auto space-y-6">
+            
+            {/* Tag Badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-900/80 backdrop-blur-md border border-purple-300/40 text-purple-200 text-xs sm:text-sm font-mono font-bold tracking-wider uppercase shadow-xl">
+              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+              <span>AWS Student Community Day 2027</span>
+            </div>
+
+            {/* Initial Hero Heading */}
+            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white tracking-tight leading-tight drop-shadow-[0_4px_24px_rgba(0,0,0,0.85)]">
+              Ready for your grand adventure through{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-200 via-amber-200 to-purple-300">
+                Cloud City?
+              </span>
+            </h1>
+
+            <p className="text-purple-200/90 text-sm sm:text-lg max-w-xl mx-auto font-medium drop-shadow-md">
+              A high-altitude tech festival where collegiate builders unlock cloud architecture, hands-on masterclasses, and community glory.
+            </p>
+
+            {/* Bouncing Prompt Indicator: "Scroll down ⇡" */}
+            <div className="pt-4 flex flex-col items-center gap-2">
+              <div className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-amber-400 text-purple-950 font-black text-xs sm:text-sm font-mono tracking-wider shadow-[0_0_25px_rgba(251,191,36,0.6)] border border-amber-300 animate-bounce">
+                <span>Scroll down ⇡</span>
+                <ArrowDown className="w-4 h-4 stroke-[3]" />
+              </div>
+              <span className="text-xs font-mono text-purple-300/70">
+                (Gates open frame-by-frame with your scroll)
+              </span>
+            </div>
+
+            {/* Skip Option */}
+            <div>
+              <button
+                onClick={handleSkipToHome}
+                className="text-xs font-mono text-purple-300/80 hover:text-amber-300 underline underline-offset-4 cursor-pointer transition-colors"
+              >
+                Skip Gate Entrance ⇣
+              </button>
+            </div>
+
+          </div>
+        </motion.div>
+
+        {/* 3. Final State (Scroll 80% to 100%): Once doors are fully open and cloud mist fills the screen */}
+        <motion.div
+          style={{
+            opacity: finalHeroOpacity,
+            scale: finalHeroScale,
+            y: finalHeroY,
+            pointerEvents: finalPointerEvents as any,
+          }}
+          className="absolute inset-0 z-30 flex flex-col items-center justify-center px-4 sm:px-6 text-center text-white pointer-events-auto"
+        >
+          {/* Subtle mist overlay behind the revealed billboard */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#1C0733]/90 via-purple-950/50 to-[#18082A]/80 pointer-events-none" />
+
+          <div className="relative z-10 max-w-5xl mx-auto space-y-6">
             
             {/* Top Pill */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-900/80 backdrop-blur-md border border-purple-300/40 text-purple-200 text-xs sm:text-sm font-mono font-bold tracking-wide mb-4 shadow-lg shadow-purple-950/40">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-900/80 backdrop-blur-md border border-purple-300/40 text-purple-200 text-xs sm:text-sm font-mono font-bold tracking-wide shadow-lg">
               <Sparkles className="w-4 h-4 text-amber-300 animate-spin" style={{ animationDuration: '6s' }} />
               <span>AWS STUDENT BUILDER GROUP PICT PRESENTS</span>
             </div>
 
-            {/* Poster Headline */}
-            <h1 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight text-white drop-shadow-[0_4px_16px_rgba(42,14,78,0.8)] leading-[1.08] mb-3">
+            {/* Grand Main Website Headline */}
+            <h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight text-white drop-shadow-[0_4px_20px_rgba(0,0,0,0.85)] leading-[1.08]">
               AWS STUDENT <br className="hidden sm:inline" />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-200 via-amber-200 to-purple-300">
                 COMMUNITY DAY
               </span>{' '}
               <span className="text-amber-400">PUNE</span>
-            </h1>
+            </h2>
 
-            {/* Date & Location Badges matching poster #1 */}
-            <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-sm sm:text-base font-mono font-bold text-purple-100 mb-6">
+            {/* Date & Location Badges */}
+            <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-sm sm:text-base font-mono font-bold text-purple-100">
               <div className="flex items-center gap-2 px-4 py-1.5 rounded-xl bg-purple-950/70 border border-purple-400/30 backdrop-blur-sm">
                 <Calendar className="w-4 h-4 text-amber-400" />
                 <span className="text-amber-300 font-black">07 FEB</span>
@@ -135,11 +267,11 @@ export const ShutterGateHero: React.FC<ShutterGateHeroProps> = ({ onRegisterClic
               </div>
             </div>
 
-            {/* Countdown Clock (Glassmorphic) */}
-            <div className="max-w-md mx-auto mb-7 p-3 rounded-2xl bg-purple-950/60 backdrop-blur-md border border-purple-400/30 shadow-2xl">
+            {/* Countdown Clock */}
+            <div className="max-w-md mx-auto p-3 rounded-2xl bg-purple-950/70 backdrop-blur-md border border-purple-400/30 shadow-2xl">
               <div className="text-[11px] font-mono text-purple-300 uppercase tracking-widest text-center mb-1.5 flex items-center justify-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                Gate Unlocked • Summit Ticker
+                Gate Opened • Entering Cloud City
               </div>
               <div className="grid grid-cols-4 gap-2 text-center">
                 {[
@@ -148,7 +280,7 @@ export const ShutterGateHero: React.FC<ShutterGateHeroProps> = ({ onRegisterClic
                   { label: 'MINS', val: timeLeft.minutes },
                   { label: 'SECS', val: timeLeft.seconds },
                 ].map((item, idx) => (
-                  <div key={idx} className="bg-purple-900/50 rounded-xl py-1.5 border border-purple-500/20">
+                  <div key={idx} className="bg-purple-900/60 rounded-xl py-1.5 border border-purple-500/20">
                     <span className="block text-xl sm:text-2xl font-black font-mono text-amber-300">
                       {String(item.val).padStart(2, '0')}
                     </span>
@@ -159,7 +291,7 @@ export const ShutterGateHero: React.FC<ShutterGateHeroProps> = ({ onRegisterClic
             </div>
 
             {/* Primary Action Buttons */}
-            <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+            <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 pt-1">
               <button
                 onClick={() => {
                   playSound('click');
@@ -181,213 +313,19 @@ export const ShutterGateHero: React.FC<ShutterGateHeroProps> = ({ onRegisterClic
                 <span>Explore City Map</span>
               </a>
             </div>
-          </div>
-        </motion.div>
 
-        {/* Phase 2: Dense Cloud Mist Layer (Scale: 1 to 1.5, Opacity: 1 to 0) */}
-        <motion.div
-          style={{
-            scale: cloudScale,
-            opacity: cloudOpacity,
-            pointerEvents: cloudPointerEvents as any,
-          }}
-          className="absolute inset-0 z-20 pointer-events-none flex items-center justify-center overflow-hidden"
-        >
-          {/* Fluffy swirling cloud SVG overlays & gradients */}
-          <div className="absolute inset-0 bg-gradient-to-b from-purple-950/30 via-purple-300/25 to-indigo-950/50 backdrop-blur-[2px]" />
-          
-          {/* Ambient cloud clusters */}
-          <div className="absolute -top-20 -left-20 w-[60vw] h-[60vw] rounded-full bg-purple-200/20 blur-3xl" />
-          <div className="absolute -bottom-20 -right-20 w-[60vw] h-[60vw] rounded-full bg-indigo-300/25 blur-3xl" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[50vh] rounded-full bg-purple-100/15 blur-2xl" />
-        </motion.div>
-
-        {/* 2. Sci-Fi Gate Elements: Futuristic Archway & Sliding Left/Right Door Panels */}
-        <div className="absolute inset-0 z-30 flex pointer-events-none overflow-hidden">
-          
-          {/* Left Door Panel */}
-          <motion.div
-            style={{ x: gateLeftX }}
-            className="w-1/2 h-full relative pointer-events-auto bg-gradient-to-r from-[#210D3A] via-[#35155D] to-[#49227A] border-r-2 border-purple-400/40 shadow-[10px_0_40px_rgba(0,0,0,0.6)] flex items-center justify-end overflow-hidden"
-          >
-            {/* Metallic Lavender Bevels & Architectural Panels */}
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(196,181,253,0.18)_0%,transparent_60%)]" />
-            <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-purple-300/20 to-transparent border-r-4 border-amber-300/60" />
-
-            {/* Left Archway Gothic Curve Accents */}
-            <div className="absolute top-0 right-0 w-[80%] h-48 border-b-2 border-l-2 border-purple-400/30 rounded-bl-[120px] bg-purple-900/20" />
-            <div className="absolute bottom-0 right-0 w-[85%] h-56 border-t-2 border-l-2 border-purple-400/30 rounded-tl-[140px] bg-purple-900/20" />
-
-            {/* Mechanical Inset Ribs & Grooves */}
-            <div className="absolute right-12 top-1/4 bottom-1/4 w-8 border-r-2 border-l-2 border-purple-400/30 bg-purple-950/40 rounded-lg flex flex-col justify-around py-4">
-              {[...Array(6)].map((_, i) => (
-                <div key={i} className="h-1 mx-1 bg-purple-400/40 rounded-full" />
-              ))}
-            </div>
-
-            {/* Directional Chevrons */}
-            <div className="absolute right-24 top-1/2 -translate-y-1/2 flex items-center text-purple-300/50 font-mono text-2xl font-black">
-              &lt;&lt;&lt;
-            </div>
-
-            {/* Left Half of Center Runic Glyph Disc */}
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-48 sm:w-64 h-48 sm:h-64 rounded-full border-4 border-amber-300/70 bg-purple-950/80 shadow-[0_0_30px_rgba(251,191,36,0.35)] flex items-center justify-center overflow-hidden">
-              <div className="w-36 sm:w-48 h-36 sm:h-48 rounded-full border-2 border-dashed border-amber-200/50 animate-spin" style={{ animationDuration: '30s' }} />
-              <div className="absolute w-24 sm:w-32 h-24 sm:h-32 rounded-full border border-purple-300/40" />
-              <div className="absolute text-[9px] font-mono font-bold text-amber-200 tracking-widest uppercase">
-                PORTAL • ALPHA
-              </div>
-            </div>
-
-            {/* Vertical Caution / Warning Markings */}
-            <div className="absolute right-4 bottom-24 tracking-[0.3em] font-mono text-[10px] text-purple-300/60 uppercase [writing-mode:vertical-rl] rotate-180">
-              STAND CLEAR • INGRESS ARCHWAY
-            </div>
-
-            {/* Left Telemetry Console */}
-            <div className="hidden md:flex absolute left-8 bottom-12 p-3 rounded-xl bg-purple-950/80 border border-purple-400/30 text-[10px] font-mono text-purple-300 space-y-1 backdrop-blur-md shadow-xl">
-              <div className="flex items-center gap-1.5 text-amber-300 font-bold">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                GATE LOCK: SYNCHRONIZED
-              </div>
-              <div className="text-purple-400">SECTOR: 01 // PICT SKY DOCK</div>
-              <div className="text-purple-400">FREQUENCY: 5.4 GHz AWS-MESH</div>
-            </div>
-          </motion.div>
-
-          {/* Right Door Panel */}
-          <motion.div
-            style={{ x: gateRightX }}
-            className="w-1/2 h-full relative pointer-events-auto bg-gradient-to-l from-[#210D3A] via-[#35155D] to-[#49227A] border-l-2 border-purple-400/40 shadow-[-10px_0_40px_rgba(0,0,0,0.6)] flex items-center justify-start overflow-hidden"
-          >
-            {/* Metallic Lavender Bevels & Architectural Panels */}
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(196,181,253,0.18)_0%,transparent_60%)]" />
-            <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-purple-300/20 to-transparent border-l-4 border-amber-300/60" />
-
-            {/* Right Archway Gothic Curve Accents */}
-            <div className="absolute top-0 left-0 w-[80%] h-48 border-b-2 border-r-2 border-purple-400/30 rounded-br-[120px] bg-purple-900/20" />
-            <div className="absolute bottom-0 left-0 w-[85%] h-56 border-t-2 border-r-2 border-purple-400/30 rounded-tr-[140px] bg-purple-900/20" />
-
-            {/* Mechanical Inset Ribs & Grooves */}
-            <div className="absolute left-12 top-1/4 bottom-1/4 w-8 border-r-2 border-l-2 border-purple-400/30 bg-purple-950/40 rounded-lg flex flex-col justify-around py-4">
-              {[...Array(6)].map((_, i) => (
-                <div key={i} className="h-1 mx-1 bg-purple-400/40 rounded-full" />
-              ))}
-            </div>
-
-            {/* Directional Chevrons */}
-            <div className="absolute left-24 top-1/2 -translate-y-1/2 flex items-center text-purple-300/50 font-mono text-2xl font-black">
-              &gt;&gt;&gt;
-            </div>
-
-            {/* Right Half of Center Runic Glyph Disc */}
-            <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-48 sm:w-64 h-48 sm:h-64 rounded-full border-4 border-amber-300/70 bg-purple-950/80 shadow-[0_0_30px_rgba(251,191,36,0.35)] flex items-center justify-center overflow-hidden">
-              <div className="w-36 sm:w-48 h-36 sm:h-48 rounded-full border-2 border-dashed border-amber-200/50 animate-spin" style={{ animationDuration: '30s', animationDirection: 'reverse' }} />
-              <div className="absolute w-24 sm:w-32 h-24 sm:h-32 rounded-full border border-purple-300/40" />
-              <div className="absolute text-[9px] font-mono font-bold text-amber-200 tracking-widest uppercase">
-                ENIGMA • CORE
-              </div>
-            </div>
-
-            {/* Vertical Caution / Warning Markings */}
-            <div className="absolute left-4 bottom-24 tracking-[0.3em] font-mono text-[10px] text-purple-300/60 uppercase [writing-mode:vertical-rl]">
-              STAND CLEAR • INGRESS ARCHWAY
-            </div>
-
-            {/* Right Telemetry Console */}
-            <div className="hidden md:flex absolute right-8 bottom-12 p-3 rounded-xl bg-purple-950/80 border border-purple-400/30 text-[10px] font-mono text-purple-300 space-y-1 backdrop-blur-md shadow-xl">
-              <div className="flex items-center gap-1.5 text-amber-300 font-bold">
-                <ShieldCheck className="w-3.5 h-3.5 text-amber-300" />
-                DESTINATION: CLOUD CITY
-              </div>
-              <div className="text-purple-400">ATMOSPHERIC PRESSURE: OPTIMAL</div>
-              <div className="text-purple-400">LATENCY: &lt; 1.2ms FAST-TRACK</div>
-            </div>
-          </motion.div>
-
-          {/* Central Crevice: Radiant Golden Solar Beam */}
-          <motion.div
-            style={{
-              opacity: creviceGlowOpacity,
-              scaleX: creviceScaleX,
-            }}
-            className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-3 z-40 pointer-events-none flex flex-col items-center justify-center"
-          >
-            {/* Core bright light seam */}
-            <div className="w-1.5 h-full bg-gradient-to-b from-amber-100 via-amber-300 to-amber-100 shadow-[0_0_30px_#FDE047,0_0_60px_#F59E0B]" />
-            {/* Ambient diffuse golden aura */}
-            <div className="absolute inset-y-0 -left-12 -right-12 bg-amber-400/30 blur-xl" />
-          </motion.div>
-
-          {/* Bottom Destination Seal / Gold Emblem (from Poster Image 4 & 5) */}
-          <motion.div
-            style={{ opacity: creviceGlowOpacity }}
-            className="absolute bottom-6 left-1/2 -translate-x-1/2 z-40 pointer-events-none"
-          >
-            <div className="px-5 py-2 rounded-full bg-amber-400/90 text-purple-950 font-black text-xs font-mono uppercase tracking-widest border-2 border-amber-200 shadow-[0_0_20px_rgba(251,191,36,0.6)] flex items-center gap-2">
-              <Flame className="w-3.5 h-3.5 text-purple-950 fill-purple-950" />
-              <span>DESTINATION: ENIGMA CORE</span>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* 1. Initial Hero Screen State Prompt (Centered Elegant Hero Heading) */}
-        <motion.div
-          style={{
-            opacity: promptOpacity,
-            scale: promptScale,
-            pointerEvents: promptPointerEvents as any,
-          }}
-          className="absolute inset-0 z-50 flex flex-col items-center justify-center px-4 text-center pointer-events-auto"
-        >
-          {/* Subtle dark backdrop overlay to guarantee sharp readability over gate */}
-          <div className="absolute inset-0 bg-gradient-to-b from-purple-950/70 via-purple-950/40 to-purple-950/80 pointer-events-none" />
-
-          <div className="relative z-10 max-w-3xl mx-auto space-y-6">
-            
-            {/* Event Tag */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-300/20 backdrop-blur-md border border-purple-300/30 text-purple-200 text-xs sm:text-sm font-mono font-bold tracking-wider uppercase shadow-lg">
-              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-              <span>AWS Student Community Day 2027</span>
-            </div>
-
-            {/* Centered Elegant Hero Heading */}
-            <h2 className="text-3xl sm:text-5xl md:text-6xl font-black text-white tracking-tight leading-tight drop-shadow-[0_4px_20px_rgba(0,0,0,0.8)]">
-              Ready for your grand adventure through{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-purple-200 to-amber-300">
-                Cloud City?
-              </span>
-            </h2>
-
-            <p className="text-purple-200/90 text-sm sm:text-lg max-w-xl mx-auto font-medium drop-shadow-md">
-              A high-altitude tech festival where collegiate builders unlock cloud architecture, hands-on masterclasses, and community glory.
-            </p>
-
-            {/* Bouncing Prompt Indicator: "Scroll down ⇡" */}
-            <div className="pt-4 flex flex-col items-center gap-2">
-              <div className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-amber-400 text-purple-950 font-black text-xs sm:text-sm font-mono tracking-wider shadow-[0_0_20px_rgba(251,191,36,0.5)] border border-amber-300 animate-bounce">
-                <span>Scroll down to open gate</span>
-                <ArrowDown className="w-4 h-4 stroke-[3]" />
-              </div>
-              <span className="text-xs font-mono text-purple-300/70">
-                (or click below to enter directly)
+            {/* Transition prompt into the rest of the homepage */}
+            <div className="pt-3">
+              <span className="text-xs font-mono text-purple-300/80 animate-pulse">
+                ⇣ Continue scrolling down to explore the full festival homepage ⇣
               </span>
             </div>
 
-            {/* Quick Skip button */}
-            <div>
-              <button
-                onClick={handleSkip}
-                className="text-xs font-mono text-purple-300 hover:text-amber-300 underline underline-offset-4 cursor-pointer transition-colors"
-              >
-                Skip Gate Animation ⇣
-              </button>
-            </div>
           </div>
         </motion.div>
 
-        {/* Scroll Progress Bar at bottom */}
-        <div className="absolute bottom-0 left-0 right-0 h-1 bg-purple-950/40 z-50">
+        {/* Scroll Progress Bar at the bottom of the sticky viewport */}
+        <div className="absolute bottom-0 left-0 right-0 h-1 bg-purple-950/50 z-40">
           <motion.div
             style={{ scaleX: scrollYProgress, transformOrigin: '0%' }}
             className="h-full bg-gradient-to-r from-purple-400 via-amber-400 to-purple-300"
