@@ -1,7 +1,8 @@
 import React from 'react';
-import { Mail, ArrowUp, Sparkles, Send } from 'lucide-react';
+import { Mail, ArrowUp } from 'lucide-react';
 import { LinkedInIcon, InstagramIcon, TwitterXIcon, DiscordIcon, GitHubIcon } from './BrandIcons';
 import { playSound } from '../utils/audio';
+import { SBGLogo } from './SBGLogo';
 
 interface StudioFooterProps {
   onOpenCodeOfConduct: () => void;
@@ -14,81 +15,41 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({ onOpenCodeOfConduct 
   };
 
   return (
-    <footer className="relative bg-gradient-to-b from-[#1C0733] via-[#160429] to-[#0E021B] text-white pt-20 pb-12 px-4 sm:px-6 lg:px-8 border-t-2 border-purple-800/40 overflow-hidden">
+    <footer className="relative bg-[#120424] text-white pt-14 pb-12 px-4 sm:px-6 lg:px-8 border-t-2 border-purple-800/40 overflow-hidden">
       
       {/* Ambient background glows */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-64 bg-purple-600/10 blur-[100px] pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-32 bg-purple-600/10 blur-[90px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto relative z-10">
         
-        {/* Pre-Footer Hero Banner (Directly Matching Poster #3!) */}
-        <div className="relative rounded-3xl bg-gradient-to-r from-purple-900/60 via-purple-950/80 to-indigo-950/70 border-2 border-purple-400/30 p-8 sm:p-14 mb-16 text-center overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
-          
-          <div className="relative z-10 max-w-3xl mx-auto space-y-4">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-500/20 border border-purple-300/30 text-amber-300 text-xs font-mono font-bold uppercase tracking-wider">
-              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-              <span>THE EXPEDITION CONTINUES</span>
-            </div>
-
-            <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight">
-              YOUR NEXT CHAPTER <br className="hidden sm:inline" />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-200 via-amber-200 to-purple-300">
-                STARTS HERE
-              </span>
-            </h2>
-
-            <p className="text-sm sm:text-lg text-purple-200/90 font-medium max-w-xl mx-auto">
-              Bring your curiosity. We'll meet you in Cloud City.
-            </p>
-
-            <div className="pt-3 flex flex-wrap items-center justify-center gap-4">
-              <a
-                href="#ticket-dispenser"
-                onClick={() => playSound('click')}
-                className="px-7 py-3.5 rounded-2xl bg-gradient-to-r from-amber-400 via-amber-500 to-amber-400 hover:from-amber-300 hover:to-amber-400 text-purple-950 font-black text-sm sm:text-base flex items-center gap-2 shadow-lg shadow-amber-400/30 transition-transform hover:scale-105"
-              >
-                <span>Get Event Passes & Updates</span>
-                <Send className="w-4 h-4" />
-              </a>
-            </div>
-
-            <p className="text-xs font-mono text-purple-300/70 tracking-widest uppercase pt-2">
-              REGISTRATION DETAILS & EARLY BIRD LIVE NOW • 07 FEB
-            </p>
-          </div>
-
-          {/* Background image preview from poster */}
-          <div 
-            className="absolute inset-0 bg-cover bg-center opacity-15 pointer-events-none"
-            style={{
-              backgroundImage: `url('/posters/poster-footer.jpg')`,
-            }}
-          />
-        </div>
-
-        {/* 3-Column Footer Grid matching Poster #3 footer bar */}
+        {/* 3-Column Footer Grid */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-purple-900/60">
           
-          {/* Column 1: CLOUD CITY brand */}
+          {/* Column 1: CLOUD CITY brand + Official SBG Logo (5 cols) */}
           <div className="md:col-span-5 space-y-4">
-            <div>
-              <h3 className="text-2xl font-black text-white tracking-tight">
-                CLOUD CITY
-              </h3>
-              <p className="text-sm font-bold text-amber-300 mt-0.5">
-                AWS Student Community Day Pune
-              </p>
-              <p className="text-xs font-mono text-purple-300 mt-1 uppercase tracking-wider">
-                Build. Connect. Explore.
-              </p>
+            <div className="flex items-center gap-3">
+              <div className="w-11 h-11 rounded-2xl bg-purple-900 border border-purple-400/40 p-1.5 flex items-center justify-center shrink-0 shadow-sm">
+                <SBGLogo variant="emblem" size="md" />
+              </div>
+              <div>
+                <h3 className="text-xl font-black text-white tracking-tight leading-tight">
+                  CLOUD CITY 2027
+                </h3>
+                <p className="text-xs font-bold text-amber-300">
+                  AWS Student Community Day Pune
+                </p>
+                <p className="text-[10px] font-mono text-purple-300 uppercase tracking-wider">
+                  AWS Student Builder Group • PICT Chapter
+                </p>
+              </div>
             </div>
 
             <p className="text-xs sm:text-sm text-purple-200/70 max-w-sm leading-relaxed font-normal">
-              A flagship collegiate technology summit brought to life by the AWS Student Builder Group at Pune Institute of Computer Technology.
+              A flagship student-powered technology summit bridging classroom theory and production innovation for builders across Maharashtra.
             </p>
 
             {/* Social Icons */}
-            <div className="flex items-center gap-2 pt-2">
+            <div className="flex items-center gap-2 pt-1">
               {[
                 { icon: LinkedInIcon, href: 'https://linkedin.com', label: 'LinkedIn' },
                 { icon: InstagramIcon, href: 'https://instagram.com', label: 'Instagram' },
@@ -104,7 +65,7 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({ onOpenCodeOfConduct 
                     target="_blank"
                     rel="noreferrer"
                     aria-label={item.label}
-                    className="w-9 h-9 rounded-xl bg-purple-950/80 border border-purple-700/50 hover:border-amber-400 hover:text-amber-300 text-purple-300 flex items-center justify-center transition-colors"
+                    className="w-9 h-9 rounded-xl bg-purple-950/80 hover:bg-amber-400 hover:text-purple-950 border border-purple-400/30 text-purple-200 flex items-center justify-center transition-all shadow-sm"
                   >
                     <Icon className="w-4 h-4 fill-current" />
                   </a>
@@ -113,87 +74,65 @@ export const StudioFooter: React.FC<StudioFooterProps> = ({ onOpenCodeOfConduct 
             </div>
           </div>
 
-          {/* Column 2: QUICK LINKS */}
-          <div className="md:col-span-3 space-y-3">
-            <h4 className="text-xs font-mono font-black text-purple-300 uppercase tracking-widest">
-              QUICK LINKS
+          {/* Column 2: Venue & Location Summary (3 cols) */}
+          <div className="md:col-span-4 space-y-3">
+            <h4 className="text-xs font-mono font-black text-amber-300 uppercase tracking-widest">
+              Event Details
             </h4>
-            <ul className="space-y-2 text-sm text-purple-200/80 font-medium">
-              <li>
-                <a href="#hero-gate-journey" className="hover:text-amber-300 transition-colors">
-                  About Cloud City
-                </a>
-              </li>
-              <li>
-                <a href="#city-interactive-map" className="hover:text-amber-300 transition-colors">
-                  Districts & Venue
-                </a>
-              </li>
-              <li>
-                <a href="#speakers-studio" className="hover:text-amber-300 transition-colors">
-                  Speakers & CFP
-                </a>
-              </li>
-              <li>
-                <a href="#flashback-gallery" className="hover:text-amber-300 transition-colors">
-                  Flashback Gallery
-                </a>
-              </li>
-              <li>
-                <a href="#ticket-dispenser" className="hover:text-amber-300 transition-colors">
-                  Passes & Tickets
-                </a>
-              </li>
-              <li>
+            <div className="space-y-2 text-xs text-purple-200/80 font-mono">
+              <div className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                <span>08:30 AM – 06:00 PM IST</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                <span>Dakkhan Banquet Hall, Pune</span>
+              </div>
+              <div className="flex items-center gap-2 text-emerald-400">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span>Early Bird Pass Live on KonfHub</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Column 3: Contact & Community Links (3 cols) */}
+          <div className="md:col-span-3 space-y-3">
+            <h4 className="text-xs font-mono font-black text-amber-300 uppercase tracking-widest">
+              Community Inquiries
+            </h4>
+            <div className="space-y-2 text-xs">
+              <a
+                href="mailto:aws.sbg.pict@gmail.com"
+                className="flex items-center gap-2 text-purple-200/80 hover:text-amber-300 transition-colors"
+              >
+                <Mail className="w-3.5 h-3.5 text-purple-400" />
+                <span>aws.sbg.pict@gmail.com</span>
+              </a>
+              <div>
                 <button
                   onClick={onOpenCodeOfConduct}
-                  className="hover:text-amber-300 transition-colors cursor-pointer text-left"
+                  className="text-xs text-purple-300 hover:text-white underline underline-offset-4 cursor-pointer"
                 >
                   Code of Conduct
                 </button>
-              </li>
-            </ul>
-          </div>
-
-          {/* Column 3: COMMUNITY & PICT */}
-          <div className="md:col-span-4 space-y-3">
-            <h4 className="text-xs font-mono font-black text-purple-300 uppercase tracking-widest">
-              COMMUNITY
-            </h4>
-            <div className="text-xs sm:text-sm text-purple-200/80 space-y-2 font-medium">
-              <p className="font-bold text-white">
-                AWS Student Builder Group • PICT
-              </p>
-              <p>Pune Institute of Computer Technology</p>
-              <p className="text-purple-300">
-                Survey No. 27, Near Trimurti Chowk, Dhankawadi, Pune, Maharashtra 411043
-              </p>
-              <div className="pt-1 flex items-center gap-2">
-                <Mail className="w-4 h-4 text-amber-400" />
-                <a
-                  href="mailto:awscloudclubpict@gmail.com"
-                  className="text-amber-300 hover:underline font-mono text-xs"
-                >
-                  awscloudclubpict@gmail.com
-                </a>
               </div>
             </div>
           </div>
 
         </div>
 
-        {/* Bottom Bar with Back to Top */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-purple-400">
+        {/* Bottom Utility Bar */}
+        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-purple-400/80">
           <div>
-            © 2027 AWS Student Community Day Pune • All rights reserved.
+            &copy; 2027 AWS Student Community Day Pune • Built by AWS Student Builder Group PICT
           </div>
 
           <button
             onClick={scrollToTop}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-purple-950/80 border border-purple-700/50 hover:border-amber-400 hover:text-amber-300 text-purple-200 transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-950/80 hover:bg-purple-900 border border-purple-400/30 text-purple-200 hover:text-amber-300 transition-colors cursor-pointer"
           >
-            <span>Back to top</span>
             <ArrowUp className="w-3.5 h-3.5" />
+            <span>Back to Top</span>
           </button>
         </div>
 

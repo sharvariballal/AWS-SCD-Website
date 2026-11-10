@@ -9,6 +9,8 @@ import {
   Sparkles,
   CheckCircle2
 } from 'lucide-react';
+import { SBGLogo } from './SBGLogo';
+import { CityMascotGuide } from './CityMascotGuide';
 
 interface InteractiveHeroStudioProps {
   onRegisterClick: (passType?: string) => void;
@@ -38,18 +40,18 @@ export const InteractiveHeroStudio: React.FC<InteractiveHeroStudioProps> = ({ on
   }, []);
 
   return (
-    <section id="hero-studio" className="relative pt-8 pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[#F5EFFE] via-[#FAF7FF] to-[#F5EFFE] overflow-hidden border-b-2 border-purple-900/10">
+    <section id="hero-studio" className="relative pt-6 pb-20 px-4 sm:px-6 lg:px-8 bg-blueprint-grid overflow-hidden border-b-2 border-purple-900/10">
       
       {/* 1. Live Ticket Status Marquee Ticker */}
-      <div className="max-w-7xl mx-auto mb-8">
-        <div className="p-2 sm:p-2.5 rounded-2xl bg-white/90 border border-purple-200 shadow-sm flex items-center gap-3 overflow-hidden">
+      <div className="max-w-7xl mx-auto mb-6">
+        <div className="p-2 sm:p-2.5 rounded-2xl bg-white border border-purple-200 shadow-sm flex items-center gap-3 overflow-hidden">
           <div className="px-2.5 py-1 rounded-xl bg-purple-950 text-amber-300 text-[10px] sm:text-xs font-mono font-black uppercase tracking-wider shrink-0 flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            LIVE STATUS
+            LIVE TICKETING
           </div>
           <div className="overflow-hidden whitespace-nowrap w-full">
             <div className="animate-marquee inline-block text-xs sm:text-sm font-bold text-purple-950 font-mono">
-              ⚡ Ticket Status: Early Bird Passes Live at ₹299 • Phase 1 Allocations Open • Sunday, 07 February 2027 • Dakkhan Banquet Hall, Pune • Universal Full Access Across All Passes • 
+              Phase 1 Status: Early Bird Passes Live at ₹299 • Universal Full Access Across All Passes • Limited Allocation Available • 
             </div>
           </div>
         </div>
@@ -59,72 +61,52 @@ export const InteractiveHeroStudio: React.FC<InteractiveHeroStudioProps> = ({ on
         
         {/* Top Header Pill Row */}
         <div className="flex flex-wrap items-center justify-between gap-3 mb-6 pb-3 border-b border-purple-200">
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-900 text-amber-300 text-xs font-mono font-bold uppercase shadow-sm">
-              <Flame className="w-3.5 h-3.5 text-amber-300" />
-              CLOUD CITY 2027
-            </span>
-            <span className="text-xs font-mono font-bold text-purple-800 hidden sm:inline">
-              AWS Student Community Day • Pune Institute of Computer Technology
-            </span>
+          <div className="flex items-center gap-2.5">
+            <SBGLogo variant="emblem" size="sm" />
+            <div className="leading-tight">
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-purple-900 text-amber-300 text-[11px] font-mono font-bold uppercase shadow-sm">
+                  <Flame className="w-3 h-3 text-amber-300" />
+                  CLOUD CITY 2027
+                </span>
+                <span className="text-xs font-mono font-bold text-purple-900">
+                  PICT Pune
+                </span>
+              </div>
+            </div>
           </div>
 
           <div className="flex items-center gap-4 text-xs font-mono font-bold text-purple-800">
-            <span className="flex items-center gap-1">
-              <Calendar className="w-3.5 h-3.5 text-purple-600" /> 07 Feb 2027
+            <span className="flex items-center gap-1.5 bg-purple-100 px-3 py-1 rounded-full border border-purple-200">
+              <Calendar className="w-3.5 h-3.5 text-purple-600" /> Sunday, 07 February 2027
             </span>
-            <span className="hidden md:inline">•</span>
-            <span className="hidden md:flex items-center gap-1">
-              <MapPin className="w-3.5 h-3.5 text-purple-600" /> Dakkhan Banquet Hall, Pune
+            <span className="hidden md:flex items-center gap-1.5 bg-purple-100 px-3 py-1 rounded-full border border-purple-200">
+              <MapPin className="w-3.5 h-3.5 text-purple-600" /> Pune
             </span>
           </div>
         </div>
 
-        {/* Hero Main Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+        {/* Hero Main Grid: Perfectly Balanced 7:5 Two-Column Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           
-          {/* Left Column: Bold Headline & Advert Value Proposition (7 cols) */}
+          {/* Left Column: Bold Headline & Narrative (7 cols) */}
           <div className="lg:col-span-7 space-y-6">
             
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-[#260B49] tracking-tight leading-[1.04]">
               STEP INTO{' '}
-              <span className="inline-block bg-gradient-to-r from-amber-400 to-amber-500 text-purple-950 px-3 py-0.5 rounded-xl border border-amber-300 shadow-md -rotate-1 mt-1">
+              <span className="inline-block bg-amber-400 text-purple-950 px-3.5 py-0.5 rounded-xl border-2 border-amber-500 shadow-md -rotate-1 mt-1">
                 CLOUD CITY.
               </span>{' '}
               BUILD REAL SKILLS.
             </h1>
 
             <p className="text-base sm:text-lg text-purple-950/80 leading-relaxed max-w-2xl font-medium">
-              A living, breathing tech metropolis engineered by the AWS Student Builder Group at PICT. Transform theoretical cloud knowledge into hands-on mastery across interactive urban districts. 1,000+ student builders, AWS Community Heroes, and recruiters under one roof.
+              A living, breathing tech metropolis engineered for student builders. Transform theoretical cloud knowledge into hands-on mastery across interactive urban districts. 1,000+ attendees, AWS Community Heroes, and industry mentors under one roof.
             </p>
 
-            {/* Countdown Ticker Box */}
-            <div className="p-4 sm:p-5 bg-white/95 backdrop-blur-md rounded-3xl border-2 border-purple-200 shadow-[0_10px_30px_rgba(76,29,149,0.08)] max-w-xl">
-              <div className="flex items-center justify-between mb-3 text-xs font-mono font-bold text-purple-800 uppercase tracking-wider">
-                <span className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                  Summit Day Countdown
-                </span>
-                <span className="text-amber-600 font-bold">07 Feb 2027 • 08:30 AM IST</span>
-              </div>
-
-              <div className="grid grid-cols-4 gap-2 text-center">
-                {[
-                  { val: timeLeft.days, unit: 'DAYS' },
-                  { val: timeLeft.hours, unit: 'HOURS' },
-                  { val: timeLeft.minutes, unit: 'MINS' },
-                  { val: timeLeft.seconds, unit: 'SECS' },
-                ].map((item, idx) => (
-                  <div key={idx} className="p-2 sm:p-3 rounded-2xl bg-purple-50/70 border border-purple-200">
-                    <div className="text-2xl sm:text-3xl font-black text-[#260B49] font-mono">
-                      {String(item.val).padStart(2, '0')}
-                    </div>
-                    <div className="text-[10px] font-mono font-bold text-purple-600 mt-0.5">
-                      {item.unit}
-                    </div>
-                  </div>
-                ))}
-              </div>
+            {/* Mascot Guide Callout */}
+            <div>
+              <CityMascotGuide zone="hero" />
             </div>
 
             {/* Action Buttons */}
@@ -133,7 +115,7 @@ export const InteractiveHeroStudio: React.FC<InteractiveHeroStudioProps> = ({ on
                 onClick={() => {
                   onRegisterClick('Early Bird Pass (₹299)');
                 }}
-                className="px-7 py-3.5 rounded-2xl text-base font-black flex items-center gap-2 cursor-pointer bg-gradient-to-r from-amber-400 via-amber-500 to-amber-400 text-purple-950 shadow-lg shadow-amber-400/30 transition-transform hover:scale-105"
+                className="px-7 py-3.5 rounded-2xl text-base font-black flex items-center gap-2 cursor-pointer bg-amber-400 hover:bg-amber-300 text-purple-950 shadow-lg shadow-amber-400/30 transition-transform hover:scale-105"
               >
                 <Ticket className="w-5 h-5 text-purple-950" />
                 <span>Book Early Bird Pass — ₹299</span>
@@ -159,17 +141,19 @@ export const InteractiveHeroStudio: React.FC<InteractiveHeroStudioProps> = ({ on
                 <CheckCircle2 className="w-3.5 h-3.5 text-amber-700" />
                 <span>Full Buffet Lunch &amp; High-Tea Included</span>
               </span>
-              <span className="px-3 py-1 rounded-xl bg-purple-100 border border-purple-300 text-purple-900 text-xs font-mono font-bold flex items-center gap-1.5">
+              <span className="px-3 py-1 rounded-xl bg-purple-100 border border-purple-300 text-purple-950 text-xs font-mono font-bold flex items-center gap-1.5">
                 <CheckCircle2 className="w-3.5 h-3.5 text-purple-700" />
-                <span>Official AWS SBG PICT Certificate</span>
+                <span>Official Summit Credential</span>
               </span>
             </div>
 
           </div>
 
-          {/* Right Column: Early Bird Advert Showcase (5 cols) */}
-          <div className="lg:col-span-5">
-            <div className="p-6 sm:p-7 rounded-3xl bg-gradient-to-br from-amber-400 to-amber-500 text-purple-950 border-2 border-amber-300 shadow-[0_16px_40px_rgba(245,158,11,0.25)] relative overflow-hidden">
+          {/* Right Column: Balanced Cards Stack (Early Bird Pass + Summit Countdown) (5 cols) */}
+          <div className="lg:col-span-5 space-y-4">
+            
+            {/* Top: Early Bird Advert Card */}
+            <div className="p-6 sm:p-7 rounded-3xl bg-amber-400 text-purple-950 border-3 border-purple-950 shadow-[0_16px_40px_rgba(245,158,11,0.25)] relative overflow-hidden">
               
               {/* Header Badge */}
               <div className="flex items-center justify-between pb-3 mb-4 border-b border-purple-950/20">
@@ -215,6 +199,36 @@ export const InteractiveHeroStudio: React.FC<InteractiveHeroStudioProps> = ({ on
               </div>
 
             </div>
+
+            {/* Bottom: Countdown Ticker Box (Balances the right side!) */}
+            <div className="p-5 bg-white rounded-3xl border-2 border-purple-200 shadow-[0_10px_30px_rgba(76,29,149,0.08)]">
+              <div className="flex items-center justify-between mb-3 text-xs font-mono font-bold text-purple-800 uppercase tracking-wider">
+                <span className="flex items-center gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                  Summit Countdown
+                </span>
+                <span className="text-amber-600 font-bold">08:30 AM IST</span>
+              </div>
+
+              <div className="grid grid-cols-4 gap-2 text-center">
+                {[
+                  { val: timeLeft.days, unit: 'DAYS' },
+                  { val: timeLeft.hours, unit: 'HOURS' },
+                  { val: timeLeft.minutes, unit: 'MINS' },
+                  { val: timeLeft.seconds, unit: 'SECS' },
+                ].map((item, idx) => (
+                  <div key={idx} className="p-2 sm:p-2.5 rounded-2xl bg-purple-50/70 border border-purple-200">
+                    <div className="text-2xl sm:text-3xl font-black text-[#260B49] font-mono">
+                      {String(item.val).padStart(2, '0')}
+                    </div>
+                    <div className="text-[10px] font-mono font-bold text-purple-600 mt-0.5">
+                      {item.unit}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
           </div>
 
         </div>

@@ -2,14 +2,10 @@ import { useState } from 'react';
 import { StudioNavbar } from './components/StudioNavbar';
 import { ShutterGateHero } from './components/ShutterGateHero';
 import { InteractiveHeroStudio } from './components/InteractiveHeroStudio';
-import { StorytellingSection } from './components/StorytellingSection';
 import { CloudCityMap } from './components/CloudCityMap';
-import { PolaroidFlashbackGallery } from './components/PolaroidFlashbackGallery';
-import { ServiceCircuitJammer } from './components/ServiceCircuitJammer';
-import { ConferenceMatrix } from './components/ConferenceMatrix';
-import { SpeakerShowcase } from './components/SpeakerShowcase';
-import { LootBoxVault } from './components/LootBoxVault';
+import { StageProgramSection } from './components/StageProgramSection';
 import { TicketDispenser } from './components/TicketDispenser';
+import { PolaroidFlashbackGallery } from './components/PolaroidFlashbackGallery';
 import { SponsorShowcase } from './components/SponsorShowcase';
 import { VenueBlueprint } from './components/VenueBlueprint';
 import { FAQStudio } from './components/FAQStudio';
@@ -47,25 +43,27 @@ export function App() {
 
   return (
     <div
-      className={`min-h-screen bg-[#F8F5FF] text-[#1F0B38] font-sans selection:bg-purple-200 selection:text-purple-950 relative ${
+      className={`min-h-screen bg-blueprint-grid text-[#1F0B38] font-sans selection:bg-purple-200 selection:text-purple-950 relative ${
         !isGateUnlocked ? 'h-screen overflow-hidden' : 'overflow-x-hidden'
       }`}
     >
-      {/* 1. True Locked-Viewport Scrollytelling Portal:
-          Locks viewport on load, scrubs video 0.0 to 0.8, and seamlessly transitions to homepage 0.8 to 1.0 */}
+      {/* 1. Cinematic Shutter Portal Gate:
+          Single "Enter Cloud City" action; official club emblem; no ticket price spoiler */}
       <ShutterGateHero
         isUnlocked={isGateUnlocked}
         onUnlock={() => setIsGateUnlocked(true)}
         onReplay={() => setIsGateUnlocked(false)}
-        onQuickRegister={() => handleOpenRegistration('Early Bird Pass (₹299)')}
       />
 
       {/* 2. Studio Sticky Navigation Bar:
-          Hidden during gate entrance; revealed once gate opens and transitions to homepage */}
+          Official club crest on black + AWS SCD identity, zero emojis, clean anchor links */}
       {isGateUnlocked && (
         <StudioNavbar
           onRegisterClick={() => handleOpenRegistration('Early Bird Pass (₹299)')}
-          onReplayGate={() => setIsGateUnlocked(false)}
+          onReplayGate={() => {
+            setIsGateUnlocked(false);
+            window.scrollTo({ top: 0, behavior: 'instant' });
+          }}
         />
       )}
 
@@ -75,46 +73,32 @@ export function App() {
           !isGateUnlocked ? 'opacity-0 pointer-events-none' : 'opacity-100 pointer-events-auto'
         }`}
       >
-        {/* Summit Announcement Billboard */}
+        {/* Summit Announcement Billboard & Countdown */}
         <InteractiveHeroStudio onRegisterClick={(pass) => handleOpenRegistration(pass || 'Early Bird Pass (₹299)')} />
 
-        {/* Storytelling Section with Scroll-Driven Text Reveal & 4 Pillars (Big Ideas. Bigger Community) */}
-        <section id="storytelling">
-          <StorytellingSection />
-        </section>
-
-        {/* Interactive Pastel 3D Isometric Cityscape & Location Pins with Left-Side Sliding Info Drawer */}
+        {/* Living Isometric Metropolis Vector Map & 4 Experience Districts */}
         <CloudCityMap />
 
-        {/* Tactile Polaroid Camera Flashback Gallery (Replacing Horizontal Marquee) */}
-        <PolaroidFlashbackGallery />
+        {/* Unified Stage & Program: Single-Stage Schedule + Curated Speakers & Open CFP */}
+        <StageProgramSection onOpenCFPModal={() => setIsCFPModalOpen(true)} />
 
-        {/* Interactive Arcade Alley Game: Service Circuit Jammer */}
-        <ServiceCircuitJammer />
-
-        {/* Agenda & Sessions Matrix */}
-        <ConferenceMatrix />
-
-        {/* Featured Speakers & Call for Speakers (CFP) Showcase */}
-        <SpeakerShowcase onOpenCFPModal={() => setIsCFPModalOpen(true)} />
-
-        {/* Official Swag Box & Perks Vault */}
-        <LootBoxVault />
-
-        {/* Pass Dispensary (Early Bird ₹299 LIVE NOW, KonfHub Direct Provision) */}
+        {/* Pass Dispensary & Everything Included In Every Pass (Unified Layout) */}
         <TicketDispenser onRegisterClick={(pass) => handleOpenRegistration(pass)} />
+
+        {/* Compact Authentic Community Flashback Reel (SCD 2026 Archive) */}
+        <PolaroidFlashbackGallery />
 
         {/* Sponsors & Ecosystem Partners Showcase */}
         <SponsorShowcase onOpenSponsorModal={() => setIsSponsorModalOpen(true)} />
 
-        {/* Venue Blueprint & Embedded Google Maps Visual */}
+        {/* Venue Blueprint & Embedded Google Maps Visual (Single Hall Reality) */}
         <VenueBlueprint />
 
         {/* Frequently Asked Questions Studio */}
         <FAQStudio />
       </main>
 
-      {/* Studio Footer (Shown once on homepage) */}
+      {/* Studio Footer: Clean Closing Layout (No duplicate ticket banner) */}
       {isGateUnlocked && (
         <StudioFooter onOpenCodeOfConduct={() => setIsCodeOfConductOpen(true)} />
       )}

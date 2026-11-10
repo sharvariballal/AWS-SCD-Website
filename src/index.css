@@ -24,14 +24,16 @@
     padding: 0;
     overflow-x: hidden;
     background-color: #F8F5FF;
+    background-image: radial-gradient(#CBD5E1 1.25px, transparent 1.25px);
+    background-size: 24px 24px;
     color: #1F0B38;
   }
 }
 
-/* Blueprint dot grid background (Soft Lavender Tint) */
+/* Blueprint dot grid background (Version 1 Dotted Grid Style) */
 .bg-blueprint-grid {
   background-color: #F8F5FF;
-  background-image: radial-gradient(#D8B4FE 1.2px, transparent 1.2px);
+  background-image: radial-gradient(#CBD5E1 1.25px, transparent 1.25px);
   background-size: 24px 24px;
 }
 

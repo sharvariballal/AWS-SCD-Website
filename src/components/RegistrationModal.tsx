@@ -217,7 +217,7 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
             </div>
 
             <h3 className="text-2xl font-black text-slate-900 mb-1">
-              Seat Reserved, Builder! 🎉
+              Seat Reserved, Builder!
             </h3>
             <p className="text-xs text-slate-600 mb-5">
               Your registration slot has been held for AWS Student Community Day 2027 at PICT Pune.

@@ -37,7 +37,7 @@ export const StorytellingSection: React.FC = () => {
   ];
 
   return (
-    <section className="relative py-24 sm:py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[#F5EFFE] via-[#EFE5FD] to-[#F8F5FF] overflow-hidden border-b-2 border-purple-900/10">
+    <section className="relative py-24 sm:py-32 px-4 sm:px-6 lg:px-8 bg-[#F8F5FF] overflow-hidden border-b-2 border-purple-900/10">
       
       {/* Background Soft Floating Clouds & Pastel Accents */}
       <div className="absolute top-10 left-1/4 w-96 h-96 rounded-full bg-purple-300/20 blur-3xl pointer-events-none" />
@@ -58,7 +58,7 @@ export const StorytellingSection: React.FC = () => {
           <ScrollReveal delay={0.2} yOffset={24}>
             <h2 className="text-4xl sm:text-6xl font-black text-[#260B49] tracking-tight leading-[1.08] mb-6">
               BIG IDEAS.{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-700 via-indigo-600 to-purple-800">
+              <span className="text-purple-700">
                 BIGGER COMMUNITY.
               </span>
             </h2>
@@ -112,7 +112,7 @@ export const StorytellingSection: React.FC = () => {
 
         {/* Narrative Callout Card with Poster Art */}
         <ScrollReveal delay={0.35} yOffset={25}>
-          <div className="relative rounded-3xl bg-gradient-to-r from-[#2F1057] via-[#3E1674] to-[#250A47] text-white p-8 sm:p-12 overflow-hidden shadow-2xl border border-purple-400/20">
+          <div className="relative rounded-3xl bg-[#240B48] text-white p-8 sm:p-12 overflow-hidden shadow-2xl border border-purple-400/30">
             {/* Ambient glows */}
             <div className="absolute -right-20 -bottom-20 w-80 h-80 rounded-full bg-amber-400/10 blur-3xl pointer-events-none" />
             <div className="absolute left-1/3 top-0 w-60 h-60 rounded-full bg-purple-400/15 blur-2xl pointer-events-none" />

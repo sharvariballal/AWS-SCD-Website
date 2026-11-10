@@ -1,136 +1,78 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
-import { ChevronDown, Sparkles, Loader2, Ticket } from 'lucide-react';
-import { playSound } from '../utils/audio';
+import { ChevronDown, Sparkles, ShieldCheck, ArrowRight } from 'lucide-react';
 
 interface ShutterGateHeroProps {
   isUnlocked: boolean;
   onUnlock: () => void;
   onReplay?: () => void;
-  onQuickRegister?: () => void;
 }
 
 export const ShutterGateHero: React.FC<ShutterGateHeroProps> = ({
   isUnlocked,
   onUnlock,
-  onQuickRegister,
 }) => {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
-  const [videoError, setVideoError] = useState(false);
-
-  // Virtual progress tracking (0.0 to 1.0)
+  // Virtual progress tracking (0.0 = Closed, 1.0 = Fully Opened)
   const targetProgressRef = useRef(0);
   const currentProgressRef = useRef(0);
   const rafIdRef = useRef<number | null>(null);
-  const updateScrubRef = useRef<() => void>(() => {});
+  const updateProgressRef = useRef<() => void>(() => {});
 
-  // React state for reactive rendering
-  const [displayProgress, setDisplayProgress] = useState(0);
-  const [textOpacity, setTextOpacity] = useState(1);
-  const [portalOpacity, setPortalOpacity] = useState(1);
-  const [portalScale, setPortalScale] = useState(1);
+  const [progress, setProgress] = useState(0);
+  const [isOpeningAutomatically, setIsOpeningAutomatically] = useState(false);
 
-  // Check video readiness
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    const onLoaded = () => {
-      video.pause();
-      video.currentTime = 0;
-      setIsVideoLoaded(true);
-    };
-
-    if (video.readyState >= 1) {
-      onLoaded();
-    } else {
-      video.addEventListener('loadedmetadata', onLoaded);
-      return () => video.removeEventListener('loadedmetadata', onLoaded);
-    }
-  }, []);
-
-  // Main animation / scrub loop
-  const updateScrub = useCallback(() => {
-    // Smooth lerp interpolation
+  // Main 60fps smooth spring/lerp loop
+  const updateProgress = useCallback(() => {
     const diff = targetProgressRef.current - currentProgressRef.current;
-    currentProgressRef.current += diff * 0.14;
+    
+    // Smooth responsive interpolation
+    currentProgressRef.current += diff * (isOpeningAutomatically ? 0.08 : 0.12);
+    const p = Math.min(Math.max(currentProgressRef.current, 0), 1.0);
+    setProgress(p);
 
-    const p = Math.min(Math.max(currentProgressRef.current, 0), 1);
-    setDisplayProgress(p);
-
-    // 1. Text Opacity: Fade out "Welcome to Cloud City" smoothly during first 20% (0.0 to 0.2)
-    if (p <= 0.2) {
-      setTextOpacity(1 - p / 0.2);
-    } else {
-      setTextOpacity(0);
-    }
-
-    // 2. Video Scrubbing: Map scroll progress (0.0 to 0.8) directly to video currentTime
-    const video = videoRef.current;
-    if (video && video.duration && !isNaN(video.duration)) {
-      const videoProgress = Math.min(Math.max(p / 0.8, 0), 1);
-      const targetTime = videoProgress * video.duration;
-
-      // Update currentTime if delta is meaningful
-      if (Math.abs(video.currentTime - targetTime) > 0.02) {
-        video.currentTime = targetTime;
-      }
-    }
-
-    // 3. Transition to Homepage (0.8 to 1.0):
-    // Once doors are fully open and cloud mist fills screen, fade out & scale portal
-    if (p >= 0.8) {
-      const transProgress = (p - 0.8) / 0.2; // 0 to 1
-      setPortalOpacity(Math.max(0, 1 - transProgress));
-      setPortalScale(1 + transProgress * 0.12);
-    } else {
-      setPortalOpacity(1);
-      setPortalScale(1);
-    }
-
-    // 4. Release lock when reached >= 0.985
+    // When almost fully opened, trigger seamless unlock
     if (p >= 0.985 && !isUnlocked) {
       onUnlock();
       return;
     }
 
-    // Continue loop if not settled
     if (!isUnlocked) {
-      rafIdRef.current = requestAnimationFrame(() => updateScrubRef.current());
+      rafIdRef.current = requestAnimationFrame(() => updateProgressRef.current());
     }
-  }, [isUnlocked, onUnlock]);
+  }, [isUnlocked, isOpeningAutomatically, onUnlock]);
 
   useEffect(() => {
-    updateScrubRef.current = updateScrub;
+    updateProgressRef.current = updateProgress;
   });
 
-  // Start / restart RAF loop
   useEffect(() => {
     if (!isUnlocked) {
-      rafIdRef.current = requestAnimationFrame(() => updateScrubRef.current());
+      targetProgressRef.current = 0;
+      currentProgressRef.current = 0;
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      rafIdRef.current = requestAnimationFrame(() => {
+        setIsOpeningAutomatically(false);
+        updateProgressRef.current();
+      });
       return () => {
         if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
       };
     }
-  }, [isUnlocked, updateScrub]);
+  }, [isUnlocked]);
 
-  // Event Listeners: Wheel & Touch delta interception
+  // Touch & Scroll Delta Handler
   useEffect(() => {
     if (isUnlocked) return;
 
-    // Prevent body scrolling
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
 
-    // 1. Mouse Wheel Delta
     const handleWheel = (e: WheelEvent) => {
       e.preventDefault();
-      const sensitivity = 0.0009; // Tuned for silky feel on both mice & trackpads
+      const sensitivity = 0.0012;
       const next = targetProgressRef.current + e.deltaY * sensitivity;
       targetProgressRef.current = Math.min(Math.max(next, 0), 1.0);
     };
 
-    // 2. Touch Gestures for mobile
     let touchStartY = 0;
     const handleTouchStart = (e: TouchEvent) => {
       touchStartY = e.touches[0].clientY;
@@ -142,19 +84,18 @@ export const ShutterGateHero: React.FC<ShutterGateHeroProps> = ({
       const diff = touchStartY - currentY;
       touchStartY = currentY;
 
-      const touchSensitivity = 0.0028;
+      const touchSensitivity = 0.0035;
       const next = targetProgressRef.current + diff * touchSensitivity;
       targetProgressRef.current = Math.min(Math.max(next, 0), 1.0);
     };
 
-    // 3. Keyboard Arrow Keys
     const handleKeyDown = (e: KeyboardEvent) => {
       if (['ArrowDown', 'PageDown', ' '].includes(e.key)) {
         e.preventDefault();
-        targetProgressRef.current = Math.min(targetProgressRef.current + 0.06, 1.0);
+        targetProgressRef.current = Math.min(targetProgressRef.current + 0.15, 1.0);
       } else if (['ArrowUp', 'PageUp'].includes(e.key)) {
         e.preventDefault();
-        targetProgressRef.current = Math.max(targetProgressRef.current - 0.06, 0);
+        targetProgressRef.current = Math.max(targetProgressRef.current - 0.15, 0);
       }
     };
 
@@ -172,155 +113,187 @@ export const ShutterGateHero: React.FC<ShutterGateHeroProps> = ({
     };
   }, [isUnlocked]);
 
-  // Auto-scrub trigger on click
+  // Instant trigger to slide open smoothly
   const handleAutoEnter = () => {
-    playSound('click');
+    setIsOpeningAutomatically(true);
     targetProgressRef.current = 1.0;
   };
 
-  // If already fully unlocked, unmount portal to restore 100% performance
-  if (isUnlocked) {
-    return null;
-  }
+  if (isUnlocked) return null;
+
+  // Door translation calculations
+  const leftDoorX = -progress * 105; // 0% to -105%
+  const rightDoorX = progress * 105; // 0% to +105%
+  const centerLockOpacity = Math.max(0, 1 - progress * 2.2);
+  const centerLockScale = 1 + progress * 0.4;
+  const centerLockRotate = progress * 90;
+  const overlayMistOpacity = Math.min(progress * 1.5, 1);
 
   return (
-    <div
-      style={{
-        opacity: portalOpacity,
-        transform: `scale(${portalScale})`,
-      }}
-      className="fixed inset-0 z-50 w-screen h-screen overflow-hidden bg-black select-none pointer-events-auto transition-transform duration-75"
-    >
-      {/* 2. HTML5 Scrub-to-Scroll Video Element */}
-      {!videoError ? (
-        <video
-          ref={videoRef}
-          src="/video_1.mp4"
-          playsInline
-          muted
-          preload="auto"
-          autoPlay={false}
-          controls={false}
-          onError={() => setVideoError(true)}
-          className="w-full h-full object-cover pointer-events-none"
-          style={{ opacity: isVideoLoaded ? 1 : 0.3 }}
-        />
-      ) : (
-        /* Fallback background if video fails */
-        <div
-          className="w-full h-full bg-cover bg-center"
-          style={{ backgroundImage: `url('/posters/gate-portal-sky.jpg')` }}
-        />
-      )}
+    <div className="fixed inset-0 z-50 w-screen h-screen overflow-hidden bg-[#0A0314] select-none pointer-events-auto">
+      
+      {/* 1. Underlying Horizon / Light Portal that reveals as doors part */}
+      <div 
+        style={{ opacity: overlayMistOpacity }}
+        className="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-[#1E0938] via-[#2F1054] to-[#F5EFFE] transition-opacity duration-300"
+      >
+        <div className="w-[800px] h-[800px] rounded-full bg-gradient-to-r from-purple-500/30 via-amber-400/30 to-purple-400/30 blur-3xl animate-pulse" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-amber-300/20 via-purple-600/10 to-transparent" />
+      </div>
 
-      {/* Loading state indicator */}
-      {!isVideoLoaded && !videoError && (
-        <div className="absolute inset-0 bg-[#160628] flex flex-col items-center justify-center text-purple-200 gap-3 z-0">
-          <Loader2 className="w-8 h-8 animate-spin text-amber-400" />
-          <span className="text-xs font-mono uppercase tracking-[0.25em]">
-            Connecting to Portal...
-          </span>
-        </div>
-      )}
-
-      {/* Ambient ethereal tints & vignette */}
-      <div className="absolute inset-0 bg-gradient-to-t from-purple-950/70 via-transparent to-purple-950/60 pointer-events-none" />
-      <div className="absolute inset-0 bg-radial from-transparent via-purple-950/20 to-purple-950/70 pointer-events-none" />
-
-      {/* 1. Minimalist Initial View (Scroll Progress 0.0 to 0.20): Centered Ethereal Typography */}
+      {/* 2. Left Hydraulic Shutter Blast Door */}
       <div
         style={{
-          opacity: textOpacity,
-          pointerEvents: textOpacity > 0.05 ? 'auto' : 'none',
+          transform: `translate3d(${leftDoorX}%, 0, 0)`,
+          willChange: 'transform',
         }}
-        className="absolute inset-0 flex flex-col items-center justify-center px-4 text-center z-20 transition-opacity duration-150"
+        className="absolute top-0 bottom-0 left-0 w-1/2 bg-gradient-to-r from-[#0D041A] via-[#1A0933] to-[#250C48] border-r-2 border-amber-400/40 shadow-[20px_0_60px_rgba(0,0,0,0.9)] flex items-center justify-end overflow-hidden"
       >
-        <div className="max-w-3xl mx-auto space-y-4">
+        {/* Precision Laser-Etched Blueprint Circuit Paths */}
+        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#C4B5FD_1px,transparent_1px)] [background-size:24px_24px]" />
+        
+        <svg className="absolute inset-0 w-full h-full opacity-30 stroke-purple-400" xmlns="http://www.w3.org/2000/svg">
+          <line x1="20%" y1="0" x2="20%" y2="100%" strokeWidth="1" strokeDasharray="6 6" />
+          <line x1="60%" y1="0" x2="60%" y2="100%" strokeWidth="1" />
+          <line x1="0" y1="35%" x2="100%" y2="35%" strokeWidth="1" />
+          <line x1="0" y1="65%" x2="100%" y2="65%" strokeWidth="1" />
+          <circle cx="60%" cy="35%" r="6" fill="#FBBF24" />
+          <circle cx="60%" cy="65%" r="6" fill="#FBBF24" />
+        </svg>
+
+        {/* Hydraulic Seam Accents */}
+        <div className="absolute right-3 top-1/4 bottom-1/4 w-1 bg-gradient-to-b from-transparent via-amber-400 to-transparent opacity-60" />
+      </div>
+
+      {/* 3. Right Hydraulic Shutter Blast Door */}
+      <div
+        style={{
+          transform: `translate3d(${rightDoorX}%, 0, 0)`,
+          willChange: 'transform',
+        }}
+        className="absolute top-0 bottom-0 right-0 w-1/2 bg-gradient-to-l from-[#0D041A] via-[#1A0933] to-[#250C48] border-l-2 border-amber-400/40 shadow-[-20px_0_60px_rgba(0,0,0,0.9)] flex items-center justify-start overflow-hidden"
+      >
+        {/* Precision Laser-Etched Blueprint Circuit Paths */}
+        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#C4B5FD_1px,transparent_1px)] [background-size:24px_24px]" />
+
+        <svg className="absolute inset-0 w-full h-full opacity-30 stroke-purple-400" xmlns="http://www.w3.org/2000/svg">
+          <line x1="80%" y1="0" x2="80%" y2="100%" strokeWidth="1" strokeDasharray="6 6" />
+          <line x1="40%" y1="0" x2="40%" y2="100%" strokeWidth="1" />
+          <line x1="0" y1="35%" x2="100%" y2="35%" strokeWidth="1" />
+          <line x1="0" y1="65%" x2="100%" y2="65%" strokeWidth="1" />
+          <circle cx="40%" cy="35%" r="6" fill="#FBBF24" />
+          <circle cx="40%" cy="65%" r="6" fill="#FBBF24" />
+        </svg>
+
+        {/* Hydraulic Seam Accents */}
+        <div className="absolute left-3 top-1/4 bottom-1/4 w-1 bg-gradient-to-b from-transparent via-amber-400 to-transparent opacity-60" />
+      </div>
+
+      {/* 4. Central Mechanical Iris & Typography (Fades out as doors open) */}
+      <div
+        style={{
+          opacity: centerLockOpacity,
+          transform: `scale(${centerLockScale})`,
+          pointerEvents: centerLockOpacity > 0.1 ? 'auto' : 'none',
+        }}
+        className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center z-30 transition-opacity duration-150"
+      >
+        <div className="max-w-2xl mx-auto space-y-6">
           
-          {/* Subtle Tag */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-purple-900/60 backdrop-blur-md border border-purple-300/30 text-purple-200 text-xs font-mono tracking-[0.25em] uppercase">
-            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-            <span>AWS Student Community Day • Pune</span>
+          {/* Rotating Geometric Iris Emblem */}
+          <div className="relative w-28 h-28 mx-auto flex items-center justify-center">
+            {/* Outer Rotating Gear Ring */}
+            <div 
+              style={{ transform: `rotate(${centerLockRotate}deg)` }}
+              className="absolute inset-0 rounded-full border-2 border-dashed border-amber-400/80 animate-[spin_30s_linear_infinite]"
+            />
+            {/* Middle Conduit Ring */}
+            <div className="absolute inset-2 rounded-full border border-purple-400/60" />
+            {/* Center Core Emblem with Official Club Crest on Black Background */}
+            <div className="w-16 h-16 rounded-2xl bg-black border-2 border-amber-400 p-2 flex items-center justify-center shadow-[0_0_35px_rgba(251,191,36,0.6)]">
+              <img
+                src="/brand/sbg-emblem-black.png"
+                alt="AWS Student Builder Group"
+                className="w-full h-full object-contain"
+              />
+            </div>
           </div>
 
-          {/* Centered Ethereal Typography */}
-          <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight text-white drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)] leading-tight">
-            Welcome to{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-200 via-white to-purple-300 drop-shadow-[0_0_40px_rgba(216,180,254,0.5)]">
-              Cloud City
-            </span>
+          {/* Summit Title Badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-950/90 border border-purple-300/40 text-purple-200 text-xs font-mono tracking-[0.25em] uppercase shadow-lg">
+            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+            <span>AWS Student Community Day 2027</span>
+          </div>
+
+          {/* Grand Header - Solid High Contrast Typography */}
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-black text-white tracking-tight leading-tight drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]">
+            Welcome to <span className="text-amber-300">Cloud City</span>
           </h1>
 
-          <p className="text-sm sm:text-base font-light text-purple-200/80 tracking-widest uppercase">
-            Sunday, 07 February 2027 • Dakkhan Banquet Hall
+          <p className="text-xs sm:text-sm font-mono text-purple-200/90 tracking-widest uppercase">
+            Sunday, 07 February 2027 • Pune
           </p>
 
-          <div className="pt-3 flex flex-wrap items-center justify-center gap-3">
+          {/* Single Dominant Ingress Action (No Ticket Price Reveal on Gates) */}
+          <div className="pt-2 flex items-center justify-center">
             <button
               onClick={handleAutoEnter}
-              className="px-6 py-2.5 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-purple-950 font-black text-xs sm:text-sm shadow-lg shadow-amber-400/30 hover:scale-105 transition-transform flex items-center gap-2 cursor-pointer"
+              className="px-8 py-3.5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-purple-950 font-black text-sm shadow-xl shadow-amber-400/30 hover:scale-105 active:scale-95 transition-all flex items-center gap-2.5 cursor-pointer"
             >
-              <span>Enter Cloud City ➔</span>
+              <span>Enter Cloud City</span>
+              <ArrowRight className="w-4 h-4" />
             </button>
-            {onQuickRegister && (
-              <button
-                onClick={() => {
-                  handleAutoEnter();
-                  onQuickRegister();
-                }}
-                className="px-5 py-2.5 rounded-2xl bg-purple-900/80 hover:bg-purple-800/90 border border-purple-300/40 text-amber-300 font-bold text-xs sm:text-sm backdrop-blur-md hover:scale-105 transition-transform flex items-center gap-1.5 cursor-pointer"
-              >
-                <Ticket className="w-4 h-4 text-amber-300" />
-                <span>Claim Early Bird Pass • ₹299</span>
-              </button>
-            )}
           </div>
+
+          {/* Verified Ingress Status */}
+          <div className="pt-2 flex items-center justify-center gap-2 text-[11px] font-mono text-purple-300/80">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+            <span>AWS Student Builder Group • PICT Pune Chapter</span>
+          </div>
+
         </div>
       </div>
 
-      {/* 1. Subtle Animated Scroll Prompt at the Bottom ("Scroll down to enter") */}
+      {/* 5. Scroll Prompt at Bottom */}
       <div
         style={{
-          opacity: textOpacity,
-          pointerEvents: textOpacity > 0.05 ? 'auto' : 'none',
+          opacity: centerLockOpacity,
+          pointerEvents: centerLockOpacity > 0.1 ? 'auto' : 'none',
         }}
-        className="absolute bottom-10 left-0 right-0 flex flex-col items-center justify-center z-20 transition-opacity duration-150"
+        className="absolute bottom-8 left-0 right-0 flex flex-col items-center justify-center z-30 transition-opacity duration-150"
       >
         <button
           onClick={handleAutoEnter}
           className="group flex flex-col items-center gap-2 cursor-pointer bg-transparent border-0 outline-none p-2"
         >
-          <span className="text-xs sm:text-sm font-mono font-medium tracking-[0.25em] uppercase text-purple-200 group-hover:text-amber-300 transition-colors">
-            Scroll down to enter
+          <span className="text-xs font-mono tracking-[0.25em] uppercase text-purple-300/80 group-hover:text-amber-300 transition-colors">
+            Scroll down or click to open gates
           </span>
-
           <div className="w-8 h-8 rounded-full bg-purple-900/60 border border-purple-400/40 flex items-center justify-center text-amber-300 shadow-lg group-hover:bg-amber-400 group-hover:text-purple-950 transition-all animate-bounce">
             <ChevronDown className="w-4 h-4" />
           </div>
         </button>
-
-        <span className="text-[10px] font-mono text-purple-300/50 mt-1">
-          (or click to enter directly)
-        </span>
       </div>
 
       {/* Top Right Quick Skip Button */}
-      <div className="absolute top-6 right-6 z-30">
+      <div className="absolute top-6 right-6 z-40">
         <button
           onClick={handleAutoEnter}
-          className="px-3.5 py-1.5 rounded-full bg-purple-950/60 hover:bg-purple-900/80 border border-purple-400/30 text-purple-200 hover:text-amber-300 text-xs font-mono tracking-wider cursor-pointer backdrop-blur-sm transition-all"
+          className="px-4 py-1.5 rounded-full bg-purple-950/80 hover:bg-purple-900 border border-purple-400/40 text-purple-200 hover:text-amber-300 text-xs font-mono tracking-wider cursor-pointer backdrop-blur-md transition-all shadow-md inline-flex items-center gap-1.5"
         >
-          Skip Intro ➔
+          <span>Skip Intro</span>
+          <ArrowRight className="w-3.5 h-3.5" />
         </button>
       </div>
 
-      {/* Subtle Progress Bar along Bottom */}
-      <div className="absolute bottom-0 left-0 right-0 h-1 bg-purple-950/40 z-30 pointer-events-none">
+      {/* Progress Line */}
+      <div className="absolute bottom-0 left-0 right-0 h-1 bg-purple-950/60 z-40 pointer-events-none">
         <div
-          style={{ width: `${displayProgress * 100}%` }}
-          className="h-full bg-gradient-to-r from-purple-400 via-amber-400 to-purple-300 transition-all duration-75"
+          style={{ width: `${progress * 100}%` }}
+          className="h-full bg-gradient-to-r from-amber-400 via-purple-400 to-amber-300 transition-all duration-75"
         />
       </div>
+
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Menu, X, Sparkles, ArrowUpRight, Compass } from 'lucide-react';
+import { Menu, X, ArrowUpRight, DoorClosed } from 'lucide-react';
+import { SBGLogo } from './SBGLogo';
 
 interface StudioNavbarProps {
   onRegisterClick: () => void;
@@ -14,33 +15,30 @@ export const StudioNavbar: React.FC<StudioNavbarProps> = ({ onRegisterClick, onR
   };
 
   const navLinks = [
-    { label: 'Overview', href: '#storytelling' },
     { label: 'City Map', href: '#city-interactive-map' },
-    { label: 'Flashback', href: '#flashback-gallery' },
-    { label: 'Arcade', href: '#circuit-jammer' },
-    { label: 'Speakers', href: '#speakers-studio' },
-    { label: 'Passes', href: '#ticket-dispenser' },
+    { label: 'Stage & Agenda', href: '#stage-program' },
+    { label: 'Passes & Swag', href: '#ticket-dispenser' },
+    { label: 'Memories', href: '#community-memories' },
     { label: 'Venue', href: '#venue-blueprint' },
+    { label: 'FAQ', href: '#faq-studio' },
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-[#FAF7FF]/95 backdrop-blur-md border-b-2 border-purple-200/90 px-4 sm:px-6 py-3.5 transition-all">
+    <header className="sticky top-0 z-50 bg-[#FAF7FF]/95 backdrop-blur-md border-b-2 border-purple-200/90 px-4 sm:px-6 py-3 transition-all">
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
         
-        {/* Brand & Region Indicator */}
+        {/* Brand: Official SBG Club Emblem on Black + AWS SCD Identity */}
         <div className="flex items-center gap-3">
           <a
             href="#hero-studio"
             onClick={() => {
               if (onReplayGate) onReplayGate();
             }}
-            title="Click to replay gate entrance"
-            className="flex items-center gap-2 group cursor-pointer"
+            title="Click to return to city gates"
+            className="flex items-center gap-2.5 group cursor-pointer"
           >
-            {/* Custom AWS SBG Chip Emblem */}
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#250C47] to-[#4A1D88] border-2 border-purple-400/50 text-amber-300 flex items-center justify-center font-black text-sm shadow-[0_4px_12px_rgba(76,29,149,0.25)] group-hover:scale-105 transition-transform">
-              <span className="text-white">AWS</span>
-            </div>
+            {/* Official Black Emblem Badge */}
+            <SBGLogo variant="emblem" size="md" />
 
             <div className="leading-tight">
               <div className="flex items-center gap-1.5">
@@ -52,7 +50,7 @@ export const StudioNavbar: React.FC<StudioNavbarProps> = ({ onRegisterClick, onR
                 </span>
               </div>
               <span className="text-[11px] font-mono text-purple-700 font-semibold block">
-                AWS Student Builder Group PICT
+                PICT Pune Chapter
               </span>
             </div>
           </a>
@@ -65,7 +63,7 @@ export const StudioNavbar: React.FC<StudioNavbarProps> = ({ onRegisterClick, onR
         </div>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden xl:flex items-center gap-1 bg-white/90 backdrop-blur-sm p-1 rounded-full border border-purple-200 shadow-sm">
+        <nav className="hidden lg:flex items-center gap-1 bg-white/90 backdrop-blur-sm p-1 rounded-full border border-purple-200 shadow-sm">
           {navLinks.map((link) => (
             <a
               key={link.label}
@@ -79,35 +77,35 @@ export const StudioNavbar: React.FC<StudioNavbarProps> = ({ onRegisterClick, onR
 
         {/* Controls & CTA */}
         <div className="flex items-center gap-2.5">
-          {/* Replay Gate Button */}
+          {/* Go Back to Closed Gates Button */}
           {onReplayGate && (
             <button
               onClick={() => {
                 onReplayGate();
               }}
-              title="Replay Gate Opening"
-              className="hidden sm:flex px-2.5 py-1.5 rounded-xl border border-purple-300 text-xs font-mono font-bold text-purple-700 bg-white hover:bg-purple-50 items-center gap-1.5 cursor-pointer transition-colors shadow-sm"
+              title="Return to Closed City Gates"
+              className="hidden sm:flex px-3 py-1.5 rounded-xl border border-purple-300 text-xs font-mono font-bold text-purple-700 bg-white hover:bg-purple-50 items-center gap-1.5 cursor-pointer transition-colors shadow-sm"
             >
-              <Compass className="w-3.5 h-3.5 text-purple-600" />
-              <span>Portal Intro</span>
+              <DoorClosed className="w-3.5 h-3.5 text-purple-600" />
+              <span>City Gates</span>
             </button>
           )}
 
           {/* Primary CTA */}
           <button
             onClick={handleRegister}
-            className="px-4 sm:px-5 py-2 rounded-xl text-xs sm:text-sm flex items-center gap-1.5 cursor-pointer font-black tracking-tight bg-gradient-to-r from-amber-400 via-amber-500 to-amber-400 text-purple-950 shadow-md shadow-amber-400/25 border border-amber-300 hover:scale-105 active:scale-95 transition-all"
+            className="px-4 sm:px-5 py-2 rounded-xl text-xs sm:text-sm flex items-center gap-1.5 cursor-pointer font-black tracking-tight bg-amber-400 hover:bg-amber-300 text-purple-950 shadow-md shadow-amber-400/25 border border-amber-300 hover:scale-105 active:scale-95 transition-all"
           >
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Get Pass • ₹299</span>
-            <ArrowUpRight className="w-3.5 h-3.5 hidden sm:inline" />
+            <span>Claim Pass</span>
+            <ArrowUpRight className="w-4 h-4 text-purple-950" />
           </button>
 
-          {/* Mobile Menu Hamburger */}
+          {/* Mobile Menu Toggle Button */}
           <button
+            type="button"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="lg:hidden p-2 rounded-xl border border-purple-300 bg-white text-purple-900 hover:bg-purple-50 cursor-pointer"
             aria-label="Toggle navigation"
-            className="xl:hidden p-2 rounded-xl border border-purple-300 bg-white text-purple-900 hover:bg-purple-50 cursor-pointer"
           >
             {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -115,31 +113,40 @@ export const StudioNavbar: React.FC<StudioNavbarProps> = ({ onRegisterClick, onR
 
       </div>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Drawer Menu */}
       {isMobileMenuOpen && (
-        <div className="xl:hidden mt-3 p-4 bg-white/98 backdrop-blur-xl rounded-2xl border-2 border-purple-200 shadow-xl space-y-2 animate-in fade-in">
+        <div className="lg:hidden mt-3 pt-3 border-t border-purple-200/80 bg-white rounded-2xl p-4 shadow-lg flex flex-col gap-2">
           {navLinks.map((link) => (
             <a
               key={link.label}
               href={link.href}
-              onClick={() => {
-                setIsMobileMenuOpen(false);
-              }}
-              className="block px-3 py-2 rounded-xl font-bold text-sm text-purple-950 hover:bg-purple-50 transition-colors"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="px-3 py-2 rounded-xl text-sm font-bold text-purple-950 hover:bg-purple-50"
             >
               {link.label}
             </a>
           ))}
-          <div className="pt-2 border-t border-purple-100">
+          <div className="pt-2 border-t border-purple-100 flex items-center justify-between">
+            {onReplayGate && (
+              <button
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  onReplayGate();
+                }}
+                className="text-xs font-mono font-bold text-purple-700 flex items-center gap-1.5"
+              >
+                <DoorClosed className="w-3.5 h-3.5" />
+                <span>Return to City Gates</span>
+              </button>
+            )}
             <button
               onClick={() => {
                 setIsMobileMenuOpen(false);
                 handleRegister();
               }}
-              className="w-full py-2.5 rounded-xl text-sm font-black flex items-center justify-center gap-2 cursor-pointer bg-gradient-to-r from-amber-400 to-amber-500 text-purple-950 shadow-md"
+              className="px-4 py-2 rounded-xl text-xs font-black bg-amber-400 text-purple-950 shadow-sm"
             >
-              <Sparkles className="w-4 h-4" />
-              <span>Claim Early Bird Pass (₹299)</span>
+              Reserve Pass
             </button>
           </div>
         </div>
