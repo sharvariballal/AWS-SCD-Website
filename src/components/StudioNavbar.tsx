@@ -94,10 +94,10 @@ export const StudioNavbar: React.FC<StudioNavbarProps> = ({ onRegisterClick, onR
           {/* Primary CTA */}
           <button
             onClick={handleRegister}
-            className="px-4 sm:px-5 py-2 rounded-xl text-xs sm:text-sm flex items-center gap-1.5 cursor-pointer font-black tracking-tight bg-amber-400 hover:bg-amber-300 text-purple-950 shadow-md shadow-amber-400/25 border border-amber-300 hover:scale-105 active:scale-95 transition-all"
+            className="px-3 sm:px-5 py-2 rounded-xl text-xs sm:text-sm flex items-center gap-1 sm:gap-1.5 cursor-pointer font-black tracking-tight bg-amber-400 hover:bg-amber-300 text-purple-950 shadow-md shadow-amber-400/25 border border-amber-300 hover:scale-105 active:scale-95 transition-all"
           >
             <span>Claim Pass</span>
-            <ArrowUpRight className="w-4 h-4 text-purple-950" />
+            <ArrowUpRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-950" />
           </button>
 
           {/* Mobile Menu Toggle Button */}

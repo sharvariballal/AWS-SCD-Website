@@ -198,19 +198,19 @@ export const ShutterGateHero: React.FC<ShutterGateHeroProps> = ({
         }}
         className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center z-30 transition-opacity duration-150"
       >
-        <div className="max-w-2xl mx-auto space-y-6">
+        <div className="max-w-2xl mx-auto space-y-3.5 sm:space-y-6">
           
           {/* Rotating Geometric Iris Emblem */}
-          <div className="relative w-28 h-28 mx-auto flex items-center justify-center">
+          <div className="relative w-20 h-20 sm:w-28 sm:h-28 mx-auto flex items-center justify-center">
             {/* Outer Rotating Gear Ring */}
             <div 
               style={{ transform: `rotate(${centerLockRotate}deg)` }}
               className="absolute inset-0 rounded-full border-2 border-dashed border-amber-400/80 animate-[spin_30s_linear_infinite]"
             />
             {/* Middle Conduit Ring */}
-            <div className="absolute inset-2 rounded-full border border-purple-400/60" />
+            <div className="absolute inset-1.5 sm:inset-2 rounded-full border border-purple-400/60" />
             {/* Center Core Emblem with Official Club Crest on Black Background */}
-            <div className="w-16 h-16 rounded-2xl bg-black border-2 border-amber-400 p-2 flex items-center justify-center shadow-[0_0_35px_rgba(251,191,36,0.6)]">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl bg-black border-2 border-amber-400 p-1.5 sm:p-2 flex items-center justify-center shadow-[0_0_35px_rgba(251,191,36,0.6)]">
               <img
                 src="/brand/sbg-emblem-black.png"
                 alt="AWS Student Builder Group"
@@ -220,25 +220,25 @@ export const ShutterGateHero: React.FC<ShutterGateHeroProps> = ({
           </div>
 
           {/* Summit Title Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-950/90 border border-purple-300/40 text-purple-200 text-xs font-mono tracking-[0.25em] uppercase shadow-lg">
-            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+          <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full bg-purple-950/90 border border-purple-300/40 text-purple-200 text-[10px] sm:text-xs font-mono tracking-[0.2em] sm:tracking-[0.25em] uppercase shadow-lg">
+            <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-300" />
             <span>AWS Student Community Day 2027</span>
           </div>
 
           {/* Grand Header - Solid High Contrast Typography */}
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-black text-white tracking-tight leading-tight drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]">
+          <h1 className="text-3xl sm:text-6xl md:text-7xl font-black text-white tracking-tight leading-tight drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]">
             Welcome to <span className="text-amber-300">Cloud City</span>
           </h1>
 
-          <p className="text-xs sm:text-sm font-mono text-purple-200/90 tracking-widest uppercase">
+          <p className="text-[11px] sm:text-sm font-mono text-purple-200/90 tracking-widest uppercase">
             Sunday, 07 February 2027 • Pune
           </p>
 
           {/* Single Dominant Ingress Action (No Ticket Price Reveal on Gates) */}
-          <div className="pt-2 flex items-center justify-center">
+          <div className="pt-1 sm:pt-2 flex items-center justify-center">
             <button
               onClick={handleAutoEnter}
-              className="px-8 py-3.5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-purple-950 font-black text-sm shadow-xl shadow-amber-400/30 hover:scale-105 active:scale-95 transition-all flex items-center gap-2.5 cursor-pointer"
+              className="px-6 py-3 sm:px-8 sm:py-3.5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-purple-950 font-black text-xs sm:text-sm shadow-xl shadow-amber-400/30 hover:scale-105 active:scale-95 transition-all flex items-center gap-2 cursor-pointer"
             >
               <span>Enter Cloud City</span>
               <ArrowRight className="w-4 h-4" />
@@ -246,9 +246,9 @@ export const ShutterGateHero: React.FC<ShutterGateHeroProps> = ({
           </div>
 
           {/* Verified Ingress Status */}
-          <div className="pt-2 flex items-center justify-center gap-2 text-[11px] font-mono text-purple-300/80">
+          <div className="pt-1 flex items-center justify-center gap-1.5 text-[10px] sm:text-[11px] font-mono text-purple-300/80">
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-            <span>AWS Student Builder Group • PICT Pune Chapter</span>
+            <span>AWS Student Builder Group • PICT Chapter</span>
           </div>
 
         </div>
@@ -260,29 +260,29 @@ export const ShutterGateHero: React.FC<ShutterGateHeroProps> = ({
           opacity: centerLockOpacity,
           pointerEvents: centerLockOpacity > 0.1 ? 'auto' : 'none',
         }}
-        className="absolute bottom-8 left-0 right-0 flex flex-col items-center justify-center z-30 transition-opacity duration-150"
+        className="absolute bottom-4 sm:bottom-8 left-0 right-0 flex flex-col items-center justify-center z-30 transition-opacity duration-150"
       >
         <button
           onClick={handleAutoEnter}
-          className="group flex flex-col items-center gap-2 cursor-pointer bg-transparent border-0 outline-none p-2"
+          className="group flex flex-col items-center gap-1.5 sm:gap-2 cursor-pointer bg-transparent border-0 outline-none p-1 sm:p-2"
         >
-          <span className="text-xs font-mono tracking-[0.25em] uppercase text-purple-300/80 group-hover:text-amber-300 transition-colors">
+          <span className="text-[10px] sm:text-xs font-mono tracking-[0.2em] sm:tracking-[0.25em] uppercase text-purple-300/80 group-hover:text-amber-300 transition-colors">
             Scroll down or click to open gates
           </span>
-          <div className="w-8 h-8 rounded-full bg-purple-900/60 border border-purple-400/40 flex items-center justify-center text-amber-300 shadow-lg group-hover:bg-amber-400 group-hover:text-purple-950 transition-all animate-bounce">
-            <ChevronDown className="w-4 h-4" />
+          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-purple-900/60 border border-purple-400/40 flex items-center justify-center text-amber-300 shadow-lg group-hover:bg-amber-400 group-hover:text-purple-950 transition-all animate-bounce">
+            <ChevronDown className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </div>
         </button>
       </div>
 
       {/* Top Right Quick Skip Button */}
-      <div className="absolute top-6 right-6 z-40">
+      <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-40">
         <button
           onClick={handleAutoEnter}
-          className="px-4 py-1.5 rounded-full bg-purple-950/80 hover:bg-purple-900 border border-purple-400/40 text-purple-200 hover:text-amber-300 text-xs font-mono tracking-wider cursor-pointer backdrop-blur-md transition-all shadow-md inline-flex items-center gap-1.5"
+          className="px-3 py-1 sm:px-4 sm:py-1.5 rounded-full bg-purple-950/80 hover:bg-purple-900 border border-purple-400/40 text-purple-200 hover:text-amber-300 text-[11px] sm:text-xs font-mono tracking-wider cursor-pointer backdrop-blur-md transition-all shadow-md inline-flex items-center gap-1.5"
         >
           <span>Skip Intro</span>
-          <ArrowRight className="w-3.5 h-3.5" />
+          <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
         </button>
       </div>
 

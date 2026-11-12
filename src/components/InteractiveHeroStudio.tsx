@@ -45,7 +45,7 @@ export const InteractiveHeroStudio: React.FC<InteractiveHeroStudioProps> = ({ on
       {/* 1. Live Ticket Status Marquee Ticker */}
       <div className="max-w-7xl mx-auto mb-6">
         <div className="p-2 sm:p-2.5 rounded-2xl bg-white border border-purple-200 shadow-sm flex items-center gap-3 overflow-hidden">
-          <div className="px-2.5 py-1 rounded-xl bg-purple-950 text-amber-300 text-[10px] sm:text-xs font-mono font-black uppercase tracking-wider shrink-0 flex items-center gap-1.5">
+          <div className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-xl bg-purple-950 text-amber-300 text-[9px] sm:text-xs font-mono font-black uppercase tracking-wider shrink-0 flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
             LIVE TICKETING
           </div>
@@ -92,15 +92,15 @@ export const InteractiveHeroStudio: React.FC<InteractiveHeroStudioProps> = ({ on
           {/* Left Column: Bold Headline & Narrative (7 cols) */}
           <div className="lg:col-span-7 space-y-6">
             
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-[#260B49] tracking-tight leading-[1.04]">
+            <h1 className="text-3xl sm:text-5xl lg:text-7xl font-black text-[#260B49] tracking-tight leading-[1.08]">
               STEP INTO{' '}
-              <span className="inline-block bg-amber-400 text-purple-950 px-3.5 py-0.5 rounded-xl border-2 border-amber-500 shadow-md -rotate-1 mt-1">
+              <span className="inline-block bg-amber-400 text-purple-950 px-2.5 sm:px-3.5 py-0.5 rounded-xl border-2 border-amber-500 shadow-md -rotate-1 mt-1">
                 CLOUD CITY.
               </span>{' '}
               BUILD REAL SKILLS.
             </h1>
 
-            <p className="text-base sm:text-lg text-purple-950/80 leading-relaxed max-w-2xl font-medium">
+            <p className="text-sm sm:text-lg text-purple-950/80 leading-relaxed max-w-2xl font-medium">
               A living, breathing tech metropolis engineered for student builders. Transform theoretical cloud knowledge into hands-on mastery across interactive urban districts. 1,000+ attendees, AWS Community Heroes, and industry mentors under one roof.
             </p>
 
@@ -110,21 +110,21 @@ export const InteractiveHeroStudio: React.FC<InteractiveHeroStudioProps> = ({ on
             </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-wrap items-center gap-4 pt-1">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-1">
               <button
                 onClick={() => {
                   onRegisterClick('Early Bird Pass (₹299)');
                 }}
-                className="px-7 py-3.5 rounded-2xl text-base font-black flex items-center gap-2 cursor-pointer bg-amber-400 hover:bg-amber-300 text-purple-950 shadow-lg shadow-amber-400/30 transition-transform hover:scale-105"
+                className="w-full sm:w-auto px-5 sm:px-7 py-3 sm:py-3.5 rounded-2xl text-sm sm:text-base font-black flex items-center justify-center gap-2 cursor-pointer bg-amber-400 hover:bg-amber-300 active:scale-95 text-purple-950 shadow-lg shadow-amber-400/30 transition-transform hover:scale-105"
               >
-                <Ticket className="w-5 h-5 text-purple-950" />
+                <Ticket className="w-4 h-4 sm:w-5 sm:h-5 text-purple-950" />
                 <span>Book Early Bird Pass — ₹299</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
 
               <a
                 href="#city-interactive-map"
-                className="bg-white hover:bg-purple-50 text-purple-900 border border-purple-200 px-6 py-3.5 rounded-2xl text-sm font-bold flex items-center gap-2 cursor-pointer shadow-sm transition-transform hover:scale-105"
+                className="w-full sm:w-auto px-5 sm:px-6 py-3 sm:py-3.5 rounded-2xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 cursor-pointer bg-white hover:bg-purple-50 active:scale-95 text-purple-900 border border-purple-200 shadow-sm transition-transform hover:scale-105"
               >
                 <Layers className="w-4 h-4 text-purple-600" />
                 <span>Explore City Districts Map</span>

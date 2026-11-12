@@ -260,16 +260,16 @@ export const TicketDispenser: React.FC<TicketDispenserProps> = ({ onRegisterClic
               </div>
 
               {/* Price Banner */}
-              <div className="p-3.5 bg-white rounded-2xl border-2 border-purple-950/20 shadow-sm mb-4 flex items-center justify-between">
+              <div className="p-3.5 bg-white rounded-2xl border-2 border-purple-950/20 shadow-sm mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
                   <span className="text-[10px] font-mono font-bold text-purple-700 uppercase block">
                     TOTAL INVESTMENT
                   </span>
-                  <div className="text-3xl font-black text-purple-950 font-mono">
+                  <div className="text-2xl sm:text-3xl font-black text-purple-950 font-mono">
                     {currentPass.isLive ? `₹${finalPrice}` : 'Phase 2 Launch'}
                   </div>
                 </div>
-                <div className="text-right">
+                <div className="sm:text-right">
                   <span className="text-[10px] font-mono font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-300 inline-block">
                     ALL MEALS &amp; SWAG INCLUDED
                   </span>

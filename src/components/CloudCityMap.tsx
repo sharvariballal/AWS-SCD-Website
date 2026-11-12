@@ -583,15 +583,18 @@ export const CloudCityMap: React.FC = () => {
                   {/* Pin Button */}
                   <button
                     onClick={() => handleSelectDistrict(district)}
-                    className={`relative flex items-center gap-2 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-2xl cursor-pointer transition-all duration-200 ${
+                    className={`relative flex items-center gap-1.5 sm:gap-2 px-2.5 py-1 sm:px-3.5 sm:py-2 rounded-xl sm:rounded-2xl cursor-pointer transition-all duration-200 ${
                       isSelected
-                        ? 'bg-amber-400 text-purple-950 font-black shadow-lg scale-110 z-30 ring-2 ring-white'
+                        ? 'bg-amber-400 text-purple-950 font-black shadow-lg scale-105 sm:scale-110 z-30 ring-2 ring-white'
                         : 'bg-[#180933]/90 hover:bg-[#250C48] text-purple-100 border border-purple-400/50 hover:border-amber-400'
                     }`}
                   >
-                    <Icon className="w-3.5 h-3.5" />
-                    <span className="text-xs font-mono font-bold whitespace-nowrap">
+                    <Icon className="w-3.5 h-3.5 shrink-0" />
+                    <span className="text-[10px] sm:text-xs font-mono font-bold whitespace-nowrap hidden sm:inline">
                       {district.name}
+                    </span>
+                    <span className="text-[10px] font-mono font-bold whitespace-nowrap sm:hidden">
+                      {district.id === 'welcome-gate' ? 'Gate' : district.id === 'speakers-district' ? 'Stage' : district.id === 'compute-cafe' ? 'Café' : 'Arcade'}
                     </span>
                   </button>
                 </div>
@@ -599,10 +602,10 @@ export const CloudCityMap: React.FC = () => {
             })}
 
             {/* Bottom Clean CAD Metadata Bar (No Tacky Instructions) */}
-            <div className="absolute bottom-3 left-4 right-4 z-10 flex items-center justify-between text-[11px] font-mono text-purple-300/80 bg-purple-950/70 backdrop-blur-md px-3.5 py-2 rounded-xl border border-purple-800/60 pointer-events-none">
+            <div className="absolute bottom-3 left-4 right-4 z-10 flex items-center justify-between text-[10px] sm:text-[11px] font-mono text-purple-300/80 bg-purple-950/70 backdrop-blur-md px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl border border-purple-800/60 pointer-events-none">
               <span className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span>Cloud City Metropolis Grid • 4 Connected Experience Zones</span>
+                <span className="truncate">Cloud City Metropolis Grid • 4 Zones</span>
               </span>
               <span className="hidden sm:inline text-purple-300">
                 Interactive District Index
@@ -611,6 +614,35 @@ export const CloudCityMap: React.FC = () => {
 
           </div>
 
+        </div>
+
+        {/* Mobile Quick-Tap District Selector (Thumb-friendly on phones) */}
+        <div className="sm:hidden grid grid-cols-2 gap-2 mt-4">
+          {districts.map((district) => {
+            const isSelected = selectedDistrict.id === district.id && isDrawerOpen;
+            const Icon = district.icon;
+            return (
+              <button
+                key={district.id}
+                onClick={() => handleSelectDistrict(district)}
+                className={`p-3 rounded-2xl border text-left flex items-center gap-2.5 transition-all cursor-pointer ${
+                  isSelected
+                    ? 'bg-amber-400 border-amber-500 text-purple-950 shadow-md font-black'
+                    : 'bg-white border-purple-200 text-purple-950 hover:bg-purple-50 font-bold'
+                }`}
+              >
+                <div className={`p-2 rounded-xl shrink-0 ${isSelected ? 'bg-purple-950 text-amber-300' : 'bg-purple-100 text-purple-700'}`}>
+                  <Icon className="w-4 h-4" />
+                </div>
+                <div className="leading-tight overflow-hidden">
+                  <div className="text-xs font-black truncate">{district.name}</div>
+                  <div className={`text-[10px] font-mono ${isSelected ? 'text-purple-950/75' : 'text-purple-600'}`}>
+                    Tap to inspect
+                  </div>
+                </div>
+              </button>
+            );
+          })}
         </div>
 
       </div>

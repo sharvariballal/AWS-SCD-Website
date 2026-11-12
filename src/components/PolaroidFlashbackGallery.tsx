@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Camera, ChevronRight, ChevronLeft, Battery } from 'lucide-react';
 import { playSound } from '../utils/audio';
@@ -55,6 +55,8 @@ const flashbackPhotos: FlashbackPhoto[] = [
 export const PolaroidFlashbackGallery: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isScreenFlashing, setIsScreenFlashing] = useState(false);
+  const touchStartXRef = useRef(0);
+  const touchEndXRef = useRef(0);
 
   const handleNextPhoto = () => {
     playSound('click');
@@ -68,6 +70,26 @@ export const PolaroidFlashbackGallery: React.FC = () => {
     setIsScreenFlashing(true);
     setTimeout(() => setIsScreenFlashing(false), 140);
     setCurrentIndex((prev) => (prev - 1 + flashbackPhotos.length) % flashbackPhotos.length);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartXRef.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndXRef.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStartXRef.current || !touchEndXRef.current) return;
+    const diff = touchStartXRef.current - touchEndXRef.current;
+    if (diff > 40) {
+      handleNextPhoto();
+    } else if (diff < -40) {
+      handlePrevPhoto();
+    }
+    touchStartXRef.current = 0;
+    touchEndXRef.current = 0;
   };
 
   const activePhoto = flashbackPhotos[currentIndex];
@@ -102,25 +124,30 @@ export const PolaroidFlashbackGallery: React.FC = () => {
             <div className="lg:col-span-9 relative rounded-2xl overflow-hidden bg-black border-2 border-neutral-800 shadow-inner">
               
               {/* LCD Top Status Bar HUD */}
-              <div className="absolute top-0 left-0 right-0 z-20 px-4 py-2.5 bg-gradient-to-b from-black/80 via-black/40 to-transparent flex items-center justify-between text-[11px] font-mono text-purple-200 pointer-events-none">
-                <div className="flex items-center gap-2">
+              <div className="absolute top-0 left-0 right-0 z-20 px-3.5 sm:px-4 py-2 sm:py-2.5 bg-gradient-to-b from-black/80 via-black/40 to-transparent flex items-center justify-between text-[10px] sm:text-[11px] font-mono text-purple-200 pointer-events-none">
+                <div className="flex items-center gap-1.5 sm:gap-2">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                   <span className="font-bold text-amber-300">PLAYBACK</span>
-                  <span className="text-neutral-400">|</span>
-                  <span>RAW+JPEG</span>
+                  <span className="text-neutral-400 hidden sm:inline">|</span>
+                  <span className="hidden sm:inline">RAW+JPEG</span>
                 </div>
 
-                <div className="flex items-center gap-3">
-                  <span className="text-purple-300">ISO 400 • F/2.8</span>
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <span className="text-purple-300 hidden sm:inline">ISO 400 • F/2.8</span>
                   <div className="flex items-center gap-1 font-bold text-emerald-400">
-                    <Battery className="w-3.5 h-3.5" />
+                    <Battery className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                     <span>94%</span>
                   </div>
                 </div>
               </div>
 
-              {/* LCD Display Photo */}
-              <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full overflow-hidden flex items-center justify-center bg-neutral-950">
+              {/* LCD Display Photo with Touch Swipe Support */}
+              <div 
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+                className="relative aspect-[16/10] sm:aspect-[16/9] w-full overflow-hidden flex items-center justify-center bg-neutral-950 cursor-grab active:cursor-grabbing select-none"
+              >
                 <AnimatePresence mode="wait">
                   <motion.img
                     key={activePhoto.id}
@@ -233,7 +260,7 @@ export const PolaroidFlashbackGallery: React.FC = () => {
                   ))}
                 </div>
                 <span className="text-[10px] font-mono text-purple-400 uppercase">
-                  Click Next to View Archive
+                  Swipe Screen or Click Next
                 </span>
               </div>
 

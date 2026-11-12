@@ -42,7 +42,7 @@ const faqs: FAQEntry[] = [
 ];
 
 export const FAQStudio: React.FC = () => {
-  const [openIndices, setOpenIndices] = useState<number[]>([0, 3]);
+  const [openIndices, setOpenIndices] = useState<number[]>([0]);
 
   const toggle = (idx: number) => {
     playSound('click');
