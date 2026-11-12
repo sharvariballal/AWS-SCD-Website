@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
-import { ChevronDown, Sparkles, ShieldCheck, ArrowRight } from 'lucide-react';
+import { ChevronDown, Sparkles, Loader2, ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
+import { playSound } from '../utils/audio';
 
 interface ShutterGateHeroProps {
   isUnlocked: boolean;
@@ -7,72 +8,225 @@ interface ShutterGateHeroProps {
   onReplay?: () => void;
 }
 
+const TOTAL_FRAMES = 141;
+
 export const ShutterGateHero: React.FC<ShutterGateHeroProps> = ({
   isUnlocked,
   onUnlock,
 }) => {
-  // Virtual progress tracking (0.0 = Closed, 1.0 = Fully Opened)
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const imagesRef = useRef<HTMLImageElement[]>([]);
+  const loadedFramesRef = useRef<boolean[]>(new Array(TOTAL_FRAMES).fill(false));
+  const [isFirstFrameLoaded, setIsFirstFrameLoaded] = useState(false);
+  const [loadProgress, setLoadProgress] = useState(0);
+
+  // Virtual progress tracking (0.0 to 1.0)
   const targetProgressRef = useRef(0);
   const currentProgressRef = useRef(0);
+  const currentFrameIdxRef = useRef(0);
   const rafIdRef = useRef<number | null>(null);
-  const updateProgressRef = useRef<() => void>(() => {});
 
-  const [progress, setProgress] = useState(0);
-  const [isOpeningAutomatically, setIsOpeningAutomatically] = useState(false);
+  // React state for reactive UI elements
+  const [displayProgress, setDisplayProgress] = useState(0);
+  const [textOpacity, setTextOpacity] = useState(1);
+  const [portalOpacity, setPortalOpacity] = useState(1);
+  const [portalScale, setPortalScale] = useState(1);
 
-  // Main 60fps smooth spring/lerp loop
-  const updateProgress = useCallback(() => {
+  // Helper to draw an image onto the canvas with high-quality cover scaling
+  const renderFrameToCanvas = useCallback((frameIdx: number) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Pick target image, or fallback to closest loaded image
+    let img: HTMLImageElement | undefined = imagesRef.current[frameIdx];
+    if (!img || !img.complete || !loadedFramesRef.current[frameIdx]) {
+      // Find nearest loaded frame
+      for (let offset = 1; offset < TOTAL_FRAMES; offset++) {
+        const left = frameIdx - offset;
+        const right = frameIdx + offset;
+        if (left >= 0 && loadedFramesRef.current[left] && imagesRef.current[left]?.complete) {
+          img = imagesRef.current[left];
+          break;
+        }
+        if (right < TOTAL_FRAMES && loadedFramesRef.current[right] && imagesRef.current[right]?.complete) {
+          img = imagesRef.current[right];
+          break;
+        }
+      }
+    }
+
+    if (!img || !img.complete || img.naturalWidth === 0) return;
+
+    const cw = canvas.width;
+    const ch = canvas.height;
+    const imgRatio = img.naturalWidth / img.naturalHeight;
+    const canvasRatio = cw / ch;
+
+    let drawW = cw;
+    let drawH = ch;
+    let drawX = 0;
+    let drawY = 0;
+
+    if (canvasRatio > imgRatio) {
+      drawH = cw / imgRatio;
+      drawY = (ch - drawH) / 2;
+    } else {
+      drawW = ch * imgRatio;
+      drawX = (cw - drawW) / 2;
+    }
+
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+    ctx.clearRect(0, 0, cw, ch);
+    ctx.drawImage(img, drawX, drawY, drawW, drawH);
+  }, []);
+
+  // Resize canvas to window inner dimensions with high-DPI scaling
+  const handleResize = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(window.innerWidth * dpr);
+    canvas.height = Math.round(window.innerHeight * dpr);
+    renderFrameToCanvas(currentFrameIdxRef.current);
+  }, [renderFrameToCanvas]);
+
+  // Preload frames sequentially / in parallel
+  useEffect(() => {
+    let isCancelled = false;
+    let loadedCount = 0;
+    const images: HTMLImageElement[] = new Array(TOTAL_FRAMES);
+
+    const checkLoaded = (idx: number) => {
+      if (isCancelled) return;
+      loadedFramesRef.current[idx] = true;
+      loadedCount++;
+      setLoadProgress(Math.round((loadedCount / TOTAL_FRAMES) * 100));
+
+      if (idx === 0) {
+        setIsFirstFrameLoaded(true);
+        handleResize();
+      }
+    };
+
+    // 1. Prioritize loading frame 0 immediately
+    const f0 = new Image();
+    f0.src = '/assets/gate-frames/frame_000.webp';
+    f0.onload = () => checkLoaded(0);
+    images[0] = f0;
+
+    // 2. Load remaining frames in batches
+    for (let i = 1; i < TOTAL_FRAMES; i++) {
+      const img = new Image();
+      img.src = `/assets/gate-frames/frame_${i.toString().padStart(3, '0')}.webp`;
+      img.onload = () => checkLoaded(i);
+      images[i] = img;
+    }
+
+    imagesRef.current = images;
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    return () => {
+      isCancelled = true;
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [handleResize]);
+
+  const updateScrubRef = useRef<() => void>(() => {});
+
+  // Main animation / scrub loop
+  const updateScrub = useCallback(() => {
+    // Silky lerp interpolation for 60fps responsiveness
     const diff = targetProgressRef.current - currentProgressRef.current;
-    
-    // Smooth responsive interpolation
-    currentProgressRef.current += diff * (isOpeningAutomatically ? 0.08 : 0.12);
-    const p = Math.min(Math.max(currentProgressRef.current, 0), 1.0);
-    setProgress(p);
+    currentProgressRef.current += diff * 0.14;
 
-    // When almost fully opened, trigger seamless unlock
+    const p = Math.min(Math.max(currentProgressRef.current, 0), 1);
+    setDisplayProgress(p);
+
+    // 1. Text Opacity: Fade out "Welcome to Cloud City" during initial scroll (0.0 to 0.18)
+    if (p <= 0.18) {
+      setTextOpacity(Math.max(0, 1 - p / 0.18));
+    } else {
+      setTextOpacity(0);
+    }
+
+    // 2. Gate Frame Sequencing:
+    // From 0.0 to 0.86, smoothly cycle through all 141 frames so the doors open 100% all the way
+    let targetFrame = 0;
+    if (p <= 0.86) {
+      targetFrame = Math.min(Math.floor((p / 0.86) * (TOTAL_FRAMES - 1)), TOTAL_FRAMES - 1);
+    } else {
+      // Gates are fully parted off-screen, hold on final frame
+      targetFrame = TOTAL_FRAMES - 1;
+    }
+
+    if (targetFrame !== currentFrameIdxRef.current) {
+      currentFrameIdxRef.current = targetFrame;
+      renderFrameToCanvas(targetFrame);
+    }
+
+    // 3. Seamless Dissolve to Homepage (0.86 to 1.0):
+    // Smooth camera scale and dissolve as user flies through the open portal
+    if (p >= 0.86) {
+      const transProgress = (p - 0.86) / 0.14; // 0 to 1
+      setPortalOpacity(Math.max(0, 1 - transProgress));
+      setPortalScale(1 + transProgress * 0.15);
+    } else {
+      setPortalOpacity(1);
+      setPortalScale(1);
+    }
+
+    // 4. Complete entrance when fully through
     if (p >= 0.985 && !isUnlocked) {
       onUnlock();
       return;
     }
 
+    // Continue loop if not settled
     if (!isUnlocked) {
-      rafIdRef.current = requestAnimationFrame(() => updateProgressRef.current());
+      rafIdRef.current = requestAnimationFrame(() => updateScrubRef.current());
     }
-  }, [isUnlocked, isOpeningAutomatically, onUnlock]);
+  }, [isUnlocked, onUnlock, renderFrameToCanvas]);
 
   useEffect(() => {
-    updateProgressRef.current = updateProgress;
+    updateScrubRef.current = updateScrub;
   });
 
+  // Start / restart RAF loop
   useEffect(() => {
     if (!isUnlocked) {
       targetProgressRef.current = 0;
       currentProgressRef.current = 0;
+      currentFrameIdxRef.current = 0;
       window.scrollTo({ top: 0, behavior: 'instant' });
-      rafIdRef.current = requestAnimationFrame(() => {
-        setIsOpeningAutomatically(false);
-        updateProgressRef.current();
-      });
+      rafIdRef.current = requestAnimationFrame(updateScrub);
       return () => {
         if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
       };
     }
-  }, [isUnlocked]);
+  }, [isUnlocked, updateScrub]);
 
-  // Touch & Scroll Delta Handler
+  // Event Listeners: Wheel, Touch & Key delta interception
   useEffect(() => {
     if (isUnlocked) return;
 
+    // Prevent body scrolling while gate is closed
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
 
+    // 1. Mouse Wheel Delta
     const handleWheel = (e: WheelEvent) => {
       e.preventDefault();
-      const sensitivity = 0.0012;
+      const sensitivity = 0.0012; // Natural, responsive feel
       const next = targetProgressRef.current + e.deltaY * sensitivity;
       targetProgressRef.current = Math.min(Math.max(next, 0), 1.0);
     };
 
+    // 2. Touch Gestures for mobile
     let touchStartY = 0;
     const handleTouchStart = (e: TouchEvent) => {
       touchStartY = e.touches[0].clientY;
@@ -89,13 +243,14 @@ export const ShutterGateHero: React.FC<ShutterGateHeroProps> = ({
       targetProgressRef.current = Math.min(Math.max(next, 0), 1.0);
     };
 
+    // 3. Keyboard Arrow Keys
     const handleKeyDown = (e: KeyboardEvent) => {
       if (['ArrowDown', 'PageDown', ' '].includes(e.key)) {
         e.preventDefault();
-        targetProgressRef.current = Math.min(targetProgressRef.current + 0.15, 1.0);
+        targetProgressRef.current = Math.min(targetProgressRef.current + 0.12, 1.0);
       } else if (['ArrowUp', 'PageUp'].includes(e.key)) {
         e.preventDefault();
-        targetProgressRef.current = Math.max(targetProgressRef.current - 0.15, 0);
+        targetProgressRef.current = Math.max(targetProgressRef.current - 0.12, 0);
       }
     };
 
@@ -113,186 +268,148 @@ export const ShutterGateHero: React.FC<ShutterGateHeroProps> = ({
     };
   }, [isUnlocked]);
 
-  // Instant trigger to slide open smoothly
+  // Auto-enter trigger on click / button press
   const handleAutoEnter = () => {
-    setIsOpeningAutomatically(true);
+    playSound('click');
     targetProgressRef.current = 1.0;
   };
 
-  if (isUnlocked) return null;
+  // Instant skip
+  const handleDirectSkip = () => {
+    playSound('click');
+    onUnlock();
+  };
 
-  // Door translation calculations
-  const leftDoorX = -progress * 105; // 0% to -105%
-  const rightDoorX = progress * 105; // 0% to +105%
-  const centerLockOpacity = Math.max(0, 1 - progress * 2.2);
-  const centerLockScale = 1 + progress * 0.4;
-  const centerLockRotate = progress * 90;
-  const overlayMistOpacity = Math.min(progress * 1.5, 1);
+  if (isUnlocked) {
+    return null;
+  }
 
   return (
-    <div className="fixed inset-0 z-50 w-screen h-screen overflow-hidden bg-[#0A0314] select-none pointer-events-auto">
-      
-      {/* 1. Underlying Horizon / Light Portal that reveals as doors part */}
+    <div
+      style={{
+        opacity: portalOpacity,
+        transform: `scale(${portalScale})`,
+      }}
+      className="fixed inset-0 z-50 w-screen h-screen overflow-hidden bg-[#0A0314] select-none pointer-events-auto transition-transform duration-75"
+    >
+      {/* 1. Canvas Frame Scrub Player (True 60fps Hardware-Accelerated) */}
+      <canvas
+        ref={canvasRef}
+        className="w-full h-full block object-cover pointer-events-none"
+      />
+
+      {/* Loading state indicator before first frame renders */}
+      {!isFirstFrameLoaded && (
+        <div className="absolute inset-0 bg-[#160628] flex flex-col items-center justify-center text-purple-200 gap-3 z-0">
+          <Loader2 className="w-8 h-8 animate-spin text-amber-400" />
+          <span className="text-xs font-mono uppercase tracking-[0.25em]">
+            Connecting to Portal...
+          </span>
+        </div>
+      )}
+
+      {/* Ambient ethereal tints & vignette */}
+      <div className="absolute inset-0 bg-gradient-to-t from-purple-950/70 via-transparent to-purple-950/60 pointer-events-none" />
+      <div className="absolute inset-0 bg-radial from-transparent via-purple-950/20 to-purple-950/70 pointer-events-none" />
+
+      {/* Directional Door Chevrons (matching user screenshot) */}
       <div 
-        style={{ opacity: overlayMistOpacity }}
-        className="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-[#1E0938] via-[#2F1054] to-[#F5EFFE] transition-opacity duration-300"
+        style={{ opacity: textOpacity }}
+        className="absolute inset-y-0 left-4 sm:left-10 flex items-center pointer-events-none z-20 text-white/40 sm:text-white/60"
       >
-        <div className="w-[800px] h-[800px] rounded-full bg-gradient-to-r from-purple-500/30 via-amber-400/30 to-purple-400/30 blur-3xl animate-pulse" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-amber-300/20 via-purple-600/10 to-transparent" />
+        <ChevronLeft className="w-10 h-10 sm:w-16 sm:h-16 stroke-[1.5] animate-pulse" />
       </div>
 
-      {/* 2. Left Hydraulic Shutter Blast Door */}
-      <div
-        style={{
-          transform: `translate3d(${leftDoorX}%, 0, 0)`,
-          willChange: 'transform',
-        }}
-        className="absolute top-0 bottom-0 left-0 w-1/2 bg-gradient-to-r from-[#0D041A] via-[#1A0933] to-[#250C48] border-r-2 border-amber-400/40 shadow-[20px_0_60px_rgba(0,0,0,0.9)] flex items-center justify-end overflow-hidden"
+      <div 
+        style={{ opacity: textOpacity }}
+        className="absolute inset-y-0 right-4 sm:right-10 flex items-center pointer-events-none z-20 text-white/40 sm:text-white/60"
       >
-        {/* Precision Laser-Etched Blueprint Circuit Paths */}
-        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#C4B5FD_1px,transparent_1px)] [background-size:24px_24px]" />
-        
-        <svg className="absolute inset-0 w-full h-full opacity-30 stroke-purple-400" xmlns="http://www.w3.org/2000/svg">
-          <line x1="20%" y1="0" x2="20%" y2="100%" strokeWidth="1" strokeDasharray="6 6" />
-          <line x1="60%" y1="0" x2="60%" y2="100%" strokeWidth="1" />
-          <line x1="0" y1="35%" x2="100%" y2="35%" strokeWidth="1" />
-          <line x1="0" y1="65%" x2="100%" y2="65%" strokeWidth="1" />
-          <circle cx="60%" cy="35%" r="6" fill="#FBBF24" />
-          <circle cx="60%" cy="65%" r="6" fill="#FBBF24" />
-        </svg>
-
-        {/* Hydraulic Seam Accents */}
-        <div className="absolute right-3 top-1/4 bottom-1/4 w-1 bg-gradient-to-b from-transparent via-amber-400 to-transparent opacity-60" />
+        <ChevronRight className="w-10 h-10 sm:w-16 sm:h-16 stroke-[1.5] animate-pulse" />
       </div>
 
-      {/* 3. Right Hydraulic Shutter Blast Door */}
+      {/* 2. Centered Ethereal Portal Typography (matching user screenshot) */}
       <div
         style={{
-          transform: `translate3d(${rightDoorX}%, 0, 0)`,
-          willChange: 'transform',
+          opacity: textOpacity,
+          pointerEvents: textOpacity > 0.05 ? 'auto' : 'none',
         }}
-        className="absolute top-0 bottom-0 right-0 w-1/2 bg-gradient-to-l from-[#0D041A] via-[#1A0933] to-[#250C48] border-l-2 border-amber-400/40 shadow-[-20px_0_60px_rgba(0,0,0,0.9)] flex items-center justify-start overflow-hidden"
+        className="absolute inset-0 flex flex-col items-center justify-center px-4 text-center z-20 transition-opacity duration-150"
       >
-        {/* Precision Laser-Etched Blueprint Circuit Paths */}
-        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#C4B5FD_1px,transparent_1px)] [background-size:24px_24px]" />
-
-        <svg className="absolute inset-0 w-full h-full opacity-30 stroke-purple-400" xmlns="http://www.w3.org/2000/svg">
-          <line x1="80%" y1="0" x2="80%" y2="100%" strokeWidth="1" strokeDasharray="6 6" />
-          <line x1="40%" y1="0" x2="40%" y2="100%" strokeWidth="1" />
-          <line x1="0" y1="35%" x2="100%" y2="35%" strokeWidth="1" />
-          <line x1="0" y1="65%" x2="100%" y2="65%" strokeWidth="1" />
-          <circle cx="40%" cy="35%" r="6" fill="#FBBF24" />
-          <circle cx="40%" cy="65%" r="6" fill="#FBBF24" />
-        </svg>
-
-        {/* Hydraulic Seam Accents */}
-        <div className="absolute left-3 top-1/4 bottom-1/4 w-1 bg-gradient-to-b from-transparent via-amber-400 to-transparent opacity-60" />
-      </div>
-
-      {/* 4. Central Mechanical Iris & Typography (Fades out as doors open) */}
-      <div
-        style={{
-          opacity: centerLockOpacity,
-          transform: `scale(${centerLockScale})`,
-          pointerEvents: centerLockOpacity > 0.1 ? 'auto' : 'none',
-        }}
-        className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center z-30 transition-opacity duration-150"
-      >
-        <div className="max-w-2xl mx-auto space-y-3.5 sm:space-y-6">
+        <div className="max-w-3xl mx-auto space-y-3 sm:space-y-4">
           
-          {/* Rotating Geometric Iris Emblem */}
-          <div className="relative w-20 h-20 sm:w-28 sm:h-28 mx-auto flex items-center justify-center">
-            {/* Outer Rotating Gear Ring */}
-            <div 
-              style={{ transform: `rotate(${centerLockRotate}deg)` }}
-              className="absolute inset-0 rounded-full border-2 border-dashed border-amber-400/80 animate-[spin_30s_linear_infinite]"
-            />
-            {/* Middle Conduit Ring */}
-            <div className="absolute inset-1.5 sm:inset-2 rounded-full border border-purple-400/60" />
-            {/* Center Core Emblem with Official Club Crest on Black Background */}
-            <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl bg-black border-2 border-amber-400 p-1.5 sm:p-2 flex items-center justify-center shadow-[0_0_35px_rgba(251,191,36,0.6)]">
-              <img
-                src="/brand/sbg-emblem-black.png"
-                alt="AWS Student Builder Group"
-                className="w-full h-full object-contain"
-              />
-            </div>
+          {/* Summit Badge Pill */}
+          <div className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full bg-purple-950/80 backdrop-blur-md border border-purple-300/30 text-purple-200 text-[10px] sm:text-xs font-mono tracking-[0.2em] sm:tracking-[0.25em] uppercase shadow-lg">
+            <Sparkles className="w-3.5 h-3.5 text-amber-300 shrink-0" />
+            <span>AWS Student Community Day • Pune</span>
           </div>
 
-          {/* Summit Title Badge */}
-          <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full bg-purple-950/90 border border-purple-300/40 text-purple-200 text-[10px] sm:text-xs font-mono tracking-[0.2em] sm:tracking-[0.25em] uppercase shadow-lg">
-            <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-300" />
-            <span>AWS Student Community Day 2027</span>
-          </div>
-
-          {/* Grand Header - Solid High Contrast Typography */}
-          <h1 className="text-3xl sm:text-6xl md:text-7xl font-black text-white tracking-tight leading-tight drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]">
-            Welcome to <span className="text-amber-300">Cloud City</span>
+          {/* Large Bold Heading */}
+          <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight text-white drop-shadow-[0_4px_30px_rgba(0,0,0,0.95)] leading-tight">
+            Welcome to{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-200 via-white to-purple-300 drop-shadow-[0_0_40px_rgba(216,180,254,0.6)]">
+              Cloud City
+            </span>
           </h1>
 
-          <p className="text-[11px] sm:text-sm font-mono text-purple-200/90 tracking-widest uppercase">
-            Sunday, 07 February 2027 • Pune
+          {/* Subtitle */}
+          <p className="text-xs sm:text-sm md:text-base font-semibold text-purple-200/90 tracking-[0.15em] sm:tracking-widest uppercase drop-shadow-md">
+            Sunday, 07 February 2027 • Dakkhan Banquet Hall
           </p>
-
-          {/* Single Dominant Ingress Action (No Ticket Price Reveal on Gates) */}
-          <div className="pt-1 sm:pt-2 flex items-center justify-center">
-            <button
-              onClick={handleAutoEnter}
-              className="px-6 py-3 sm:px-8 sm:py-3.5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-purple-950 font-black text-xs sm:text-sm shadow-xl shadow-amber-400/30 hover:scale-105 active:scale-95 transition-all flex items-center gap-2 cursor-pointer"
-            >
-              <span>Enter Cloud City</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
-
-          {/* Verified Ingress Status */}
-          <div className="pt-1 flex items-center justify-center gap-1.5 text-[10px] sm:text-[11px] font-mono text-purple-300/80">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-            <span>AWS Student Builder Group • PICT Chapter</span>
-          </div>
 
         </div>
       </div>
 
-      {/* 5. Scroll Prompt at Bottom */}
+      {/* 3. Animated Scroll Prompt at Bottom */}
       <div
         style={{
-          opacity: centerLockOpacity,
-          pointerEvents: centerLockOpacity > 0.1 ? 'auto' : 'none',
+          opacity: textOpacity,
+          pointerEvents: textOpacity > 0.05 ? 'auto' : 'none',
         }}
-        className="absolute bottom-4 sm:bottom-8 left-0 right-0 flex flex-col items-center justify-center z-30 transition-opacity duration-150"
+        className="absolute bottom-6 sm:bottom-10 left-0 right-0 flex flex-col items-center justify-center z-20 transition-opacity duration-150"
       >
         <button
           onClick={handleAutoEnter}
-          className="group flex flex-col items-center gap-1.5 sm:gap-2 cursor-pointer bg-transparent border-0 outline-none p-1 sm:p-2"
+          className="group flex flex-col items-center gap-2 cursor-pointer bg-transparent border-0 outline-none p-2"
         >
-          <span className="text-[10px] sm:text-xs font-mono tracking-[0.2em] sm:tracking-[0.25em] uppercase text-purple-300/80 group-hover:text-amber-300 transition-colors">
-            Scroll down or click to open gates
+          <span className="text-xs sm:text-sm font-mono font-bold tracking-[0.2em] sm:tracking-[0.25em] uppercase text-purple-200 group-hover:text-amber-300 transition-colors drop-shadow">
+            Scroll down to enter
           </span>
-          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-purple-900/60 border border-purple-400/40 flex items-center justify-center text-amber-300 shadow-lg group-hover:bg-amber-400 group-hover:text-purple-950 transition-all animate-bounce">
-            <ChevronDown className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+
+          <div className="w-8 h-8 rounded-full bg-purple-900/70 border border-purple-400/40 flex items-center justify-center text-amber-300 shadow-lg group-hover:bg-amber-400 group-hover:text-purple-950 transition-all animate-bounce">
+            <ChevronDown className="w-4 h-4" />
           </div>
         </button>
+
+        <span className="text-[10px] font-mono text-purple-300/60 mt-0.5">
+          (or click to enter directly)
+        </span>
       </div>
 
-      {/* Top Right Quick Skip Button */}
-      <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-40">
+      {/* 4. Top Right Quick Skip Button */}
+      <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-30">
         <button
-          onClick={handleAutoEnter}
-          className="px-3 py-1 sm:px-4 sm:py-1.5 rounded-full bg-purple-950/80 hover:bg-purple-900 border border-purple-400/40 text-purple-200 hover:text-amber-300 text-[11px] sm:text-xs font-mono tracking-wider cursor-pointer backdrop-blur-md transition-all shadow-md inline-flex items-center gap-1.5"
+          onClick={handleDirectSkip}
+          className="px-3.5 sm:px-4 py-1.5 rounded-full bg-purple-950/70 hover:bg-purple-900/90 border border-purple-400/30 text-purple-200 hover:text-amber-300 text-xs font-mono tracking-wider cursor-pointer backdrop-blur-md transition-all shadow-md inline-flex items-center gap-1.5"
         >
           <span>Skip Intro</span>
-          <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+          <ArrowRight className="w-3.5 h-3.5" />
         </button>
       </div>
 
-      {/* Progress Line */}
-      <div className="absolute bottom-0 left-0 right-0 h-1 bg-purple-950/60 z-40 pointer-events-none">
+      {/* 5. Subtle Progress Bar along Bottom */}
+      <div className="absolute bottom-0 left-0 right-0 h-1 bg-purple-950/40 z-30 pointer-events-none">
         <div
-          style={{ width: `${progress * 100}%` }}
-          className="h-full bg-gradient-to-r from-amber-400 via-purple-400 to-amber-300 transition-all duration-75"
+          style={{ width: `${displayProgress * 100}%` }}
+          className="h-full bg-gradient-to-r from-purple-400 via-amber-400 to-purple-300 transition-all duration-75"
         />
       </div>
+
+      {/* Background Frame Preload Tracker (subtle, non-intrusive) */}
+      {loadProgress < 100 && (
+        <div className="absolute bottom-1.5 right-4 z-30 pointer-events-none text-[9px] font-mono text-purple-400/40 tracking-wider">
+          STREAMING PORTAL: {loadProgress}%
+        </div>
+      )}
 
     </div>
   );
