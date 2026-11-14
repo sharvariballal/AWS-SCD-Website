@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { StudioNavbar } from './components/StudioNavbar';
+import { CitySkylineCanvas } from './components/CitySkylineCanvas';
+import { Navbar } from './components/Navbar';
+import { SocialSidebar } from './components/SocialSidebar';
 import { ShutterGateHero } from './components/ShutterGateHero';
 import { InteractiveHeroStudio } from './components/InteractiveHeroStudio';
 import { CloudCityMap } from './components/CloudCityMap';
@@ -9,7 +11,7 @@ import { PolaroidFlashbackGallery } from './components/PolaroidFlashbackGallery'
 import { SponsorShowcase } from './components/SponsorShowcase';
 import { VenueBlueprint } from './components/VenueBlueprint';
 import { FAQStudio } from './components/FAQStudio';
-import { StudioFooter } from './components/StudioFooter';
+import { Footer } from './components/Footer';
 import { RegistrationModal } from './components/RegistrationModal';
 import { SpeakerRegistrationModal } from './components/SpeakerRegistrationModal';
 import { SponsorRegistrationModal } from './components/SponsorRegistrationModal';
@@ -43,22 +45,23 @@ export function App() {
 
   return (
     <div
-      className={`min-h-screen bg-blueprint-grid text-[#1F0B38] font-sans selection:bg-purple-200 selection:text-purple-950 relative ${
+      className={`min-h-screen bg-[#070415] text-[#F8FAFC] font-sans selection:bg-amber-400 selection:text-slate-950 relative ${
         !isGateUnlocked ? 'h-screen overflow-hidden' : 'overflow-x-hidden'
       }`}
     >
-      {/* 1. Cinematic Shutter Portal Gate:
-          Single "Enter Cloud City" action; official club emblem; no ticket price spoiler */}
+      {/* 1. Animated Night Sky Skyline Canvas from main */}
+      <CitySkylineCanvas />
+
+      {/* 2. Cinematic Shutter Portal Gate */}
       <ShutterGateHero
         isUnlocked={isGateUnlocked}
         onUnlock={() => setIsGateUnlocked(true)}
         onReplay={() => setIsGateUnlocked(false)}
       />
 
-      {/* 2. Studio Sticky Navigation Bar:
-          Official club crest on black + AWS SCD identity, zero emojis, clean anchor links */}
+      {/* 3. Sticky Glassmorphic Navigation Bar from main */}
       {isGateUnlocked && (
-        <StudioNavbar
+        <Navbar
           onRegisterClick={() => handleOpenRegistration('Early Bird Pass (₹299)')}
           onReplayGate={() => {
             setIsGateUnlocked(false);
@@ -67,7 +70,10 @@ export function App() {
         />
       )}
 
-      {/* Main Content Area: The Home Page (Unlocked after gate sequence finishes) */}
+      {/* 4. Fixed Social Media Floating Sidebar from main */}
+      {isGateUnlocked && <SocialSidebar />}
+
+      {/* 5. Main Content Area: The Home Page (Unlocked after gate sequence finishes) */}
       <main
         className={`relative z-10 transition-opacity duration-700 ${
           !isGateUnlocked ? 'opacity-0 pointer-events-none' : 'opacity-100 pointer-events-auto'
@@ -98,9 +104,9 @@ export function App() {
         <FAQStudio />
       </main>
 
-      {/* Studio Footer: Clean Closing Layout (No duplicate ticket banner) */}
+      {/* 6. Footer from main */}
       {isGateUnlocked && (
-        <StudioFooter onOpenCodeOfConduct={() => setIsCodeOfConductOpen(true)} />
+        <Footer onOpenCodeOfConduct={() => setIsCodeOfConductOpen(true)} />
       )}
 
       {/* Student Verification Registration Modal */}

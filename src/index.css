@@ -1,136 +1,210 @@
 @import "tailwindcss";
 
-@layer base {
-  :root {
-    --canvas-bg: #F8F5FF;
-    --canvas-ink: #1F0B38;
-    --poster-deep-purple: #250C48;
-    --poster-primary-purple: #6D28D9;
-    --poster-light-purple: #DDD6FE;
-    --poster-soft-bg: #FAF7FF;
-    --poster-amber: #F59E0B;
-    --poster-gold: #FBBF24;
-  }
+:root {
+  /* Theme tokens: Night Sky, Purple, Blue, Cyan, Amber from main branch */
+  --night-bg: #070415;
+  --night-deep: #0D0826;
+  --tech-purple: #8B5CF6;
+  --tech-violet: #A855F7;
+  --tech-blue: #3B82F6;
+  --tech-cyan: #38BDF8;
+  --aws-amber: #FF9900;
+  --aws-gold: #FFC72C;
+  --neon-glow: rgba(139, 92, 246, 0.45);
+  --glass-border: rgba(139, 92, 246, 0.25);
+  --glass-bg: rgba(18, 12, 42, 0.75);
+}
 
+@layer base {
   html {
     scroll-behavior: smooth;
-    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background-color: var(--canvas-bg);
-    color: var(--canvas-ink);
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color-scheme: dark;
   }
 
   body {
     margin: 0;
     padding: 0;
+    background-color: #070415;
+    color: #F8FAFC;
     overflow-x: hidden;
-    background-color: #F8F5FF;
-    background-image: radial-gradient(#CBD5E1 1.25px, transparent 1.25px);
-    background-size: 24px 24px;
-    color: #1F0B38;
   }
 }
 
-/* Blueprint dot grid background (Version 1 Dotted Grid Style) */
-.bg-blueprint-grid {
-  background-color: #F8F5FF;
-  background-image: radial-gradient(#CBD5E1 1.25px, transparent 1.25px);
-  background-size: 24px 24px;
+/* Custom Scrollbar from main */
+::-webkit-scrollbar {
+  width: 9px;
+}
+::-webkit-scrollbar-track {
+  background: #090518;
+}
+::-webkit-scrollbar-thumb {
+  background: #2A1D54;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #8B5CF6;
 }
 
-.bg-dark-grid {
-  background-color: #1C0733;
-  background-image: radial-gradient(#4C1D95 1.2px, transparent 1.2px);
-  background-size: 24px 24px;
+/* Glassmorphism Classes for Purple/Blue Night Theme */
+.glass-panel {
+  background: rgba(18, 12, 42, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
 }
 
-/* Neo-Brutalist Tactile Cards & Shadows (Deep Purple & Lavender Accents) */
-.neo-card {
-  background-color: #FFFFFF;
-  border: 2px solid #250C48;
-  border-radius: 20px;
-  box-shadow: 4px 4px 0px #250C48;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+.glass-panel-dark {
+  background: rgba(11, 7, 28, 0.88);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
 }
 
-.neo-card:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0px #250C48;
+.glass-card-hover {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass-card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 35px -10px rgba(139, 92, 246, 0.35), 0 0 20px rgba(59, 130, 246, 0.3);
+  border-color: rgba(168, 85, 247, 0.55);
 }
 
-.neo-card-flat {
-  background-color: #FFFFFF;
-  border: 2px solid #250C48;
-  border-radius: 20px;
+/* Glow effects in purple, blue, cyan & amber */
+.glow-purple {
+  box-shadow: 0 0 25px rgba(139, 92, 246, 0.45);
 }
 
-.neo-btn {
-  border: 2px solid #250C48;
-  box-shadow: 3px 3px 0px #250C48;
-  font-weight: 700;
-  transition: all 0.15s ease;
-  cursor: pointer;
+.glow-purple-lg {
+  box-shadow: 0 0 45px rgba(139, 92, 246, 0.6), 0 0 20px rgba(192, 132, 252, 0.4);
 }
 
-.neo-btn:hover {
-  transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0px #250C48;
+.glow-blue {
+  box-shadow: 0 0 25px rgba(59, 130, 246, 0.45);
 }
 
-.neo-btn:active {
-  transform: translate(2px, 2px);
-  box-shadow: 0px 0px 0px #250C48;
+.glow-cyan {
+  box-shadow: 0 0 25px rgba(56, 189, 248, 0.45);
 }
 
-.neo-btn-primary {
-  background-color: #FBBF24;
-  color: #1F0B38;
+.glow-amber {
+  box-shadow: 0 0 25px rgba(255, 153, 0, 0.45);
 }
 
-.neo-btn-primary:hover {
-  background-color: #F59E0B;
-}
-
-.neo-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
-  padding: 0.25rem 0.75rem;
-  border: 2px solid #250C48;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  box-shadow: 2px 2px 0px #250C48;
-}
-
-/* Perforated tear-off edge effect */
-.perforated-edge {
-  position: relative;
-}
-.perforated-edge::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -6px;
-  height: 12px;
-  background-image: radial-gradient(circle, #F8F5FF 5px, transparent 6px);
-  background-size: 18px 18px;
+.glow-text {
+  text-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
 }
 
 /* Continuous Marquee Animation */
 @keyframes marquee {
-  0% { transform: translateX(0%); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 .animate-marquee {
   display: flex;
   width: max-content;
-  animation: marquee 25s linear infinite;
+  animation: marquee 35s linear infinite;
 }
 
 .animate-marquee:hover {
   animation-play-state: paused;
 }
+
+/* Subtle Pulse animation */
+@keyframes subtlePulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 25px rgba(139, 92, 246, 0.35);
+  }
+  50% {
+    transform: scale(1.03);
+    box-shadow: 0 0 45px rgba(168, 85, 247, 0.65), 0 0 25px rgba(59, 130, 246, 0.5);
+  }
+}
+
+.pulse-badge {
+  animation: subtlePulse 3s ease-in-out infinite;
+}
+
+/* Ethereal Cyber Grid over Canvas */
+.bg-blueprint-grid {
+  background-color: transparent !important;
+  background-image: radial-gradient(rgba(168, 85, 247, 0.14) 1.25px, transparent 1.25px) !important;
+  background-size: 24px 24px;
+}
+
+.bg-dark-grid {
+  background-color: #070415;
+  background-image: radial-gradient(rgba(139, 92, 246, 0.15) 1.2px, transparent 1.2px);
+  background-size: 24px 24px;
+}
+
+/* Night Sky Card & Text Adaptations for Piyush Branch Components */
+.bg-blueprint-grid .bg-white,
+.bg-blueprint-grid .bg-white\/95,
+.bg-blueprint-grid .bg-white\/90 {
+  background-color: rgba(14, 9, 36, 0.85) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-color: rgba(168, 85, 247, 0.28) !important;
+  color: #F8FAFC !important;
+}
+
+.bg-blueprint-grid .text-\[\#260B49\],
+.bg-blueprint-grid .text-\[\#1F0B38\],
+.bg-blueprint-grid .text-purple-950 {
+  color: #F8FAFC !important;
+}
+
+.bg-blueprint-grid .text-purple-900,
+.bg-blueprint-grid .text-purple-800 {
+  color: #E9D5FF !important;
+}
+
+.bg-blueprint-grid .text-purple-950\/80,
+.bg-blueprint-grid .text-purple-950\/75,
+.bg-blueprint-grid .text-purple-800\/80,
+.bg-blueprint-grid .text-purple-700 {
+  color: #CBD5E1 !important;
+}
+
+.bg-blueprint-grid .bg-purple-100,
+.bg-blueprint-grid .bg-purple-100\/80 {
+  background-color: rgba(139, 92, 246, 0.18) !important;
+  color: #DDD6FE !important;
+  border-color: rgba(168, 85, 247, 0.35) !important;
+}
+
+.bg-blueprint-grid .border-purple-200,
+.bg-blueprint-grid .border-purple-200\/90,
+.bg-blueprint-grid .border-purple-100 {
+  border-color: rgba(139, 92, 246, 0.25) !important;
+}
+
+.bg-blueprint-grid .border-purple-900\/10 {
+  border-color: rgba(139, 92, 246, 0.2) !important;
+}
+
+@layer utilities {
+  .font-anton {
+    font-family: 'Anton', sans-serif;
+    letter-spacing: 0.01em;
+  }
+}
+
+/* Scroll Reveal Animations */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(32px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in-up { animation: fadeInUp 0.6s cubic-bezier(0.16,1,0.3,1) forwards; }
+.animate-delay-100 { animation-delay: 0.1s; opacity: 0; }
+.animate-delay-200 { animation-delay: 0.2s; opacity: 0; }
+.animate-delay-300 { animation-delay: 0.3s; opacity: 0; }

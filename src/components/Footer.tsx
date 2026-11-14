@@ -72,11 +72,11 @@ export const Footer: React.FC<FooterProps> = ({ onOpenCodeOfConduct }) => {
             {/* Social Media Links */}
             <div className="flex items-center gap-3 pt-2">
               {[
-                { icon: LinkedInIcon, href: 'https://linkedin.com', label: 'LinkedIn' },
-                { icon: InstagramIcon, href: 'https://instagram.com', label: 'Instagram' },
-                { icon: TwitterXIcon, href: 'https://x.com', label: 'Twitter / X' },
-                { icon: DiscordIcon, href: 'https://discord.gg', label: 'Discord' },
-                { icon: GitHubIcon, href: 'https://github.com', label: 'GitHub' },
+                { icon: LinkedInIcon, href: 'https://linkedin.com/company/aws-cloud-club', label: 'LinkedIn' },
+                { icon: InstagramIcon, href: 'https://instagram.com/awscloudclub', label: 'Instagram' },
+                { icon: TwitterXIcon, href: 'https://x.com/awscloudclub', label: 'Twitter / X' },
+                { icon: DiscordIcon, href: 'https://discord.gg/awscloudclub', label: 'Discord' },
+                { icon: GitHubIcon, href: 'https://github.com/aws-cloud-clubs', label: 'GitHub' },
               ].map((s, i) => {
                 const Icon = s.icon;
                 return (
@@ -102,38 +102,43 @@ export const Footer: React.FC<FooterProps> = ({ onOpenCodeOfConduct }) => {
             </h4>
             <ul className="space-y-2.5 text-sm">
               <li>
-                <a href="#home" className="hover:text-amber-400 transition-colors">
+                <a href="#hero-studio" className="hover:text-amber-400 transition-colors">
                   Home &amp; Countdown
                 </a>
               </li>
               <li>
-                <a href="#about" className="hover:text-amber-400 transition-colors">
-                  About Cloud City
+                <a href="#city-interactive-map" className="hover:text-amber-400 transition-colors">
+                  City Metropolis Map
                 </a>
               </li>
               <li>
-                <a href="#builder-playground" className="hover:text-amber-400 transition-colors">
-                  Architecture Simulator
+                <a href="#stage-program" className="hover:text-amber-400 transition-colors">
+                  Stage &amp; Agenda
                 </a>
               </li>
               <li>
-                <a href="#persona-quiz" className="hover:text-amber-400 transition-colors">
-                  Builder Persona Quiz
+                <a href="#ticket-dispenser" className="hover:text-amber-400 transition-colors">
+                  Passes &amp; Tickets
                 </a>
               </li>
               <li>
-                <a href="#agenda" className="hover:text-amber-400 transition-colors">
-                  Tracks &amp; Schedule
+                <a href="#community-memories" className="hover:text-amber-400 transition-colors">
+                  Community Memories
                 </a>
               </li>
               <li>
-                <a href="#swag" className="hover:text-amber-400 transition-colors">
-                  Swag &amp; Loot Bag
+                <a href="#sponsors-showcase" className="hover:text-amber-400 transition-colors">
+                  Sponsors &amp; Partners
                 </a>
               </li>
               <li>
-                <a href="#team" className="hover:text-amber-400 transition-colors">
-                  Student Core Team
+                <a href="#venue-blueprint" className="hover:text-amber-400 transition-colors">
+                  Venue &amp; Accessibility
+                </a>
+              </li>
+              <li>
+                <a href="#faq-studio" className="hover:text-amber-400 transition-colors">
+                  Frequently Asked Questions
                 </a>
               </li>
             </ul>
@@ -146,29 +151,31 @@ export const Footer: React.FC<FooterProps> = ({ onOpenCodeOfConduct }) => {
             </h4>
             <ul className="space-y-2.5 text-sm">
               <li className="text-slate-400">
-                📅 Sunday, 31st January 2027
+                📅 Sunday, 7th February 2027
               </li>
               <li className="text-slate-400">
                 📍 Dakkhan Banquet Hall, Pune
               </li>
               <li>
                 <a
-                  href="mailto:team@awssbgpict.org"
+                  href="mailto:support@aws-sbg-pict.in"
                   className="hover:text-amber-400 transition-colors flex items-center gap-1.5"
                 >
                   <Mail className="w-3.5 h-3.5" />
-                  team@awssbgpict.org
+                  support@aws-sbg-pict.in
                 </a>
               </li>
-              <li>
-                <button
-                  onClick={onOpenCodeOfConduct}
-                  className="hover:text-amber-400 transition-colors flex items-center gap-1.5 text-slate-300 text-left cursor-pointer"
-                >
-                  <FileText className="w-3.5 h-3.5 text-amber-400" />
-                  Code of Conduct
-                </button>
-              </li>
+              {onOpenCodeOfConduct && (
+                <li>
+                  <button
+                    onClick={onOpenCodeOfConduct}
+                    className="hover:text-amber-400 transition-colors flex items-center gap-1.5 text-slate-300 text-left cursor-pointer"
+                  >
+                    <FileText className="w-3.5 h-3.5 text-amber-400" />
+                    Code of Conduct
+                  </button>
+                </li>
+              )}
               <li>
                 <span className="text-xs text-slate-500 flex items-center gap-1">
                   <ShieldCheck className="w-3 h-3 text-emerald-400" /> PICT Student Chapter

@@ -3,12 +3,14 @@ import { Menu, X, Sparkles, ExternalLink, Volume2, VolumeX } from 'lucide-react'
 import confetti from 'canvas-confetti';
 import { SBGLogo } from './SBGLogo';
 import { setSoundEnabled, playSound } from '../utils/audio';
+import { TICKETING_CONFIG } from '../config/ticketing';
 
 interface NavbarProps {
   onRegisterClick?: () => void;
+  onReplayGate?: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onRegisterClick }) => {
+export const Navbar: React.FC<NavbarProps> = ({ onRegisterClick, onReplayGate }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [soundOn, setSoundOn] = useState(false);
@@ -45,19 +47,22 @@ export const Navbar: React.FC<NavbarProps> = ({ onRegisterClick }) => {
 
     if (onRegisterClick) {
       onRegisterClick();
-    } else {
-      window.open('https://registration-link.com', '_blank', 'noopener,noreferrer');
+    } else if (TICKETING_CONFIG.provider === 'konfhub' && TICKETING_CONFIG.konfhubEventUrl) {
+      window.open(TICKETING_CONFIG.konfhubEventUrl, '_blank');
     }
   };
 
   const handleLogoClick = () => {
     playSound('powerup');
+    if (onReplayGate) {
+      onReplayGate();
+    }
     try {
       confetti({
         particleCount: 40,
         spread: 50,
         origin: { x: 0.1, y: 0.1 },
-        colors: ['#FF9900', '#FFC72C'],
+        colors: ['#FF9900', '#FFC72C', '#8B5CF6'],
       });
     } catch {
       // ignore
@@ -65,14 +70,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onRegisterClick }) => {
   };
 
   const navLinks = [
-    { name: 'Home', href: '#home' },
-    { name: 'About', href: '#about' },
-    { name: 'Playground', href: '#builder-playground' },
-    { name: 'Agenda', href: '#agenda' },
-    { name: 'Loot & Swag', href: '#swag' },
-    { name: 'Tickets', href: '#tickets' },
-    { name: 'Team', href: '#team' },
-    { name: 'Venue', href: '#venue' },
+    { name: 'City Map', href: '#city-interactive-map' },
+    { name: 'Stage & Agenda', href: '#stage-program' },
+    { name: 'Passes', href: '#ticket-dispenser' },
+    { name: 'Memories', href: '#community-memories' },
+    { name: 'Sponsors', href: '#sponsors-showcase' },
+    { name: 'Venue', href: '#venue-blueprint' },
+    { name: 'FAQ', href: '#faq-studio' },
   ];
 
   return (
@@ -88,8 +92,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onRegisterClick }) => {
           
           {/* Logo & Brand with AWS SBG PICT */}
           <a
-            href="#home"
+            href="#hero-studio"
             onClick={handleLogoClick}
+            title="Click to return to city gates"
             className="flex items-center group focus:outline-none focus:ring-2 focus:ring-amber-500 rounded-xl p-1"
           >
             <SBGLogo />
@@ -184,7 +189,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onRegisterClick }) => {
               <div className="flex justify-center items-center gap-4 pt-2 text-xs text-slate-400 font-medium">
                 <span>📍 Pune</span>
                 <span>•</span>
-                <span>📅 31st Jan 2027</span>
+                <span>📅 7th Feb 2027</span>
               </div>
             </div>
           </div>

@@ -1,0 +1,58 @@
+# AWS Student Community Day 2027 (Cloud City) — AWS SBG PICT
+
+> AWS Student Community Day (SCD) 2027 — Cloud City is Western India's premier student cloud computing conference, organized by the AWS Student Builder Group at Pune Institute of Computer Technology (PICT) on Sunday, 7th February 2027 at Dakkhan Banquet Hall, Ambegoan | Katraj | Nahre, Pune, Maharashtra.
+
+## Overview
+
+Cloud City 2027 gathers 1,000+ student developers, cloud architects, DevOps engineers, and tech enthusiasts. The conference features a 60fps cinematic gate entrance, interactive metropolis experience districts, single-stage curated masterclasses, live cloud infrastructure demos, an afternoon Live Hackathon Arena, catering (welcome breakfast, buffet lunch, and high tea), official heavyweight swag kits, and verifiable digital certificates.
+
+## Quick Facts
+
+- **Event:** AWS Student Community Day 2027 (Cloud City)
+- **Date:** Sunday, 7th February 2027
+- **Time:** 08:30 AM – 06:00 PM IST
+- **Venue:** Dakkhan Banquet Hall, Ambegoan | Katraj | Nahre, Pune, Maharashtra 411046
+- **Organizer:** AWS Student Builder Group, Pune Institute of Computer Technology (PICT)
+- **Primary Website:** https://awssbgpict.in
+- **Official Ticketing Portal:** https://konfhub.com/aws-scd-pune-2027
+- **Support & Inquiries:** support@aws-sbg-pict.in
+
+## Interactive Experience Districts
+
+- **Compute District (EC2 & Kubernetes):** Multi-cluster Amazon EKS autoscaling, high-throughput container clusters, and node virtualization.
+- **Serverless District (Lambda & EventBridge):** Zero-cold-start architectures, event-driven pipelines, and async processing grids.
+- **AI & Vector Grid (Bedrock & SageMaker):** Generative AI agents, graph-based autonomous pipelines, and RAG knowledge retrievers.
+- **SecOps & Governance District:** Zero-trust cloud postures, automated IAM remediation, and compliance guards.
+
+## Passes & Ticketing
+
+Every ticket pass includes full-day access, South Indian breakfast, buffet lunch, high tea, heavyweight t-shirt, smart badge, sticker kit, and verifiable certificate:
+
+- [Early Bird Pass](https://konfhub.com/aws-scd-pune-2027): ₹299 — Active Phase 1 live pass with complete universal summit access.
+- [Regular Pass](https://konfhub.com/aws-scd-pune-2027): ₹369 — Phase 2 regular admission pass.
+- [Group Discount Pass](https://konfhub.com/aws-scd-pune-2027): ₹330 per person — Squad booking for teams of 3 or more builders.
+
+## Key Program Highlights
+
+- **Grand Auditorium Stage:** Single-stage master program ensuring zero schedule conflicts between keynotes and panels.
+- **Live Hackathon & Challenge Arena:** Real-time team competition (2-4 builders) tackling cloud resilience and architecture challenges for bounties and credits.
+- **Call for Speakers (CFP):** Open community CFP welcoming student researchers, engineers, and open-source creators.
+- **Community Memories Archive:** Digital camera flashback reel showcasing previous edition milestones.
+
+## Venue & Accessibility
+
+- **Hall:** Dakkhan Banquet Hall
+- **Location:** Ambegoan | Katraj | Nahre, Pune, Maharashtra 411046
+- **Transit:** Quick connectivity from Katraj Bus Depot, Swargate Bus Station, and Mumbai-Bangalore Highway (NH-4).
+- **Amenities:** Air-conditioned main auditorium, 1,000 Mbps developer Wi-Fi, dedicated charging stations, and on-site parking.
+
+## Frequently Asked Questions (FAQ)
+
+- **Who can attend?** All students, developers, and cloud enthusiasts from PICT and colleges across India.
+- **Prerequisites?** No prior AWS experience required; sessions cater to foundational and advanced builders.
+- **Hardware needed?** Laptop, charger, and student ID / PRN proof.
+- **Food & Catering?** 100% included (breakfast, coffee breaks, and buffet lunch).
+
+## Optional & Unabridged Context
+
+- [Full LLM Documentation](https://awssbgpict.in/full-llms.txt): Unabridged, comprehensive documentation covering all summit details, district mappings, CFP guidelines, sponsor rosters, and community conduct.

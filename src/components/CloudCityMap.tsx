@@ -13,7 +13,6 @@ import {
   Compass,
   Layers
 } from 'lucide-react';
-import { CityMascotGuide } from './CityMascotGuide';
 import { playSound } from '../utils/audio';
 
 export interface DistrictData {
@@ -163,13 +162,9 @@ export const CloudCityMap: React.FC = () => {
             <h2 className="text-3xl sm:text-5xl font-black text-[#260B49] tracking-tight">
               Cloud City District Map
             </h2>
-            <p className="text-sm sm:text-base text-purple-950/75 mt-2 max-w-2xl font-medium">
-              Explore the four core districts of our student-powered tech metropolis. Tap any district button to inspect deep-dive agendas, perks, and venue details.
+            <p className="text-sm sm:text-base text-slate-300 mt-2 max-w-xl font-normal">
+              Explore the four core districts of our tech metropolis. Tap any district to inspect agendas and venue details.
             </p>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <CityMascotGuide zone="map" />
           </div>
         </div>
 

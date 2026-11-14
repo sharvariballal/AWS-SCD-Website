@@ -1,0 +1,52 @@
+# Robots.txt for AWS Student Community Day 2027 (Cloud City) — AWS SBG PICT
+# Website: https://awssbgpict.in
+
+User-agent: *
+Allow: /
+Allow: /llms.txt
+Allow: /full-llms.txt
+
+# Explicit allowances for Search Engines and AI Crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Diffbot
+Allow: /
+
+# Sitemap & LLM Discovery Files
+Sitemap: https://awssbgpict.in/sitemap.xml
+LLMs-Txt: https://awssbgpict.in/llms.txt
+LLMs-Full-Txt: https://awssbgpict.in/full-llms.txt

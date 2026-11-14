@@ -95,7 +95,7 @@ export const PolaroidFlashbackGallery: React.FC = () => {
   const activePhoto = flashbackPhotos[currentIndex];
 
   return (
-    <section id="flashback-gallery" className="py-20 px-4 sm:px-6 lg:px-8 bg-blueprint-grid border-b-2 border-purple-900/10">
+    <section id="community-memories" className="py-20 px-4 sm:px-6 lg:px-8 bg-blueprint-grid border-b-2 border-purple-900/10">
       <div className="max-w-5xl mx-auto">
         
         {/* Section Header */}

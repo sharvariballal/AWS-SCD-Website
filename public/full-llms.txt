@@ -1,0 +1,208 @@
+# AWS Student Community Day 2027 (Cloud City) — Complete Summit Knowledge Base
+
+> Unabridged documentation and official knowledge base for "AWS Student Community Day 2027 — Cloud City", Western India's premier student cloud conference held in Pune, Maharashtra on Sunday, 7th February 2027.
+
+---
+
+## 1. Executive Summary & Vision
+
+**Event Title:** AWS Student Community Day 2027 — Cloud City  
+**Hosting Organization:** AWS Student Builder Group (SBG) at Pune Institute of Computer Technology (PICT)  
+**Date:** Sunday, 7th February 2027  
+**Time:** 08:30 AM – 06:00 PM Indian Standard Time (IST)  
+**Location:** Dakkhan Banquet Hall, Ambegoan | Katraj | Nahre, Pune, Maharashtra 411046, India  
+**Official Website:** https://awssbgpict.in  
+**Ticketing Portal (KonfHub):** https://konfhub.com/aws-scd-pune-2027  
+**Support Email:** support@aws-sbg-pict.in  
+
+### The Theme: Cloud City (Metropolis Architecture)
+Cloud City envisions cloud computing infrastructure through the lens of a bustling, high-tech architectural metropolis. Digital systems—like modern cities—rely on resilient foundations: high-density compute skyscrapers, zero-cold-start serverless energy grids, autonomous AI intelligence networks, and hardened perimeter defense.
+
+Organized by the AWS Student Builder Group at PICT, this conference bridges the gap between university theoretical curricula and production-scale industrial engineering. Attendees experience an interactive tech metropolis featuring cinematic shutter gates, vector district maps, single-stage curated masterclasses, live cloud infrastructure teardowns, an afternoon Live Hackathon Arena, and direct connections to tech leaders and recruiters.
+
+---
+
+## 2. Interactive Experience Districts
+
+Cloud City is divided into four distinct technical districts designed to give builders hands-on exposure to modern cloud stacks:
+
+1. **Compute District (EC2, Containers & Kubernetes):**
+   - High-density node provisioning, containerized microservices, and Amazon EKS at scale.
+   - Intelligent node autoscaling with Karpenter, eBPF networking via Cilium, and cost optimization.
+   - Deep dive into Linux kernel primitives and distributed container runtimes.
+
+2. **Serverless District (AWS Lambda, EventBridge & DynamoDB):**
+   - Event-driven reactive architectures, asynchronous choreography, and fan-out patterns.
+   - Zero-cold-start optimization using AWS Lambda SnapStart, lightweight runtimes (Rust, Go), and provisioned concurrency.
+   - Serverless databases: DynamoDB single-table design, transactions, and global replication.
+
+3. **AI & Vector Grid (Amazon Bedrock, SageMaker & Agents):**
+   - Autonomous multi-agent orchestration, state machines, and graph workflows.
+   - Retrieval-Augmented Generation (RAG) using vector databases and dense embeddings.
+   - Model evaluation, guardrails, and production LLM cost and latency benchmarks.
+
+4. **SecOps & Governance District:**
+   - Zero-trust architecture, automated least-privilege IAM policies, and cloud posture management.
+   - Incident detection and automated quarantine using AWS Step Functions and EventBridge.
+   - Infrastructure-as-Code (Terraform, AWS CDK) security linting and automated policy enforcement.
+
+---
+
+## 3. Venue, Accessibility & Logistics
+
+### Venue Details
+- **Venue Name:** Dakkhan Banquet Hall
+- **Address:** Ambegoan | Katraj | Nahre, Pune, Maharashtra 411046, India
+- **Landmark:** Near Katraj Bus Depot and Mumbai-Bangalore Highway (NH-4 bypass)
+- **Google Maps Navigation:** https://maps.google.com/?q=Dakkhan+Banquet+Hall+Katraj+Pune
+
+### Transit Connectivity
+- **From Pune Railway Station:** ~14 km (35–45 minutes via cab or direct PMPML bus towards Katraj).
+- **From Pune Airport (PNQ):** ~22 km (50–60 minutes via cab).
+- **From Swargate Bus Station:** ~8 km (20 minutes via Katraj BRT corridor).
+- **From Katraj Bus Depot:** ~2 km (convenient local transit or auto-rickshaw).
+- **Highway Access:** Direct off-ramp from NH-48 (Mumbai-Bangalore Highway).
+
+### Facility Amenities
+- Fully air-conditioned Grand Auditorium with unified single-stage setup.
+- 1,000 Mbps ultra-fast developer Wi-Fi for live labs and hackathons.
+- Dedicated power strips and laptop charging stations at every row.
+- On-site complimentary parking for two-wheelers and cars.
+- Banquet dining area serving breakfast, lunch buffet, and high tea.
+
+---
+
+## 4. Passes & Ticketing Guide
+
+All summit passes provide 100% universal access to all stage programs, workshops, catering, swag kits, and digital credentials. There are no paywalled tracks or hidden VIP restrictions.
+
+### Pass Tiers & Pricing
+
+| Pass Tier | Price (INR) | Status | What Is Included |
+| :--- | :--- | :--- | :--- |
+| **Early Bird Pass** | ₹299 | **ACTIVE (Phase 1)** | Universal Summit Access, Hot Breakfast, Lunch Buffet, High Tea, Heavyweight Swag Kit, Digital Credential |
+| **Regular Pass** | ₹369 | Phase 2 (Coming Soon) | Universal Summit Access, Hot Breakfast, Lunch Buffet, High Tea, Heavyweight Swag Kit, Digital Credential |
+| **Group Discount Pass** | ₹330 / person | Phase 2 (Teams of 3+) | Universal Summit Access for all squad members, Hot Breakfast, Lunch Buffet, Swag Kits, Digital Credentials |
+
+### Universal Perks Included with Every Pass
+1. **Full Day Summit Admission:** Access to all keynotes, stage deep-dives, and panels with zero schedule clashes.
+2. **Hot Breakfast & Buffet Lunch:** South Indian morning breakfast, multi-course banquet buffet lunch, and artisanal high-tea coffee.
+3. **Official Builder Swag Kit:** Heavyweight cotton event t-shirt, holographic badge, stickers, and lanyard.
+4. **Digital Credential Certificate:** Verifiable proof of participation issued by AWS Student Builder Group PICT.
+
+### Booking Process
+- Tickets are processed via KonfHub: https://konfhub.com/aws-scd-pune-2027
+- Instant digital ticket generation with secure QR code.
+- Payments accepted via UPI, Credit/Debit cards, and Net Banking.
+
+---
+
+## 5. Master Summit Program & Schedule
+
+*Date: Sunday, 7th February 2027 | 08:30 AM – 06:00 PM IST*
+
+### Curated Single-Stage Timeline
+
+- **08:30 AM – 09:30 AM | Check-in, Breakfast & Badge Distribution**
+  - Registration badge pickup at Central Foyer.
+  - South Indian welcome breakfast with hot filter coffee and Masala Chai.
+  - Swag kit handoff (t-shirt, badge, stickers).
+
+- **09:30 AM – 10:30 AM | Grand Keynote: Welcome to Cloud City — The Modern Distributed Metropolis**
+  - Opening remarks from AWS SBG PICT leadership.
+  - Industry keynote on distributed systems resilience, serverless architectures, and cloud modernization.
+
+- **10:45 AM – 12:00 PM | Masterclass: Production Generative AI Agents on Serverless AWS**
+  - Live architectural deep-dive into multi-agent systems, function calling, Amazon Bedrock, and DynamoDB vector retrieval.
+  - Real-world production pitfalls, cold start mitigations, and latency optimization.
+
+- **12:00 PM – 01:15 PM | Engineering Deep Dive: Extreme Scale Kubernetes with Amazon EKS**
+  - Intelligent cluster autoscaling using Karpenter, cost reduction strategies, eBPF observability, and multi-tenant security.
+
+- **01:15 PM – 02:30 PM | Networking Cloud Cafe & Grand Buffet Lunch**
+  - Full banquet buffet lunch at Dakkhan Banquet Hall.
+  - Recruiter networking, startup booths, and open peer discussions.
+
+- **02:30 PM – 04:30 PM | Live Hackathon & Cloud Architecture Arena**
+  - Team challenge (2–4 builders) solving live cloud crisis scenarios and latency bottlenecks.
+  - Mentors on-site to assist teams; real-time leaderboard scoring.
+
+- **04:30 PM – 05:15 PM | Industry Panel: Navigating Cloud Careers from Campus to Staff Engineer**
+  - Panel discussion featuring tech startup CTOs, AWS Community Heroes, and alumni.
+  - Audience Q&A on resumes, portfolio projects, open-source impact, and campus placements.
+
+- **05:15 PM – 06:00 PM | Hackathon Awards, Swag Drop & Closing Ceremony**
+  - Announcement of hackathon winners with bounties and AWS credits.
+  - Recognition of community volunteers and student contributors.
+
+---
+
+## 6. Call for Speakers (CFP)
+
+AWS Student Community Day 2027 operates an open Call for Speakers (CFP) to encourage students, independent developers, and industry engineers to share their knowledge on the main stage.
+
+- **Proposal Submission:** Available via the official CFP portal.
+- **Accepted Topics:** Distributed systems, serverless architectures, DevOps and SRE, Generative AI in production, cloud security, and student founder stories.
+- **Speaker Perks:** Full summit access, dedicated green room access, speaker memento, travel support consideration for outstation speakers, and networking with keynote leaders.
+
+---
+
+## 7. Sponsors & Ecosystem Partners
+
+AWS Student Community Day 2027 is made possible through collaborations with visionary enterprise cloud providers, regional tech startups, and developer tool ecosystems.
+
+### Opportunities for Sponsors
+- **Booth Spaces:** Dedicated exhibition booth in the central hall.
+- **Career Fair Access:** Direct resume collection and interviews with over 1,000 top engineering students.
+- **Branded Challenges:** Sponsored hackathon problem statements and bounty prizes.
+- **Keynote Slots:** Speaking opportunities for technical leaders.
+- **Contact:** Reach out to the sponsorship committee at support@aws-sbg-pict.in.
+
+---
+
+## 8. Frequently Asked Questions (FAQ)
+
+### Q1: Who can attend AWS Student Community Day 2027?
+**Answer:** Cloud City is open to all students, developers, and cloud enthusiasts! Whether you are a first-year engineering student, final-year graduate, self-taught builder, or hackathon enthusiast from PICT or any college across Pune and India, you are warmly welcomed.
+
+### Q2: Do I need prior AWS or cloud computing experience?
+**Answer:** Not at all! Our agenda is specifically architected for student builders. We feature foundational workshops, live step-by-step code walkthroughs, and mentor-assisted sessions so you can deploy your first serverless microservice or AI agent on the spot.
+
+### Q3: What hardware should I bring on summit day?
+**Answer:** Bring your laptop, charger, and valid college ID / PRN proof. We provide 1,000 Mbps high-speed Wi-Fi, power connectivity, and sandbox AWS credits.
+
+### Q4: Are food, refreshments, and lunch included in the pass?
+**Answer:** Yes, 100%! Every ticket tier includes welcome breakfast with South Indian delicacies, hot filter coffee and Masala Chai breaks, and a lavish full buffet lunch at Dakkhan Banquet Hall.
+
+### Q5: How does the Live Hackathon & Challenge Arena work?
+**Answer:** The Live Hackathon takes place in the afternoon inside the Arcade Alley & Hackathon zone within the main hall. You can compete in teams of 2-4 builders to solve realistic cloud crisis and optimization challenges. Top teams take home certificates, bounties, trophies, and AWS cloud credits.
+
+### Q6: When and how will certificates and swag be delivered?
+**Answer:** Physical swag kits (heavyweight cotton tee, holographic sticker pack, smart badge) are handed to you in person at the morning check-in counter. Verifiable digital credentials with unique verification IDs are issued via AWS SBG PICT directly to your registered email.
+
+---
+
+## 9. About AWS Student Builder Group (SBG) PICT
+
+### Who We Are
+AWS Student Builder Group at Pune Institute of Computer Technology (PICT) is a premier student-run cloud community. We empower engineering students with industry-relevant skills in distributed cloud architecture, serverless systems, and DevOps engineering.
+
+### Community Mission
+To bridge the gap between classroom theory and real-world software architecture by conducting hands-on workshops, multi-week bootcamps, community hackathons, and certifications study circles.
+
+### Chapter Location & Inquiries
+- **Host Campus:** Pune Institute of Computer Technology (PICT), Dhankawadi, Pune, Maharashtra 411043
+- **Event Venue:** Dakkhan Banquet Hall, Ambegoan | Katraj | Nahre, Pune, Maharashtra 411046
+- **Support Email:** support@aws-sbg-pict.in
+- **Website:** https://awssbgpict.in
+- **Ticketing:** https://konfhub.com/aws-scd-pune-2027
+
+---
+
+## 10. Code of Conduct & Legal Disclaimers
+
+### Community Code of Conduct
+AWS Student Community Day 2027 is committed to providing a safe, welcoming, respectful, and harassment-free environment for everyone regardless of gender, sexual orientation, disability, physical appearance, race, ethnicity, or technical background. Exclusionary behavior, harassment, or intimidation in any form is strictly prohibited.
+
+### Legal & Trademark Notice
+AWS Student Builder Group at PICT is an independent, student-led technical community. Amazon Web Services, AWS, the AWS logo, and related marks are trademarks of Amazon.com, Inc. or its affiliates. AWS Student Community Day 2027 is a community-organized event.

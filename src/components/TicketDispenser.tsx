@@ -13,7 +13,6 @@ import {
 } from 'lucide-react';
 import { TICKETING_CONFIG } from '../config/ticketing';
 import { SBGLogo } from './SBGLogo';
-import { CityMascotGuide } from './CityMascotGuide';
 
 interface TicketDispenserProps {
   onRegisterClick: (passType: string) => void;
@@ -114,17 +113,10 @@ export const TicketDispenser: React.FC<TicketDispenserProps> = ({ onRegisterClic
           </p>
         </div>
 
-        {/* Mascot Tip */}
-        <div className="flex justify-center mb-8">
-          <CityMascotGuide zone="tickets" />
-        </div>
-
-        {/* 100% Universal Access Notice Banner */}
-        <div className="mb-8 p-4 rounded-2xl bg-white border border-purple-200 shadow-sm flex items-center gap-3 max-w-4xl mx-auto">
-          <Info className="w-5 h-5 text-purple-700 shrink-0" />
-          <p className="text-xs sm:text-sm font-semibold text-purple-950">
-            <strong>Universal Full-Access Guarantee:</strong> There is zero difference in access between ticket categories. Every pass grants 100% full admission to all keynotes, technical sessions, buffet lunch, specialty coffee, and the official swag kit. Only the booking phase price differs.
-          </p>
+        {/* Universal Access Notice Banner */}
+        <div className="mb-8 p-3.5 rounded-2xl bg-[#0D1B2A]/80 border border-slate-700/80 shadow-sm flex items-center justify-center gap-2 max-w-2xl mx-auto text-xs text-slate-300 text-center">
+          <Info className="w-4 h-4 text-amber-400 shrink-0" />
+          <span>Universal Access Guarantee: Every pass includes full keynotes, labs, buffet lunch, and official swag.</span>
         </div>
 
         {/* The Machine Layout: 2 Columns */}
