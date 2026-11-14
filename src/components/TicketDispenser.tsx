@@ -1,342 +1,208 @@
-import React, { useState } from 'react';
-import { 
-  Ticket, 
-  Sparkles, 
-  Check, 
+import React from 'react';
+import {
+  Sparkles,
+  Check,
   ShieldCheck,
-  Lock,
-  Info,
   Package,
   Utensils,
   Award,
-  ArrowRight
+  ArrowRight,
+  Lock
 } from 'lucide-react';
 import { TICKETING_CONFIG } from '../config/ticketing';
-import { SBGLogo } from './SBGLogo';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 
 interface TicketDispenserProps {
   onRegisterClick: (passType: string) => void;
 }
 
 export const TicketDispenser: React.FC<TicketDispenserProps> = ({ onRegisterClick }) => {
-  const [selectedTier, setSelectedTier] = useState<number>(0);
+  const headerRef = useScrollReveal();
+  const cardsRef = useScrollReveal();
 
-  const passes = [
-    {
-      id: 'early_bird',
-      title: 'Early Bird Pass',
-      tag: 'ACTIVE TIER',
-      basePrice: 299,
-      isLive: true,
-      displayPrice: '₹299',
-      subtitle: 'Phase 1 official live quota • Limited seats',
-      badge: 'LIVE NOW',
-    },
-    {
-      id: 'regular',
-      title: 'Regular Pass',
-      tag: 'PHASE 2',
-      basePrice: 369,
-      isLive: false,
-      displayPrice: 'Revealing Soon',
-      subtitle: 'Launches after Early Bird phase concludes',
-      badge: 'COMING SOON',
-    },
-    {
-      id: 'group',
-      title: 'Group Discount Pass',
-      tag: 'TEAMS OF 3+',
-      basePrice: 330,
-      isLive: false,
-      displayPrice: 'Revealing Soon',
-      subtitle: 'Discounted squad booking for teams of 3 or more',
-      badge: 'COMING SOON',
-    },
-  ];
-
-  const currentPass = passes[selectedTier];
-  const finalPrice = currentPass.basePrice;
-
-  const handleDispenseTicket = () => {
-    if (!currentPass.isLive) {
-      alert('This tier launches in the next phase! Please book the active Early Bird pass (₹299).');
+  const handleBook = (tier: string, isLive: boolean) => {
+    if (!isLive) {
+      alert('This tier launches in Phase 2! Please claim the active Early Bird pass (₹299).');
       return;
     }
     if (TICKETING_CONFIG.provider === 'konfhub' && TICKETING_CONFIG.konfhubEventUrl) {
       window.open(TICKETING_CONFIG.konfhubEventUrl, '_blank');
       return;
     }
-    onRegisterClick(`${currentPass.title} (₹${finalPrice})`);
+    onRegisterClick(tier);
   };
 
-  const universalPerks = [
+  const passTiers = [
     {
-      title: 'Full Day Summit Admission',
-      desc: 'All keynotes, stage deep-dives, and technical panels with zero schedule clashes.',
-      icon: Award,
+      id: 'early-bird',
+      name: 'Early Bird Pass',
+      tag: 'ACTIVE // PHASE 1',
+      price: '₹299',
+      originalPrice: '₹499',
+      status: 'LIVE NOW',
+      isLive: true,
+      featured: true,
+      perks: [
+        'Full Day All-District Summit Access',
+        'Multi-Course Banquet Buffet & Breakfast',
+        'Official Cloud City Builder Swag Kit',
+        'Verifiable Digital Certificate of Attendance',
+      ],
     },
     {
-      title: 'Hot Breakfast & Buffet Lunch',
-      desc: 'South Indian morning breakfast, multi-course buffet lunch, and artisanal high-tea coffee.',
-      icon: Utensils,
+      id: 'regular',
+      name: 'Regular Pass',
+      tag: 'PHASE 2',
+      price: '₹369',
+      originalPrice: '₹549',
+      status: 'OPENS SOON',
+      isLive: false,
+      featured: false,
+      perks: [
+        'Full Day All-District Summit Access',
+        'Multi-Course Banquet Buffet & Breakfast',
+        'Official Cloud City Builder Swag Kit',
+        'Verifiable Digital Certificate of Attendance',
+      ],
     },
     {
-      title: 'Official Builder Swag Kit',
-      desc: 'Heavyweight event t-shirt, holographic badge, stickers, and lanyard.',
-      icon: Package,
-    },
-    {
-      title: 'Digital Credential Certificate',
-      desc: 'Verifiable proof of participation issued by AWS Student Builder Group PICT.',
-      icon: ShieldCheck,
+      id: 'group',
+      name: 'Group Pass',
+      tag: 'SQUAD // 3+ BUILDERS',
+      price: '₹330',
+      originalPrice: '₹499',
+      status: 'OPENS SOON',
+      isLive: false,
+      featured: false,
+      perks: [
+        'Discounted Team Admission (3+ Members)',
+        'Multi-Course Banquet Buffet & Breakfast',
+        'Official Cloud City Builder Swag Kit',
+        'Verifiable Digital Certificate of Attendance',
+      ],
     },
   ];
 
   return (
-    <section id="ticket-dispenser" className="py-20 px-4 sm:px-6 lg:px-8 bg-blueprint-grid border-b-2 border-purple-900/10">
-      <div className="max-w-7xl mx-auto">
-        
+    <section id="ticket-dispenser" className="py-10 sm:py-14 px-4 sm:px-6 lg:px-8 bg-blueprint-grid border-b border-white/5">
+      <div className="max-w-6xl mx-auto">
+
         {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-purple-300 bg-purple-100 text-purple-900 text-xs font-mono font-bold uppercase mb-3 shadow-sm">
-            <Ticket className="w-3.5 h-3.5 text-purple-700" />
-            <span>Pass Dispensary &amp; Inclusions</span>
+        <div ref={headerRef} className="sr-reveal text-center max-w-2xl mx-auto mb-8 sm:mb-10">
+          <div className="flex items-center justify-center gap-2 text-xs font-mono tracking-widest text-cyan-400 mb-2 uppercase font-semibold">
+            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]" />
+            <span className="text-slate-500">//</span>
+            <span>Summit Admissions</span>
           </div>
 
-          {/* Solid Non-Gradient Heading */}
-          <h2 className="text-3xl sm:text-5xl font-black text-[#260B49] tracking-tight">
-            Claim Your Cloud City Pass
+          <h2 className="font-anton text-3xl sm:text-5xl text-white tracking-tight">
+            CLAIM YOUR <span className="text-cyan-400">SUMMIT</span> PASS
           </h2>
 
-          <p className="text-sm sm:text-base text-purple-950/75 mt-2 font-medium">
-            Subsidized student admission for verified student builders and developers. Valid college PRN or ID required.
+          <p className="text-sm sm:text-base text-slate-300 mt-2" style={{ fontFamily: "'Inter', sans-serif" }}>
+            Subsidized student admission. Every pass includes full masterclasses, hot meals, and official swag.
           </p>
         </div>
 
-        {/* Universal Access Notice Banner */}
-        <div className="mb-8 p-3.5 rounded-2xl bg-[#0D1B2A]/80 border border-slate-700/80 shadow-sm flex items-center justify-center gap-2 max-w-2xl mx-auto text-xs text-slate-300 text-center">
-          <Info className="w-4 h-4 text-amber-400 shrink-0" />
-          <span>Universal Access Guarantee: Every pass includes full keynotes, labs, buffet lunch, and official swag.</span>
+        {/* Clean 3-Card Pass Layout */}
+        <div ref={cardsRef} className="sr-reveal grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch mb-8">
+          {passTiers.map((tier) => (
+            <div
+              key={tier.id}
+              className={`relative rounded-3xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 backdrop-blur-xl ${tier.featured
+                ? 'bg-[#0D1B2A]/95 border-2 border-cyan-400 shadow-[0_0_35px_rgba(34,211,238,0.2)] md:-translate-y-2'
+                : 'bg-[#0D1B2A]/70 border border-white/10 hover:border-white/20'
+                }`}
+            >
+              {/* Featured Badge */}
+              {tier.featured && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-cyan-400 text-slate-950 font-mono text-[10px] font-black uppercase tracking-wider shadow-md">
+                  RECOMMENDED
+                </div>
+              )}
+
+              <div>
+                {/* Tier Meta */}
+                <div className="flex items-center justify-between pb-3 mb-4 border-b border-white/10">
+                  <span className="text-[10px] font-mono font-bold tracking-wider text-cyan-400">
+                    {tier.tag}
+                  </span>
+                  <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded ${tier.isLive
+                    ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
+                    : 'bg-white/5 text-slate-400 border border-white/10'
+                    }`}>
+                    {tier.status}
+                  </span>
+                </div>
+
+                <h3 className="font-anton text-2xl text-white tracking-tight mb-2">
+                  {tier.name}
+                </h3>
+
+                {/* Price Display */}
+                <div className="flex items-baseline gap-2 mb-6">
+                  <span className="font-mono text-3xl sm:text-4xl font-black text-cyan-400">
+                    {tier.price}
+                  </span>
+                  <span className="font-mono text-sm text-slate-500 line-through">
+                    {tier.originalPrice}
+                  </span>
+                  <span className="text-[11px] font-mono text-slate-400">/ attendee</span>
+                </div>
+
+                {/* Inclusions List */}
+                <div className="space-y-2.5 mb-6">
+                  {tier.perks.map((perk, i) => (
+                    <div key={i} className="flex items-start gap-2.5 text-xs text-slate-300" style={{ fontFamily: "'Inter', sans-serif" }}>
+                      <Check className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+                      <span>{perk}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Action Button */}
+              <div>
+                <button
+                  onClick={() => handleBook(`${tier.name} (${tier.price})`, tier.isLive)}
+                  className={`w-full py-3.5 rounded-xl font-mono text-xs sm:text-sm font-black flex items-center justify-center gap-2 transition-all cursor-pointer ${tier.isLive
+                    ? 'bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-slate-950 shadow-[0_0_20px_rgba(56,189,248,0.4)] hover:scale-[1.02]'
+                    : 'bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10'
+                    }`}
+                >
+                  {tier.isLive ? (
+                    <>
+                      <Sparkles className="w-4 h-4" />
+                      <span>Book Early Bird — {tier.price}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  ) : (
+                    <>
+                      <Lock className="w-3.5 h-3.5" />
+                      <span>Phase 2 Release</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
 
-        {/* The Machine Layout: 2 Columns */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
-          {/* Left Column: Pass Tier Selector + Integrated All Perks Grid (7 cols) */}
-          <div className="lg:col-span-7 space-y-6">
-            
-            <div className="text-xs font-mono font-bold text-purple-900 uppercase flex items-center justify-between">
-              <span>Step 1: Choose Your Pass Tier</span>
-              <span className="text-emerald-700 font-bold flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                Phase 1 Active
-              </span>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {passes.map((tier, idx) => {
-                const isSelected = selectedTier === idx;
-                return (
-                  <button
-                    key={tier.id}
-                    type="button"
-                    onClick={() => {
-                      setSelectedTier(idx);
-                    }}
-                    className={`p-5 rounded-2xl border-2 transition-all text-left relative overflow-hidden cursor-pointer ${
-                      isSelected
-                        ? 'border-purple-900 bg-white shadow-md ring-2 ring-purple-900/15'
-                        : 'border-purple-200 bg-white/70 hover:bg-white hover:border-purple-400'
-                    }`}
-                  >
-                    <div className="h-6 flex items-center justify-between mb-3">
-                      <span className="inline-flex items-center h-6 px-2.5 rounded-lg text-[10px] font-mono font-black uppercase tracking-wider bg-purple-100 text-purple-900 border border-purple-200">
-                        {tier.tag}
-                      </span>
-                      <div className="h-6 flex items-center">
-                        {tier.isLive ? (
-                          <span className="inline-flex items-center gap-1.5 h-6 px-2 rounded-lg text-[10px] font-mono font-bold text-emerald-700 bg-emerald-50 border border-emerald-200">
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                            LIVE
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center gap-1 h-6 px-2 rounded-lg text-[10px] font-mono font-bold text-purple-400 bg-purple-50 border border-purple-100">
-                            <Lock className="w-3 h-3 text-purple-400" />
-                            <span>LOCKED</span>
-                          </span>
-                        )}
-                      </div>
-                    </div>
-
-                    <h3 className="text-base font-black text-purple-950 mb-1">
-                      {tier.title}
-                    </h3>
-
-                    <p className="text-xs text-purple-700/80 mb-3 min-h-[32px]">
-                      {tier.subtitle}
-                    </p>
-
-                    <div className="pt-2.5 border-t border-purple-100 flex items-center justify-between min-h-[42px]">
-                      <span className="text-lg sm:text-xl font-black text-purple-950 font-mono tracking-tight">
-                        {tier.displayPrice}
-                      </span>
-                      <span className="text-[10px] font-mono text-purple-500 font-bold uppercase tracking-wider shrink-0">
-                        {tier.isLive ? 'INR NET' : 'PHASE 2'}
-                      </span>
-                    </div>
-
-                    {isSelected && (
-                      <div className="absolute top-0 right-0 w-3 h-3 bg-purple-900 rounded-bl-lg" />
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* INTEGRATED: What Every Ticket Unlocks (Formerly LootBoxVault) */}
-            <div className="p-6 rounded-3xl bg-white border-2 border-purple-200 shadow-sm space-y-4">
-              <div className="flex items-center justify-between pb-3 border-b border-purple-100">
-                <span className="text-xs font-mono font-black text-purple-950 uppercase tracking-wider flex items-center gap-2">
-                  <Package className="w-4 h-4 text-purple-700" />
-                  <span>Everything Included In Every Ticket</span>
-                </span>
-                <span className="text-[11px] font-mono font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                  Zero Hidden Fees
-                </span>
+        {/* Minimal Inclusions Strip (Spacious & Clean) */}
+        <div className="p-4 rounded-2xl bg-[#0D1B2A]/60 border border-white/5 backdrop-blur-md">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+            {[
+              { icon: Award, label: 'All-Day Pass & Workshops' },
+              { icon: Utensils, label: 'Breakfast & Full Buffet Lunch' },
+              { icon: Package, label: 'Official Swag Kit & Badge' },
+              { icon: ShieldCheck, label: 'Verifiable Digital Certificate' },
+            ].map(({ icon: Icon, label }, idx) => (
+              <div key={idx} className="flex flex-col sm:flex-row items-center justify-center gap-2 text-xs text-slate-300">
+                <Icon className="w-4 h-4 text-cyan-400 shrink-0" />
+                <span style={{ fontFamily: "'Inter', sans-serif" }}>{label}</span>
               </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                {universalPerks.map((perk, idx) => {
-                  const Icon = perk.icon;
-                  return (
-                    <div
-                      key={idx}
-                      className="p-3.5 rounded-2xl bg-purple-50/60 border border-purple-100 flex items-start gap-3"
-                    >
-                      <div className="w-8 h-8 rounded-xl bg-purple-100 border border-purple-200 text-purple-700 flex items-center justify-center shrink-0 mt-0.5">
-                        <Icon className="w-4 h-4" />
-                      </div>
-                      <div>
-                        <h4 className="text-xs font-bold text-purple-950 mb-0.5">{perk.title}</h4>
-                        <p className="text-[11px] text-purple-800/80 leading-relaxed font-normal">{perk.desc}</p>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
+            ))}
           </div>
-
-          {/* Right Column: Physical Perforated Tear-off Ticket Stub (5 cols) */}
-          <div className="lg:col-span-5">
-            <div className="text-xs font-mono font-bold text-purple-900 uppercase mb-2">
-              Generated Pass Preview
-            </div>
-
-            <div className="p-6 rounded-3xl bg-amber-400 text-slate-950 border-3 border-purple-950 shadow-[0_16px_40px_rgba(245,158,11,0.25)] relative overflow-hidden">
-              
-              {/* Ticket Top Header: Official Club Emblem */}
-              <div className="flex items-center justify-between pb-3 mb-4 border-b-2 border-purple-950/20">
-                <div>
-                  <div className="text-[10px] font-mono font-black uppercase tracking-wider text-purple-950/80">
-                    ADMIT ONE • COMMUNITY PASS
-                  </div>
-                  <h4 className="text-xl font-black uppercase tracking-tight text-purple-950">
-                    {currentPass.title}
-                  </h4>
-                </div>
-                <div className="w-10 h-10 rounded-xl bg-purple-950 p-1 flex items-center justify-center border border-purple-900 shadow-sm">
-                  <SBGLogo variant="emblem" size="sm" />
-                </div>
-              </div>
-
-              {/* Price Banner */}
-              <div className="p-3.5 bg-white rounded-2xl border-2 border-purple-950/20 shadow-sm mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div>
-                  <span className="text-[10px] font-mono font-bold text-purple-700 uppercase block">
-                    TOTAL INVESTMENT
-                  </span>
-                  <div className="text-2xl sm:text-3xl font-black text-purple-950 font-mono">
-                    {currentPass.isLive ? `₹${finalPrice}` : 'Phase 2 Launch'}
-                  </div>
-                </div>
-                <div className="sm:text-right">
-                  <span className="text-[10px] font-mono font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-300 inline-block">
-                    ALL MEALS &amp; SWAG INCLUDED
-                  </span>
-                  <div className="text-[11px] font-mono font-semibold text-purple-800 mt-1">
-                    Community Pass • Pune
-                  </div>
-                </div>
-              </div>
-
-              {/* Universal access guarantee list */}
-              <div className="space-y-2 mb-6">
-                <span className="text-[10px] font-mono font-black uppercase tracking-wider text-purple-950 block">
-                  ALL PASSES INCLUDE:
-                </span>
-                <div className="flex items-center gap-2 text-xs font-bold text-purple-950">
-                  <Check className="w-4 h-4 text-purple-950 shrink-0" />
-                  <span>Full Day All-District Summit Access</span>
-                </div>
-                <div className="flex items-center gap-2 text-xs font-bold text-purple-950">
-                  <Check className="w-4 h-4 text-purple-950 shrink-0" />
-                  <span>Keynote District &amp; In-Person Cloud Workshops</span>
-                </div>
-                <div className="flex items-center gap-2 text-xs font-bold text-purple-950">
-                  <Check className="w-4 h-4 text-purple-950 shrink-0" />
-                  <span>Compute Café Full Buffet Lunch &amp; Coffee</span>
-                </div>
-                <div className="flex items-center gap-2 text-xs font-bold text-purple-950">
-                  <Check className="w-4 h-4 text-purple-950 shrink-0" />
-                  <span>Official Builder Swag Kit &amp; Certificate</span>
-                </div>
-              </div>
-
-              {/* CTA Button */}
-              <button
-                type="button"
-                onClick={handleDispenseTicket}
-                className="w-full py-4 rounded-2xl bg-purple-950 hover:bg-purple-900 text-amber-300 font-mono font-black text-sm flex items-center justify-center gap-2 shadow-xl hover:scale-[1.02] active:scale-95 transition-all cursor-pointer border border-purple-800"
-              >
-                <Sparkles className="w-4 h-4" />
-                <span>Dispense &amp; Reserve Pass Now</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-
-              {/* Barcode Graphic */}
-              <div className="pt-4 mt-4 border-t-2 border-dashed border-purple-950/20 flex items-center justify-between text-[10px] font-mono text-purple-950/70">
-                <div className="flex items-center gap-2">
-                  <svg className="w-32 h-6" viewBox="0 0 120 24" fill="currentColor">
-                    <rect x="0" y="0" width="3" height="24" />
-                    <rect x="5" y="0" width="1" height="24" />
-                    <rect x="8" y="0" width="4" height="24" />
-                    <rect x="15" y="0" width="2" height="24" />
-                    <rect x="20" y="0" width="5" height="24" />
-                    <rect x="28" y="0" width="2" height="24" />
-                    <rect x="33" y="0" width="1" height="24" />
-                    <rect x="36" y="0" width="3" height="24" />
-                    <rect x="42" y="0" width="6" height="24" />
-                    <rect x="51" y="0" width="2" height="24" />
-                    <rect x="56" y="0" width="4" height="24" />
-                    <rect x="63" y="0" width="1" height="24" />
-                    <rect x="67" y="0" width="3" height="24" />
-                    <rect x="73" y="0" width="5" height="24" />
-                    <rect x="81" y="0" width="2" height="24" />
-                    <rect x="86" y="0" width="4" height="24" />
-                    <rect x="93" y="0" width="2" height="24" />
-                    <rect x="98" y="0" width="5" height="24" />
-                    <rect x="106" y="0" width="2" height="24" />
-                    <rect x="111" y="0" width="4" height="24" />
-                  </svg>
-                </div>
-                <span className="font-bold">PICT PUNE CHAPTER</span>
-              </div>
-
-            </div>
-          </div>
-
         </div>
 
       </div>

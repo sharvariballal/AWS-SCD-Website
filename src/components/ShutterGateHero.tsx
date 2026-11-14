@@ -136,7 +136,7 @@ export const ShutterGateHero: React.FC<ShutterGateHeroProps> = ({
     };
   }, [handleResize]);
 
-  const updateScrubRef = useRef<() => void>(() => {});
+  const updateScrubRef = useRef<() => void>(() => { });
 
   // Main animation / scrub loop
   const updateScrub = useCallback(() => {
@@ -301,7 +301,7 @@ export const ShutterGateHero: React.FC<ShutterGateHeroProps> = ({
       {/* Loading state indicator before first frame renders */}
       {!isFirstFrameLoaded && (
         <div className="absolute inset-0 bg-[#160628] flex flex-col items-center justify-center text-purple-200 gap-3 z-0">
-          <Loader2 className="w-8 h-8 animate-spin text-amber-400" />
+          <Loader2 className="w-8 h-8 animate-spin text-cyan-400" />
           <span className="text-xs font-mono uppercase tracking-[0.25em]">
             Connecting to Portal...
           </span>
@@ -313,14 +313,14 @@ export const ShutterGateHero: React.FC<ShutterGateHeroProps> = ({
       <div className="absolute inset-0 bg-radial from-transparent via-purple-950/20 to-purple-950/70 pointer-events-none" />
 
       {/* Directional Door Chevrons (matching user screenshot) */}
-      <div 
+      <div
         style={{ opacity: textOpacity }}
         className="absolute inset-y-0 left-4 sm:left-10 flex items-center pointer-events-none z-20 text-white/40 sm:text-white/60"
       >
         <ChevronLeft className="w-10 h-10 sm:w-16 sm:h-16 stroke-[1.5] animate-pulse" />
       </div>
 
-      <div 
+      <div
         style={{ opacity: textOpacity }}
         className="absolute inset-y-0 right-4 sm:right-10 flex items-center pointer-events-none z-20 text-white/40 sm:text-white/60"
       >
@@ -336,17 +336,18 @@ export const ShutterGateHero: React.FC<ShutterGateHeroProps> = ({
         className="absolute inset-0 flex flex-col items-center justify-center px-4 text-center z-20 transition-opacity duration-150"
       >
         <div className="max-w-3xl mx-auto space-y-3 sm:space-y-4">
-          
+
           {/* Summit Badge Pill */}
-          <div className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full bg-purple-950/80 backdrop-blur-md border border-purple-300/30 text-purple-200 text-[10px] sm:text-xs font-mono tracking-[0.2em] sm:tracking-[0.25em] uppercase shadow-lg">
-            <Sparkles className="w-3.5 h-3.5 text-amber-300 shrink-0" />
-            <span>AWS Student Community Day • Pune</span>
+          <div className="flex items-center justify-center gap-2 text-xs font-mono tracking-widest text-cyan-400 mb-2 uppercase font-semibold">
+            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee] animate-pulse" />
+            <Sparkles className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+            <span>AWS Student Community Day // Pune</span>
           </div>
 
           {/* Large Bold Heading */}
-          <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight text-white drop-shadow-[0_4px_30px_rgba(0,0,0,0.95)] leading-tight">
+          <h1 className="font-anton text-5xl sm:text-7xl md:text-8xl lg:text-9xl tracking-tight text-white drop-shadow-[0_4px_30px_rgba(0,0,0,0.95)] leading-tight">
             Welcome to{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-200 via-white to-purple-300 drop-shadow-[0_0_40px_rgba(216,180,254,0.6)]">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-white to-sky-400 drop-shadow-[0_0_40px_rgba(56,189,248,0.6)]">
               Cloud City
             </span>
           </h1>
@@ -371,11 +372,11 @@ export const ShutterGateHero: React.FC<ShutterGateHeroProps> = ({
           onClick={handleAutoEnter}
           className="group flex flex-col items-center gap-2 cursor-pointer bg-transparent border-0 outline-none p-2"
         >
-          <span className="text-xs sm:text-sm font-mono font-bold tracking-[0.2em] sm:tracking-[0.25em] uppercase text-purple-200 group-hover:text-amber-300 transition-colors drop-shadow">
+          <span className="text-xs sm:text-sm font-mono font-bold tracking-[0.2em] sm:tracking-[0.25em] uppercase text-purple-200 group-hover:text-cyan-400 transition-colors drop-shadow">
             Scroll down to enter
           </span>
 
-          <div className="w-8 h-8 rounded-full bg-purple-900/70 border border-purple-400/40 flex items-center justify-center text-amber-300 shadow-lg group-hover:bg-amber-400 group-hover:text-purple-950 transition-all animate-bounce">
+          <div className="w-8 h-8 rounded-full bg-purple-900/70 border border-purple-400/40 flex items-center justify-center text-cyan-400 shadow-lg group-hover:bg-cyan-400 group-hover:text-purple-950 transition-all animate-bounce">
             <ChevronDown className="w-4 h-4" />
           </div>
         </button>
@@ -389,7 +390,7 @@ export const ShutterGateHero: React.FC<ShutterGateHeroProps> = ({
       <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-30">
         <button
           onClick={handleDirectSkip}
-          className="px-3.5 sm:px-4 py-1.5 rounded-full bg-purple-950/70 hover:bg-purple-900/90 border border-purple-400/30 text-purple-200 hover:text-amber-300 text-xs font-mono tracking-wider cursor-pointer backdrop-blur-md transition-all shadow-md inline-flex items-center gap-1.5"
+          className="px-3.5 sm:px-4 py-1.5 rounded-full bg-purple-950/70 hover:bg-purple-900/90 border border-purple-400/30 text-purple-200 hover:text-cyan-400 text-xs font-mono tracking-wider cursor-pointer backdrop-blur-md transition-all shadow-md inline-flex items-center gap-1.5"
         >
           <span>Skip Intro</span>
           <ArrowRight className="w-3.5 h-3.5" />
@@ -400,7 +401,7 @@ export const ShutterGateHero: React.FC<ShutterGateHeroProps> = ({
       <div className="absolute bottom-0 left-0 right-0 h-1 bg-purple-950/40 z-30 pointer-events-none">
         <div
           style={{ width: `${displayProgress * 100}%` }}
-          className="h-full bg-gradient-to-r from-purple-400 via-amber-400 to-purple-300 transition-all duration-75"
+          className="h-full bg-gradient-to-r from-purple-400 via-cyan-400 to-purple-300 transition-all duration-75"
         />
       </div>
 

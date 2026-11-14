@@ -33,7 +33,7 @@ export const SponsorRegistrationModal: React.FC<SponsorRegistrationModalProps> =
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-in fade-in">
       <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border-3 border-slate-950 relative overflow-hidden max-h-[92vh] overflow-y-auto">
         {/* Decorative Top Accent */}
-        <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-amber-400 via-emerald-400 to-indigo-500" />
+        <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-cyan-400 via-emerald-400 to-indigo-500" />
 
         {/* Close Button */}
         <button
@@ -46,7 +46,7 @@ export const SponsorRegistrationModal: React.FC<SponsorRegistrationModalProps> =
 
         {submitted ? (
           <div className="text-center py-8 space-y-4">
-            <div className="w-16 h-16 rounded-2xl bg-amber-100 border-2 border-slate-900 text-amber-800 flex items-center justify-center mx-auto shadow-[3px_3px_0px_#0F172A]">
+            <div className="w-16 h-16 rounded-2xl bg-cyan-100 border-2 border-slate-900 text-cyan-800 flex items-center justify-center mx-auto shadow-[3px_3px_0px_#0F172A]">
               <Check className="w-8 h-8" />
             </div>
 
@@ -68,7 +68,7 @@ export const SponsorRegistrationModal: React.FC<SponsorRegistrationModalProps> =
         ) : (
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 font-mono text-[11px] font-black uppercase">
+              <span className="px-2.5 py-0.5 rounded-full bg-cyan-100 text-cyan-950 border border-cyan-300 font-mono text-[11px] font-black uppercase">
                 Partner With Us
               </span>
             </div>
@@ -92,7 +92,7 @@ export const SponsorRegistrationModal: React.FC<SponsorRegistrationModalProps> =
                     placeholder="e.g. Acme Cloud Inc."
                     value={companyName}
                     onChange={(e) => setCompanyName(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border-2 border-slate-900 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-400"
+                    className="w-full px-3.5 py-2.5 rounded-xl border-2 border-slate-900 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-cyan-400"
                   />
                 </div>
                 <div>
@@ -105,7 +105,7 @@ export const SponsorRegistrationModal: React.FC<SponsorRegistrationModalProps> =
                     placeholder="e.g. Alex Rivera"
                     value={contactName}
                     onChange={(e) => setContactName(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border-2 border-slate-900 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-400"
+                    className="w-full px-3.5 py-2.5 rounded-xl border-2 border-slate-900 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-cyan-400"
                   />
                 </div>
               </div>
@@ -121,7 +121,7 @@ export const SponsorRegistrationModal: React.FC<SponsorRegistrationModalProps> =
                     placeholder="alex@acme.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border-2 border-slate-900 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-400"
+                    className="w-full px-3.5 py-2.5 rounded-xl border-2 border-slate-900 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-cyan-400"
                   />
                 </div>
                 <div>
@@ -133,7 +133,7 @@ export const SponsorRegistrationModal: React.FC<SponsorRegistrationModalProps> =
                     placeholder="+91 98765 43210"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border-2 border-slate-900 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-400"
+                    className="w-full px-3.5 py-2.5 rounded-xl border-2 border-slate-900 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-cyan-400"
                   />
                 </div>
               </div>
@@ -145,7 +145,7 @@ export const SponsorRegistrationModal: React.FC<SponsorRegistrationModalProps> =
                 <select
                   value={tierInterest}
                   onChange={(e) => setTierInterest(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border-2 border-slate-900 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-400 bg-white"
+                  className="w-full px-3.5 py-2.5 rounded-xl border-2 border-slate-900 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-cyan-400 bg-white"
                 >
                   <option value="title">Title Partner (Main Event Headliner)</option>
                   <option value="platinum">Platinum Partner (Booth & Keynote Slot)</option>
@@ -163,15 +163,15 @@ export const SponsorRegistrationModal: React.FC<SponsorRegistrationModalProps> =
                   placeholder="Tell us about your developer hiring, product demo, or branding objectives..."
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border-2 border-slate-900 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-400"
+                  className="w-full px-3.5 py-2.5 rounded-xl border-2 border-slate-900 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-cyan-400"
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full neo-btn bg-slate-950 text-amber-400 hover:bg-slate-900 py-3 rounded-2xl text-sm font-black flex items-center justify-center gap-2 cursor-pointer shadow-[3px_3px_0px_#FF9900] mt-2"
+                className="w-full neo-btn bg-slate-950 text-cyan-400 hover:bg-slate-900 py-3 rounded-2xl text-sm font-black flex items-center justify-center gap-2 cursor-pointer shadow-[3px_3px_0px_#38BDF8] mt-2"
               >
-                <Award className="w-4 h-4 text-amber-400" />
+                <Award className="w-4 h-4 text-cyan-400" />
                 <span>Submit Sponsorship Inquiry</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
@@ -183,7 +183,7 @@ export const SponsorRegistrationModal: React.FC<SponsorRegistrationModalProps> =
                   rel="noreferrer"
                   className="inline-flex items-center gap-1.5 text-xs font-mono text-slate-700 hover:text-slate-950 font-bold underline"
                 >
-                  <Download className="w-3.5 h-3.5 text-amber-600" />
+                  <Download className="w-3.5 h-3.5 text-cyan-600" />
                   <span>Download SCD 2027 Sponsorship Deck (.PDF)</span>
                 </a>
               </div>

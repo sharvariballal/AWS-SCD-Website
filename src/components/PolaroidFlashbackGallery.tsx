@@ -1,7 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Camera, ChevronRight, ChevronLeft, Battery } from 'lucide-react';
+import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { playSound } from '../utils/audio';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 
 export interface FlashbackPhoto {
   id: string;
@@ -20,8 +21,8 @@ const flashbackPhotos: FlashbackPhoto[] = [
     caption: 'Opening keynote kick-off with AWS community leaders and student builders across Maharashtra.',
     tag: 'KEYNOTE ARENA',
     date: '07 Feb 2026',
-    url: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1200&q=80',
-    stat: '1,000+ Attendees',
+    url: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1400&q=80',
+    stat: '1,000+ Builders',
   },
   {
     id: 'photo-2',
@@ -29,16 +30,16 @@ const flashbackPhotos: FlashbackPhoto[] = [
     caption: 'Students deployed real production generative AI pipelines on AWS in under 90 minutes.',
     tag: 'HANDS-ON WORKSHOPS',
     date: '07 Feb 2026',
-    url: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&w=1200&q=80',
+    url: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&w=1400&q=80',
     stat: '100% Hands-on',
   },
   {
     id: 'photo-3',
     title: 'AWS Solutions Architects Mentorship',
-    caption: '1-on-1 architecture reviews and career guidance from principal engineers and heroes.',
+    caption: '1-on-1 architecture reviews and career guidance from principal engineers and community heroes.',
     tag: 'MENTORSHIP',
     date: '07 Feb 2026',
-    url: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1200&q=80',
+    url: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1400&q=80',
     stat: '20+ Mentors',
   },
   {
@@ -47,225 +48,130 @@ const flashbackPhotos: FlashbackPhoto[] = [
     caption: 'Official heavyweight event tees, stickers, breakfast, and buffet lunch for all attendees.',
     tag: 'BUILDER SWAG',
     date: '07 Feb 2026',
-    url: 'https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=1200&q=80',
+    url: 'https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=1400&q=80',
     stat: '100% Meals & Kits',
   },
 ];
 
 export const PolaroidFlashbackGallery: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isScreenFlashing, setIsScreenFlashing] = useState(false);
-  const touchStartXRef = useRef(0);
-  const touchEndXRef = useRef(0);
+  const headerRef = useScrollReveal();
+  const galleryRef = useScrollReveal();
 
   const handleNextPhoto = () => {
     playSound('click');
-    setIsScreenFlashing(true);
-    setTimeout(() => setIsScreenFlashing(false), 140);
     setCurrentIndex((prev) => (prev + 1) % flashbackPhotos.length);
   };
 
   const handlePrevPhoto = () => {
     playSound('click');
-    setIsScreenFlashing(true);
-    setTimeout(() => setIsScreenFlashing(false), 140);
     setCurrentIndex((prev) => (prev - 1 + flashbackPhotos.length) % flashbackPhotos.length);
-  };
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartXRef.current = e.targetTouches[0].clientX;
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    touchEndXRef.current = e.targetTouches[0].clientX;
-  };
-
-  const handleTouchEnd = () => {
-    if (!touchStartXRef.current || !touchEndXRef.current) return;
-    const diff = touchStartXRef.current - touchEndXRef.current;
-    if (diff > 40) {
-      handleNextPhoto();
-    } else if (diff < -40) {
-      handlePrevPhoto();
-    }
-    touchStartXRef.current = 0;
-    touchEndXRef.current = 0;
   };
 
   const activePhoto = flashbackPhotos[currentIndex];
 
   return (
-    <section id="community-memories" className="py-20 px-4 sm:px-6 lg:px-8 bg-blueprint-grid border-b-2 border-purple-900/10">
+    <section id="community-memories" className="py-10 sm:py-14 px-4 sm:px-6 lg:px-8 bg-blueprint-grid border-b border-white/5">
       <div className="max-w-5xl mx-auto">
-        
+
         {/* Section Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+        <div ref={headerRef} className="sr-reveal flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-purple-300 bg-purple-100 text-purple-900 text-xs font-mono font-black uppercase mb-2">
-              <Camera className="w-3.5 h-3.5 text-purple-700" />
-              <span>SCD 2026 Archive • Digital Camera Review</span>
+            <div className="flex items-center gap-2 text-xs font-mono tracking-widest text-cyan-400 mb-2 uppercase font-semibold">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]" />
+              <span className="text-slate-500">//</span>
+              <span>SCD Archive</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl font-black text-[#260B49] tracking-tight">
-              Community Scale &amp; Memories
+            <h2 className="font-anton text-3xl sm:text-5xl text-white tracking-tight">
+              COMMUNITY SCALE &amp; <span className="text-cyan-400">MEMORIES</span>
             </h2>
           </div>
 
-          <div className="text-xs font-mono font-bold text-purple-900 px-3.5 py-1.5 rounded-xl bg-purple-100 border border-purple-200">
-            Playback Mode • Photo {currentIndex + 1} of {flashbackPhotos.length}
+          <div className="text-xs font-mono text-slate-400">
+            {currentIndex + 1} of {flashbackPhotos.length}
           </div>
         </div>
 
-        {/* Realistic Digital Camera Chassis Body */}
-        <div className="p-4 sm:p-7 rounded-3xl bg-[#16062A] border-3 border-purple-900/80 shadow-[0_25px_60px_rgba(76,29,149,0.22)] text-white">
-          
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-            
-            {/* Camera LCD Viewfinder Screen (9 cols) */}
-            <div className="lg:col-span-9 relative rounded-2xl overflow-hidden bg-black border-2 border-neutral-800 shadow-inner">
-              
-              {/* LCD Top Status Bar HUD */}
-              <div className="absolute top-0 left-0 right-0 z-20 px-3.5 sm:px-4 py-2 sm:py-2.5 bg-gradient-to-b from-black/80 via-black/40 to-transparent flex items-center justify-between text-[10px] sm:text-[11px] font-mono text-purple-200 pointer-events-none">
-                <div className="flex items-center gap-1.5 sm:gap-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  <span className="font-bold text-amber-300">PLAYBACK</span>
-                  <span className="text-neutral-400 hidden sm:inline">|</span>
-                  <span className="hidden sm:inline">RAW+JPEG</span>
-                </div>
+        {/* Clean Modern Cinematic Photo Card */}
+        <div ref={galleryRef} className="sr-reveal relative rounded-3xl overflow-hidden bg-[#0D1B2A]/90 border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] backdrop-blur-xl">
 
-                <div className="flex items-center gap-2 sm:gap-3">
-                  <span className="text-purple-300 hidden sm:inline">ISO 400 • F/2.8</span>
-                  <div className="flex items-center gap-1 font-bold text-emerald-400">
-                    <Battery className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                    <span>94%</span>
-                  </div>
-                </div>
-              </div>
+          {/* Main Visual */}
+          <div className="relative aspect-[16/9] sm:aspect-[21/9] w-full overflow-hidden bg-black">
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={activePhoto.id}
+                src={activePhoto.url}
+                alt={activePhoto.title}
+                initial={{ opacity: 0, scale: 1.03 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.25 }}
+                className="w-full h-full object-cover"
+              />
+            </AnimatePresence>
 
-              {/* LCD Display Photo with Touch Swipe Support */}
-              <div 
-                onTouchStart={handleTouchStart}
-                onTouchMove={handleTouchMove}
-                onTouchEnd={handleTouchEnd}
-                className="relative aspect-[16/10] sm:aspect-[16/9] w-full overflow-hidden flex items-center justify-center bg-neutral-950 cursor-grab active:cursor-grabbing select-none"
-              >
-                <AnimatePresence mode="wait">
-                  <motion.img
-                    key={activePhoto.id}
-                    src={activePhoto.url}
-                    alt={activePhoto.title}
-                    initial={{ opacity: 0, scale: 1.04 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.98 }}
-                    transition={{ duration: 0.2 }}
-                    className="w-full h-full object-cover"
-                  />
-                </AnimatePresence>
+            {/* Gradient Overlay for Text Readability */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#070415] via-transparent to-black/30 pointer-events-none" />
 
-                {/* Shutter Screen Flash */}
-                <AnimatePresence>
-                  {isScreenFlashing && (
-                    <motion.div
-                      initial={{ opacity: 0.9 }}
-                      animate={{ opacity: 0 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.14 }}
-                      className="absolute inset-0 bg-white pointer-events-none z-30"
-                    />
-                  )}
-                </AnimatePresence>
-
-                {/* Bottom LCD Photo Caption HUD */}
-                <div className="absolute bottom-0 left-0 right-0 z-20 p-4 bg-gradient-to-t from-black/90 via-black/60 to-transparent">
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <div>
-                      <span className="text-[10px] font-mono font-bold text-amber-300 px-2 py-0.5 rounded bg-purple-950/80 border border-purple-400/40 inline-block mb-1">
-                        {activePhoto.tag}
-                      </span>
-                      <h4 className="text-base sm:text-lg font-black text-white leading-tight">
-                        {activePhoto.title}
-                      </h4>
-                      <p className="text-xs text-purple-200/90 leading-snug mt-0.5 line-clamp-1 sm:line-clamp-none">
-                        {activePhoto.caption}
-                      </p>
-                    </div>
-
-                    <div className="text-right">
-                      <span className="text-xs font-mono font-black text-emerald-400 bg-neutral-900/90 px-2.5 py-1 rounded-md border border-neutral-700 block">
-                        {activePhoto.stat}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-
+            {/* Top Stat Badge */}
+            <div className="absolute top-4 right-4 z-10">
+              <span className="px-3 py-1 rounded-full bg-[#070415]/80 backdrop-blur-md border border-cyan-400/30 text-cyan-400 font-mono text-xs font-bold shadow-lg">
+                {activePhoto.stat}
+              </span>
             </div>
 
-            {/* Digital Camera Hardware Control Pad (3 cols) */}
-            <div className="lg:col-span-3 flex flex-col justify-between h-full space-y-4">
-              
-              {/* Camera Model Badge */}
-              <div className="text-center pb-2 border-b border-purple-800/60">
-                <span className="text-[10px] font-mono font-black text-amber-300 tracking-widest uppercase">
-                  PICT DIGITAL REVIEW
+            {/* Bottom Caption */}
+            <div className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-6 z-10 flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+              <div className="max-w-xl">
+                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-cyan-400 mb-1 block">
+                  {activePhoto.tag}
                 </span>
-                <div className="text-xs text-purple-300 font-mono">
-                  SCD MEMORY REEL
-                </div>
+                <h3 className="font-anton text-xl sm:text-3xl text-white tracking-tight leading-tight">
+                  {activePhoto.title}
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-300 mt-1 line-clamp-1 sm:line-clamp-none" style={{ fontFamily: "'Inter', sans-serif" }}>
+                  {activePhoto.caption}
+                </p>
               </div>
 
-              {/* The Physical Hardware Navigation Controls */}
-              <div className="flex flex-col items-center justify-center space-y-3 py-2">
-                
-                {/* Hardware Navigation Row */}
-                <div className="grid grid-cols-2 gap-2.5 w-full">
-                  <button
-                    type="button"
-                    onClick={handlePrevPhoto}
-                    className="py-3 px-4 rounded-2xl bg-purple-950 hover:bg-purple-900 active:scale-95 border border-purple-500/40 text-purple-200 text-xs sm:text-sm font-mono font-bold flex items-center justify-center gap-1.5 cursor-pointer transition-all shadow-md"
-                    title="Previous photo"
-                  >
-                    <ChevronLeft className="w-4 h-4 text-amber-300" />
-                    <span>PREV</span>
-                  </button>
+              {/* Prev / Next Controls */}
+              <div className="flex items-center gap-2 shrink-0">
+                <button
+                  type="button"
+                  onClick={handlePrevPhoto}
+                  aria-label="Previous photo"
+                  className="w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white flex items-center justify-center transition-all cursor-pointer backdrop-blur-md active:scale-95"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
 
-                  <button
-                    type="button"
-                    onClick={handleNextPhoto}
-                    className="py-3 px-4 rounded-2xl bg-amber-400 hover:bg-amber-300 active:scale-95 text-purple-950 text-xs sm:text-sm font-mono font-black flex items-center justify-center gap-1.5 cursor-pointer transition-all shadow-md border border-amber-300"
-                    title="Next photo"
-                  >
-                    <span>NEXT</span>
-                    <ChevronRight className="w-4 h-4 text-purple-950" />
-                  </button>
-                </div>
-
+                <button
+                  type="button"
+                  onClick={handleNextPhoto}
+                  aria-label="Next photo"
+                  className="w-10 h-10 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-slate-950 flex items-center justify-center transition-all cursor-pointer shadow-[0_0_15px_rgba(56,189,248,0.4)] active:scale-95"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
               </div>
-
-              {/* Filmstrip Frame Counter */}
-              <div className="pt-2 border-t border-purple-800/60 text-center">
-                <div className="flex items-center justify-center gap-1.5 mb-1.5">
-                  {flashbackPhotos.map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => {
-                        playSound('click');
-                        setCurrentIndex(i);
-                      }}
-                      className={`h-1.5 rounded-full transition-all cursor-pointer ${
-                        currentIndex === i ? 'w-6 bg-amber-400' : 'w-2 bg-purple-700 hover:bg-purple-500'
-                      }`}
-                      title={`Go to photo ${i + 1}`}
-                    />
-                  ))}
-                </div>
-                <span className="text-[10px] font-mono text-purple-400 uppercase">
-                  Swipe Screen or Click Next
-                </span>
-              </div>
-
             </div>
 
+          </div>
+
+          {/* Dot Indicators */}
+          <div className="p-3 bg-[#070415]/80 border-t border-white/5 flex items-center justify-center gap-2">
+            {flashbackPhotos.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => {
+                  playSound('click');
+                  setCurrentIndex(i);
+                }}
+                className={`h-1.5 rounded-full transition-all cursor-pointer ${currentIndex === i ? 'w-6 bg-cyan-400 shadow-[0_0_8px_#22d3ee]' : 'w-2 bg-slate-700 hover:bg-slate-500'
+                  }`}
+                aria-label={`Go to photo ${i + 1}`}
+              />
+            ))}
           </div>
 
         </div>

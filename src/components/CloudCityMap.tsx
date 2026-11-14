@@ -10,12 +10,12 @@ import {
   Users, 
   Gift, 
   X, 
-  Compass,
   Layers
 } from 'lucide-react';
 import { playSound } from '../utils/audio';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 
-export interface DistrictData {
+interface DistrictData {
   id: string;
   name: string;
   shortName: string;
@@ -23,115 +23,112 @@ export interface DistrictData {
   codename: string;
   icon: React.FC<{ className?: string }>;
   x: number; // percentage in artwork canvas
-  y: number;
-  venueDetail: string;
+  y: number; // percentage in artwork canvas
   timing: string;
   capacity: string;
   description: string;
   perks: string[];
-  sessions: string[];
+  scheduleSnippet: string[];
   color: string;
 }
 
 const districts: DistrictData[] = [
   {
-    id: 'welcome-gate',
-    name: 'The Welcome Gate',
-    shortName: 'Welcome Gate',
-    tagline: 'Main Ingress, Check-in & Badge Distribution',
-    codename: 'ZONE 01 • METROPOLIS INGRESS',
-    icon: DoorOpen,
-    x: 50,
-    y: 69,
-    venueDetail: 'Ground Floor Grand Concourse, Dakkhan Hall',
-    timing: '08:30 AM – 10:00 AM (Ongoing)',
-    capacity: 'Rapid Throughput Check-In',
-    description: 'The monumental entrance into Cloud City. Every attendee scans their KonfHub QR ticket, validates their student PRN or college ID, and receives their exclusive holographic Cloud City credential badge and welcome swag pouch.',
-    perks: [
-      'Official Cloud City Holographic Lanyard Badge',
-      'AWS Builder Sticker Pack & Welcome Kit',
-      'Fast-track Registration QR Scanners',
-      'Volunteer Navigator Desk',
-    ],
-    sessions: [
-      '08:30 AM - Gates Open & Badge Collection',
-      '09:15 AM - Morning Concourse Gathering',
-    ],
-    color: '#F59E0B',
-  },
-  {
-    id: 'speakers-district',
-    name: 'Speakers District',
-    shortName: 'Speakers Stage',
-    tagline: 'Central Grand Stage & Keynote Epicenter',
-    codename: 'ZONE 02 • MAIN AUDITORIUM',
+    id: 'district-keynote',
+    name: 'Keynote & Main Auditorium',
+    shortName: 'Grand Stage',
+    tagline: 'Grand Hall • Keynotes, Architecture deep dives & Firesides',
+    codename: 'ZONE A // KEYNOTE',
     icon: Mic2,
-    x: 50,
-    y: 28,
-    venueDetail: 'Grand Auditorium Stage with 4K LED Backdrop & Surround Sound',
-    timing: '10:00 AM – 04:30 PM (Sequential)',
-    capacity: '1,000+ Seated Attendees',
-    description: 'The intellectual heart of the summit. Featuring a colossal ultra-wide LED stage where AWS Community Heroes, Principal Solutions Architects, and Industry Leaders present sequential deep-dives with zero conflicting schedules.',
+    x: 48,
+    y: 35,
+    timing: '09:30 AM - 06:00 PM IST',
+    capacity: '1,000 Seated Builders',
+    description:
+      'The central arena of Cloud City featuring inspiring keynotes from AWS Heroes, Principal Solutions Architects, and pioneering student founders.',
     perks: [
-      'Live Keynotes from AWS Heroes & Leaders',
-      'Generative AI & Serverless Deep Dives',
-      'Interactive Open-Mic Q&A with Speakers',
-      'Live Stage Architecture Demonstrations',
+      'Keynotes from AWS Community Heroes & SA Leaders',
+      'Live generative AI & serverless demonstrations',
+      'Exclusive Stage-Front Swag Drops & AMA sessions',
     ],
-    sessions: [
-      '10:00 AM - Opening Keynote: Architecting Cloud Metropolises',
-      '11:45 AM - Production Generative AI on Amazon Bedrock',
-      '02:00 PM - Multi-Cluster Platform Engineering at Scale',
+    scheduleSnippet: [
+      '09:30 AM - Opening Keynote: Architecting Next-Gen Cloud',
+      '11:30 AM - Serverless Resiliency at Enterprise Scale',
+      '02:30 PM - GenAI Deep Dive: Multimodal Agents with Bedrock',
     ],
-    color: '#A855F7',
+    color: '#818CF8',
   },
   {
-    id: 'arcade-alley',
-    name: 'Arcade Alley',
-    shortName: 'Arcade Alley',
-    tagline: 'Hands-on Builder Stations & Carnival Stalls',
-    codename: 'ZONE 03 • INNOVATION EXPO',
+    id: 'district-hackathon',
+    name: 'Arcade Alley & Challenge Arena',
+    shortName: 'Arcade Zone',
+    tagline: 'Live Hackathon, Cloud Challenges & Hands-on Terminal Labs',
+    codename: 'ZONE B // ARCADE',
     icon: Gamepad2,
-    x: 71,
-    y: 37,
-    venueDetail: 'Interactive Innovation Arcade & Demo Concourse',
-    timing: '10:30 AM – 05:00 PM (Continuous)',
-    capacity: 'Interactive Booth Stalls',
-    description: 'A vibrant gaming and innovation zone packed with DIY carnival stalls, AWS ecosystem sponsor tables, and architecture speed challenges. Collect challenge stamps to unlock rare ecosystem prizes and stickers.',
+    x: 78,
+    y: 48,
+    timing: '11:00 AM - 05:00 PM IST',
+    capacity: '350 Active Builders',
+    description:
+      'The competitive heart of Cloud City where teams battle in live architectural rescue sprints, debugging gauntlets, and AWS Bedrock agent hackathons.',
     perks: [
-      'Ecosystem Sponsor Interactive Booths',
-      'Hands-on Architecture Speed-Runs',
-      'Community Project Demos & Prototypes',
-      'Bonus Swag & Ecosystem Challenge Cards',
+      'Bounties, trophies, and AWS cloud credit rewards',
+      'High-speed 1 Gbps wired & Wi-Fi builder tables',
+      'On-floor mentorship from Solutions Architects',
     ],
-    sessions: [
-      '11:00 AM - Challenge Booths Open',
-      '03:00 PM - Cloud City Architecture Speed Runs',
+    scheduleSnippet: [
+      '11:00 AM - Hackathon Briefing & Problem Statement Release',
+      '01:30 PM - Sprint Checkpoint 1 & Mentor Review',
+      '04:30 PM - Final Demos & Winner Celebrations',
     ],
     color: '#38BDF8',
   },
   {
-    id: 'compute-cafe',
-    name: 'Compute Cafe',
-    shortName: 'Compute Cafe',
-    tagline: 'All-Day Dining, Artisan Coffee & Refreshments',
-    codename: 'ZONE 04 • REFUEL CONCOURSE',
-    icon: Coffee,
-    x: 83,
-    y: 50,
-    venueDetail: 'East Wing Dining Pavilion & Outdoor Terrace Lounge',
-    timing: '08:30 AM – 05:30 PM (Continuous)',
-    capacity: 'Continuous Buffet Service',
-    description: 'A lavish culinary wing designed to fuel high-velocity thinking. Every registered builder enjoys a full hot South Indian breakfast, an elaborate multi-course buffet lunch, and afternoon high-tea with artisanal coffee included with their pass.',
+    id: 'district-welcome',
+    name: 'Welcome Portal & Swag Dispensary',
+    shortName: 'Check-In Gate',
+    tagline: 'Registration, RFID Badge Ingress & Holographic Swag Vault',
+    codename: 'ZONE C // CHECK-IN',
+    icon: DoorOpen,
+    x: 24,
+    y: 68,
+    timing: '08:30 AM - 10:30 AM IST',
+    capacity: 'Continuous Flow',
+    description:
+      'The gateway to Cloud City. Scan your QR pass, claim your physical builder kit (heavyweight cotton tee, holographic sticker pack, smart badge).',
     perks: [
-      'Full Multi-Course Buffet Lunch Included',
-      'Fresh Artisanal Filter Coffee & High-Tea Snacks',
-      'Casual Discussion Counters & Charging Docks',
-      'Speaker & Mentor Networking Corner',
+      'Zero-wait QR code check-in & badge dispensing',
+      'Heavyweight cotton Cloud City 2027 tee & stickers',
+      'Direct bag-drop cloakroom & helpdesk support',
     ],
-    sessions: [
-      '08:30 AM - Morning Breakfast & Coffee Station',
-      '01:00 PM - Grand Buffet Lunch Service',
+    scheduleSnippet: [
+      '08:30 AM - Gates & Welcome Lounge Open',
+      '09:00 AM - Morning Breakfast & Builder Networking',
+      '10:30 AM - Check-in Closes for Main Keynote',
+    ],
+    color: '#A855F7',
+  },
+  {
+    id: 'district-cafe',
+    name: 'Compute Café & Dining Concourse',
+    shortName: 'Dining Hall',
+    tagline: 'Multi-course Buffet Lunch, Artisanal High-Tea & Networking',
+    codename: 'ZONE D // DINING',
+    icon: Coffee,
+    x: 62,
+    y: 78,
+    timing: '08:30 AM - 05:30 PM IST',
+    capacity: 'Full Summit Catering',
+    description:
+      'All passes include complete summit hospitality: welcome South Indian breakfast, lavish buffet lunch at Dakkhan Banquet Hall, and high-tea coffee sessions.',
+    perks: [
+      'Hot South Indian morning breakfast spread',
+      'Lavish multi-course banquet buffet lunch',
+      'All-day artisanal coffee & Masala Chai breaks',
+    ],
+    scheduleSnippet: [
+      '08:30 AM - Morning Welcome Breakfast & Filter Coffee',
+      '01:00 PM - Multi-Course Banquet Buffet Lunch',
       '04:30 PM - High-Tea & Sundown Snack Concourse',
     ],
     color: '#FB7185',
@@ -141,6 +138,8 @@ const districts: DistrictData[] = [
 export const CloudCityMap: React.FC = () => {
   const [selectedDistrict, setSelectedDistrict] = useState<DistrictData>(districts[1]);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const headerRef = useScrollReveal();
+  const mapRef = useScrollReveal();
 
   const handleSelectDistrict = (district: DistrictData) => {
     playSound('click');
@@ -149,27 +148,28 @@ export const CloudCityMap: React.FC = () => {
   };
 
   return (
-    <section id="city-interactive-map" className="py-20 px-4 sm:px-6 lg:px-8 bg-blueprint-grid border-b-2 border-purple-900/10">
+    <section id="city-interactive-map" className="py-10 sm:py-12 px-4 sm:px-6 lg:px-8 bg-blueprint-grid border-b border-white/5">
       <div className="max-w-7xl mx-auto">
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+        <div ref={headerRef} className="sr-reveal flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-purple-300 bg-purple-100 text-purple-900 text-xs font-mono font-black uppercase mb-3 shadow-sm">
-              <Compass className="w-3.5 h-3.5 text-purple-700" />
+            <div className="flex items-center gap-2 text-xs font-mono tracking-widest text-cyan-400 mb-2 uppercase font-semibold">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]" />
+              <span className="text-slate-500">//</span>
               <span>Metropolis Blueprint</span>
             </div>
-            <h2 className="text-3xl sm:text-5xl font-black text-[#260B49] tracking-tight">
-              Cloud City District Map
+            <h2 className="font-anton text-3xl sm:text-5xl text-white tracking-tight">
+              CLOUD CITY <span className="text-cyan-400">DISTRICT</span> MAP
             </h2>
-            <p className="text-sm sm:text-base text-slate-300 mt-2 max-w-xl font-normal">
+            <p className="text-sm sm:text-base text-slate-300 mt-2 max-w-xl" style={{ fontFamily: "'Inter', sans-serif" }}>
               Explore the four core districts of our tech metropolis. Tap any district to inspect agendas and venue details.
             </p>
           </div>
         </div>
 
         {/* Master Cityscape & Inspector Layout: Fills 100% Edge-to-Edge with Zero Letterbox */}
-        <div className="relative w-full aspect-[1024/765] min-h-[460px] sm:min-h-[580px] lg:min-h-[700px] rounded-3xl overflow-hidden border-2 border-purple-900/20 shadow-[0_25px_60px_rgba(76,29,149,0.18)] bg-gradient-to-b from-[#2A114B] to-[#120422] select-none">
+        <div ref={mapRef} className="sr-reveal relative w-full aspect-[1024/765] min-h-[460px] sm:min-h-[580px] lg:min-h-[700px] rounded-3xl overflow-hidden border border-white/10 shadow-[0_25px_60px_rgba(76,29,149,0.25)] bg-gradient-to-b from-[#2A114B] to-[#120422] select-none hover:border-cyan-500/30 transition-all duration-300">
           
           {/* Cloud City Isometric Artwork: 100% Full-Bleed Edge-to-Edge Fill */}
           <img
@@ -186,11 +186,11 @@ export const CloudCityMap: React.FC = () => {
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: '-100%', opacity: 0 }}
                 transition={{ type: 'spring', damping: 25, stiffness: 220 }}
-                className="absolute top-0 left-0 bottom-0 z-40 w-full sm:w-[420px] bg-[#16082B]/95 backdrop-blur-xl border-r-2 border-purple-500/30 p-6 flex flex-col justify-between shadow-2xl text-white overflow-y-auto"
+                className="absolute top-0 left-0 bottom-0 z-40 w-full sm:w-[420px] bg-[#16082B]/95 backdrop-blur-xl border-r border-cyan-500/30 p-6 flex flex-col justify-between shadow-2xl text-white overflow-y-auto"
               >
                 <div>
                   {/* Drawer Header */}
-                  <div className="flex items-center justify-between pb-4 border-b border-purple-800/60 mb-5">
+                  <div className="flex items-center justify-between pb-4 border-b border-white/10 mb-5">
                     <span 
                       style={{ color: selectedDistrict.color }}
                       className="text-xs font-mono font-black tracking-widest uppercase flex items-center gap-1.5"
@@ -201,28 +201,28 @@ export const CloudCityMap: React.FC = () => {
 
                     <button
                       onClick={() => setIsDrawerOpen(false)}
-                      className="w-8 h-8 rounded-full bg-purple-900/60 border border-purple-500/40 text-purple-200 hover:text-white hover:bg-purple-800 flex items-center justify-center transition-colors cursor-pointer"
+                      className="w-8 h-8 rounded-full bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10 flex items-center justify-center transition-colors cursor-pointer"
                     >
                       <X className="w-4 h-4" />
                     </button>
                   </div>
 
                   {/* Title & Tagline */}
-                  <h3 className="text-2xl font-black text-white tracking-tight mb-1">
+                  <h3 className="font-anton text-2xl text-white tracking-tight mb-1">
                     {selectedDistrict.name}
                   </h3>
-                  <p className="text-xs font-medium text-amber-300/90 mb-4 font-mono">
+                  <p className="text-xs font-medium text-cyan-300 mb-4 font-mono">
                     {selectedDistrict.tagline}
                   </p>
 
-                  <p className="text-xs text-purple-200/90 leading-relaxed mb-6 font-normal">
+                  <p className="text-xs text-slate-300 leading-relaxed mb-6 font-normal" style={{ fontFamily: "'Inter', sans-serif" }}>
                     {selectedDistrict.description}
                   </p>
 
                   {/* Quick Specs Cards */}
                   <div className="grid grid-cols-2 gap-2.5 mb-6 text-xs font-mono">
-                    <div className="p-3 rounded-xl bg-purple-950/60 border border-purple-800/60">
-                      <div className="flex items-center gap-1.5 text-purple-400 mb-1 text-[10px] uppercase">
+                    <div className="p-3 rounded-xl bg-white/5 border border-white/10">
+                      <div className="flex items-center gap-1.5 text-cyan-400 mb-1 text-[10px] uppercase">
                         <Clock className="w-3 h-3" />
                         <span>Hours</span>
                       </div>
@@ -231,7 +231,7 @@ export const CloudCityMap: React.FC = () => {
                       </div>
                     </div>
 
-                    <div className="p-3 rounded-xl bg-purple-950/60 border border-purple-800/60">
+                    <div className="p-3 rounded-xl bg-white/5 border border-white/10">
                       <div className="flex items-center gap-1.5 text-purple-400 mb-1 text-[10px] uppercase">
                         <Users className="w-3 h-3" />
                         <span>Format</span>
@@ -244,8 +244,8 @@ export const CloudCityMap: React.FC = () => {
 
                   {/* District Highlights */}
                   <div className="space-y-3 mb-6">
-                    <h4 className="text-[11px] font-mono font-black text-purple-300 uppercase tracking-wider flex items-center gap-1.5">
-                      <Gift className="w-3.5 h-3.5 text-amber-400" />
+                    <h4 className="text-[11px] font-mono font-bold text-cyan-300 uppercase tracking-wider flex items-center gap-1.5">
+                      <Gift className="w-3.5 h-3.5 text-cyan-400" />
                       <span>District Amenities &amp; Swag</span>
                     </h4>
 
@@ -253,9 +253,9 @@ export const CloudCityMap: React.FC = () => {
                       {selectedDistrict.perks.map((perk, idx) => (
                         <div
                           key={idx}
-                          className="flex items-center gap-2 p-2.5 rounded-xl bg-purple-900/30 border border-purple-700/30 text-xs text-purple-100"
+                          className="flex items-center gap-2 p-2.5 rounded-xl bg-white/5 border border-white/5 text-xs text-slate-200"
                         >
-                          <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />
+                          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shrink-0" />
                           <span>{perk}</span>
                         </div>
                       ))}
@@ -264,15 +264,15 @@ export const CloudCityMap: React.FC = () => {
                 </div>
 
                 {/* Footer Action */}
-                <div className="pt-4 border-t border-purple-800/60 flex items-center justify-between">
-                  <div className="text-[10px] font-mono text-purple-400">
-                    <MapPin className="w-3 h-3 inline mr-1 text-purple-400" />
+                <div className="pt-4 border-t border-white/10 flex items-center justify-between">
+                  <div className="text-[10px] font-mono text-slate-400">
+                    <MapPin className="w-3 h-3 inline mr-1 text-cyan-400" />
                     <span>Dakkhan Banquet Hall, Pune</span>
                   </div>
                   <a
                     href="#ticket-dispenser"
                     onClick={() => setIsDrawerOpen(false)}
-                    className="px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-purple-950 font-bold text-xs font-mono flex items-center gap-1.5 shadow-md"
+                    className="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-slate-950 font-bold text-xs font-mono flex items-center gap-1.5 shadow-[0_0_15px_rgba(56,189,248,0.4)] transition-all"
                   >
                     <span>Reserve Pass</span>
                   </a>
@@ -307,13 +307,13 @@ export const CloudCityMap: React.FC = () => {
                   aria-label={`Inspect ${district.name}`}
                   className={`relative flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl sm:rounded-2xl cursor-pointer transition-all duration-200 backdrop-blur-md shadow-[0_8px_25px_rgba(0,0,0,0.5)] ${
                     isSelected
-                      ? 'bg-amber-400 text-purple-950 font-black shadow-[0_0_30px_rgba(251,191,36,0.7)] scale-105 sm:scale-110 z-30 ring-2 ring-white'
-                      : 'bg-[#180933]/92 hover:bg-[#2A114B] text-white border border-purple-400/50 hover:border-amber-400 hover:scale-105'
+                      ? 'bg-cyan-400 text-slate-950 font-black shadow-[0_0_30px_rgba(34,211,238,0.7)] scale-105 sm:scale-110 z-30 ring-2 ring-white'
+                      : 'bg-[#180933]/92 hover:bg-[#2A114B] text-white border border-purple-400/50 hover:border-cyan-400 hover:scale-105'
                   }`}
                 >
                   {/* Circular Icon Pin */}
                   <div 
-                    style={{ backgroundColor: isSelected ? '#3B1578' : district.color }}
+                    style={{ backgroundColor: isSelected ? '#003366' : district.color }}
                     className="w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center text-white shrink-0 shadow-sm transition-colors"
                   >
                     <Icon className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[2.2]" />
@@ -330,12 +330,12 @@ export const CloudCityMap: React.FC = () => {
           })}
 
           {/* Bottom Metadata Bar */}
-          <div className="absolute bottom-3 left-4 right-4 z-20 flex items-center justify-between text-[10px] sm:text-[11px] font-mono text-purple-200/90 bg-purple-950/80 backdrop-blur-md px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl border border-purple-500/30 pointer-events-none shadow-lg">
+          <div className="absolute bottom-3 left-4 right-4 z-20 flex items-center justify-between text-[10px] sm:text-[11px] font-mono text-purple-200/90 bg-[#070415]/85 backdrop-blur-md px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl border border-white/10 pointer-events-none shadow-lg">
             <span className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
               <span className="truncate">Cloud City Metropolis Grid • 4 Active Districts</span>
             </span>
-            <span className="hidden sm:inline text-purple-200">
+            <span className="hidden sm:inline text-slate-300">
               Interactive Metropolis Map
             </span>
           </div>
@@ -353,16 +353,16 @@ export const CloudCityMap: React.FC = () => {
                 onClick={() => handleSelectDistrict(district)}
                 className={`p-3 rounded-2xl border text-left flex items-center gap-2.5 transition-all cursor-pointer ${
                   isSelected
-                    ? 'bg-amber-400 border-amber-500 text-purple-950 shadow-md font-black'
-                    : 'bg-white border-purple-200 text-purple-950 hover:bg-purple-50 font-bold'
+                    ? 'bg-cyan-400 border-cyan-400 text-slate-950 shadow-[0_0_15px_rgba(34,211,238,0.4)] font-black'
+                    : 'bg-[#0D1B2A]/90 border-white/10 text-white hover:bg-[#0D1B2A] font-bold'
                 }`}
               >
-                <div className={`p-2 rounded-xl shrink-0 ${isSelected ? 'bg-purple-950 text-amber-300' : 'bg-purple-100 text-purple-700'}`}>
+                <div className={`p-2 rounded-xl shrink-0 ${isSelected ? 'bg-slate-950 text-cyan-300' : 'bg-white/10 text-cyan-400'}`}>
                   <Icon className="w-4 h-4" />
                 </div>
                 <div className="leading-tight overflow-hidden">
                   <div className="text-xs font-black truncate">{district.name}</div>
-                  <div className={`text-[10px] font-mono ${isSelected ? 'text-purple-950/75' : 'text-purple-600'}`}>
+                  <div className={`text-[10px] font-mono ${isSelected ? 'text-slate-900/80' : 'text-slate-400'}`}>
                     Tap to inspect
                   </div>
                 </div>

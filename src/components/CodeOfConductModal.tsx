@@ -13,7 +13,7 @@ export const CodeOfConductModal: React.FC<CodeOfConductModalProps> = ({ isOpen, 
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-in fade-in">
       <div className="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl border border-slate-200 relative max-h-[85vh] overflow-y-auto">
         {/* Top Accent */}
-        <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500" />
+        <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-cyan-400 via-sky-300 to-blue-500" />
 
         {/* Close button */}
         <button
@@ -25,7 +25,7 @@ export const CodeOfConductModal: React.FC<CodeOfConductModalProps> = ({ isOpen, 
         </button>
 
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-2xl bg-amber-500/10 text-amber-600 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-2xl bg-cyan-500/10 text-cyan-600 flex items-center justify-center">
             <ShieldCheck className="w-6 h-6" />
           </div>
           <div>
@@ -43,12 +43,12 @@ export const CodeOfConductModal: React.FC<CodeOfConductModalProps> = ({ isOpen, 
             AWS Student Builder Group PICT is dedicated to providing a respectful, harassment-free, and inclusive conference experience for everyone, regardless of gender, sexual orientation, disability, physical appearance, body size, race, ethnicity, or religion.
           </p>
 
-          <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200/80">
-            <h4 className="font-bold text-amber-900 flex items-center gap-2 mb-1 text-sm">
-              <Heart className="w-4 h-4 text-amber-600" />
+          <div className="p-4 rounded-2xl bg-cyan-50 border border-cyan-200/80">
+            <h4 className="font-bold text-cyan-950 flex items-center gap-2 mb-1 text-sm">
+              <Heart className="w-4 h-4 text-cyan-600" />
               Our Core Builder Values
             </h4>
-            <ul className="list-disc list-inside space-y-1 text-xs text-amber-800">
+            <ul className="list-disc list-inside space-y-1 text-xs text-cyan-800">
               <li><strong>Be Welcoming:</strong> Welcome beginners and cloud learners of all backgrounds.</li>
               <li><strong>Be Respectful:</strong> Value differing viewpoints and constructive technical discussions.</li>
               <li><strong>Support Fellow Builders:</strong> Share knowledge generously during workshops and hackathons.</li>
@@ -66,7 +66,7 @@ export const CodeOfConductModal: React.FC<CodeOfConductModalProps> = ({ isOpen, 
           </p>
 
           <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700 flex items-center gap-2.5">
-            <Mail className="w-4 h-4 text-amber-500 shrink-0" />
+            <Mail className="w-4 h-4 text-cyan-500 shrink-0" />
             <span>Emergency / Direct Report Email: <strong>conduct@awssbgpict.in</strong></span>
           </div>
         </div>

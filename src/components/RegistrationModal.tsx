@@ -45,7 +45,7 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
         particleCount: 100,
         spread: 80,
         origin: { y: 0.5 },
-        colors: ['#FF9900', '#FFC72C', '#6C5CE7', '#10B981'],
+        colors: ['#38BDF8', '#FFC72C', '#6C5CE7', '#10B981'],
       });
     } catch {
       // ignore
@@ -66,7 +66,7 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-in fade-in">
       <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-200 relative overflow-hidden max-h-[90vh] overflow-y-auto">
         {/* Decorative Top Accent */}
-        <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500" />
+        <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-cyan-400 via-sky-300 to-blue-500" />
 
         {/* Close Button */}
         <button
@@ -81,7 +81,7 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
           <div>
             <div className="flex items-center gap-2 mb-2">
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping" />
-              <span className="text-xs font-mono font-bold text-amber-600 uppercase tracking-wider">
+              <span className="text-xs font-mono font-bold text-cyan-600 uppercase tracking-wider">
                 STUDENT BUILDER REGISTRATION
               </span>
             </div>
@@ -102,7 +102,7 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
                 <select
                   value={ticketType}
                   onChange={(e) => setTicketType(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 font-semibold text-xs sm:text-sm focus:border-amber-400 focus:bg-white focus:outline-none transition-colors"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 font-semibold text-xs sm:text-sm focus:border-cyan-400 focus:bg-white focus:outline-none transition-colors"
                 >
                   <option value="Early Bird Pass (₹299)">Early Bird Pass — ₹299 (Active)</option>
                   <option value="Regular Pass (Phase 2)">Regular Pass — (Phase 2)</option>
@@ -121,7 +121,7 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   placeholder="e.g. Aditi Sharma"
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-xs sm:text-sm focus:border-amber-400 focus:bg-white focus:outline-none transition-colors"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-xs sm:text-sm focus:border-cyan-400 focus:bg-white focus:outline-none transition-colors"
                 />
               </div>
 
@@ -136,7 +136,7 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="aditi@college.edu or personal email"
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-xs sm:text-sm focus:border-amber-400 focus:bg-white focus:outline-none transition-colors"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-xs sm:text-sm focus:border-cyan-400 focus:bg-white focus:outline-none transition-colors"
                 />
               </div>
 
@@ -152,7 +152,7 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
                     value={college}
                     onChange={(e) => setCollege(e.target.value)}
                     placeholder="e.g. PICT Pune / COEP / MIT"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-xs focus:border-amber-400 focus:bg-white focus:outline-none transition-colors"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-xs focus:border-cyan-400 focus:bg-white focus:outline-none transition-colors"
                   />
                 </div>
 
@@ -166,7 +166,7 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
                     value={prn}
                     onChange={(e) => setPrn(e.target.value)}
                     placeholder="e.g. 32178 or PRN"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-xs focus:border-amber-400 focus:bg-white focus:outline-none transition-colors"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-xs focus:border-cyan-400 focus:bg-white focus:outline-none transition-colors"
                   />
                 </div>
               </div>
@@ -184,7 +184,7 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
                       onClick={() => setGradYear(yr)}
                       className={`py-2 text-xs font-bold rounded-xl border transition-colors cursor-pointer ${
                         gradYear === yr
-                          ? 'bg-amber-400 border-amber-500 text-slate-950'
+                          ? 'bg-cyan-400 border-cyan-500 text-slate-950'
                           : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
                       }`}
                     >
@@ -203,7 +203,7 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-3.5 rounded-xl font-black text-sm bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-400 text-slate-950 shadow-lg hover:brightness-105 active:scale-[0.99] transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                className="w-full py-3.5 rounded-xl font-black text-sm bg-gradient-to-r from-cyan-400 via-sky-400 to-blue-500 text-slate-950 shadow-lg hover:brightness-105 active:scale-[0.99] transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
               >
                 <span>{isSubmitting ? 'Confirming Credentials...' : 'Proceed to Reserve Seat →'}</span>
               </button>
@@ -224,10 +224,10 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
             </p>
 
             {/* Mock Digital Badge */}
-            <div className="p-4 rounded-2xl bg-gradient-to-tr from-[#0D1B2A] to-slate-800 text-white text-left relative overflow-hidden mb-6 shadow-xl border border-amber-400/30">
+            <div className="p-4 rounded-2xl bg-gradient-to-tr from-[#0D1B2A] to-slate-800 text-white text-left relative overflow-hidden mb-6 shadow-xl border border-cyan-400/30">
               <div className="flex items-center justify-between border-b border-slate-700 pb-3 mb-3">
                 <div>
-                  <span className="text-[10px] font-mono text-amber-400 uppercase font-bold block">
+                  <span className="text-[10px] font-mono text-cyan-400 uppercase font-bold block">
                     AWS SBG PICT • CLOUD CITY 2027
                   </span>
                   <div className="text-base font-black text-white">{fullName || 'Student Builder'}</div>

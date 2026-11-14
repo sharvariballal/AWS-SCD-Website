@@ -34,7 +34,7 @@ export const SpeakerRegistrationModal: React.FC<SpeakerRegistrationModalProps> =
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-in fade-in">
       <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border-3 border-slate-950 relative overflow-hidden max-h-[92vh] overflow-y-auto">
         {/* Decorative Top Accent */}
-        <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-purple-500 via-amber-400 to-indigo-500" />
+        <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-purple-500 via-cyan-400 to-indigo-500" />
 
         {/* Close Button */}
         <button

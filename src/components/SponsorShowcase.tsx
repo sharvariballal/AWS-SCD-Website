@@ -1,52 +1,57 @@
 import React from 'react';
-import { Award, Download, ArrowUpRight, HeartHandshake, Lock, Sparkles } from 'lucide-react';
+import { Download, ArrowUpRight, HeartHandshake, Lock, Sparkles } from 'lucide-react';
 import { playSound } from '../utils/audio';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 
 interface SponsorShowcaseProps {
   onOpenSponsorModal: () => void;
 }
 
 export const SponsorShowcase: React.FC<SponsorShowcaseProps> = ({ onOpenSponsorModal }) => {
+  const headerRef = useScrollReveal();
+  const cardsRef = useScrollReveal();
+
   const tiers = [
     {
       tier: 'TITLE PARTNER',
-      status: 'ANNOUNCING IN PHASE 2',
+      status: 'PHASE 2 REVEAL',
       isLocked: true,
-      desc: 'Headline branding across main stage, attendee badging, and welcome gate.',
-      badgeColor: 'bg-amber-400 text-purple-950',
+      desc: 'Exclusive headline branding across main stage, attendee smart badging, and welcome gate.',
+      tagColor: 'text-cyan-400 bg-cyan-400/10 border-cyan-400/30',
     },
     {
-      tier: 'PLATINUM & CLOUD PARTNERS',
-      status: 'ANNOUNCING IN PHASE 2',
+      tier: 'PLATINUM & CLOUD',
+      status: 'PHASE 2 REVEAL',
       isLocked: true,
-      desc: 'Exclusive booth inside Arcade Alley, stage tech presentation, and recruitment rights.',
-      badgeColor: 'bg-purple-200 text-purple-950',
+      desc: 'Dedicated booth inside Arcade Alley, main stage tech session, and student developer recruitment.',
+      tagColor: 'text-purple-300 bg-purple-500/10 border-purple-500/30',
     },
     {
-      tier: 'COMMUNITY & STUDENT PARTNERS',
-      status: 'OPEN FOR PARTNERSHIPS',
+      tier: 'COMMUNITY PARTNERS',
+      status: 'OPEN NOW',
       isLocked: false,
-      desc: 'Collaborating student developer clubs, hackathon tracks, and campus outreach.',
-      badgeColor: 'bg-emerald-100 text-emerald-950',
+      desc: 'Collaborating student developer clubs, regional college chapters, and campus outreach teams.',
+      tagColor: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30',
     },
   ];
 
   return (
-    <section id="sponsors-showcase" className="py-20 px-4 sm:px-6 lg:px-8 bg-blueprint-grid border-b-2 border-purple-900/10">
-      <div className="max-w-7xl mx-auto">
+    <section id="sponsors-showcase" className="py-10 sm:py-14 px-4 sm:px-6 lg:px-8 bg-blueprint-grid border-b border-white/5">
+      <div className="max-w-6xl mx-auto">
         
-        {/* Header - Solid Non-Gradient Typography */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+        {/* Header */}
+        <div ref={headerRef} className="sr-reveal flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-purple-300 bg-purple-100 text-purple-900 text-xs font-mono font-black uppercase mb-3 shadow-sm">
-              <Award className="w-3.5 h-3.5 text-purple-700" />
+            <div className="flex items-center gap-2 text-xs font-mono tracking-widest text-cyan-400 mb-2 uppercase font-semibold">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]" />
+              <span className="text-slate-500">//</span>
               <span>Sponsors &amp; Ecosystem</span>
             </div>
-            <h2 className="text-3xl sm:text-5xl font-black text-[#260B49] tracking-tight">
-              Backed by Community &amp; Industry
+            <h2 className="font-anton text-3xl sm:text-5xl text-white tracking-tight">
+              BACKED BY <span className="text-cyan-400">COMMUNITY</span> &amp; INDUSTRY
             </h2>
-            <p className="text-sm sm:text-base text-purple-950/75 mt-2 max-w-xl font-medium">
-              Powered by AWS Student Builder Group PICT with leading cloud technology and developer ecosystems.
+            <p className="text-sm sm:text-base text-slate-300 mt-2 max-w-xl" style={{ fontFamily: "'Inter', sans-serif" }}>
+              Empowering student cloud builders through industry collaboration.
             </p>
           </div>
 
@@ -56,7 +61,7 @@ export const SponsorShowcase: React.FC<SponsorShowcaseProps> = ({ onOpenSponsorM
                 playSound('click');
                 onOpenSponsorModal();
               }}
-              className="bg-amber-400 hover:bg-amber-300 text-purple-950 px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-black flex items-center gap-2 cursor-pointer shadow-md shadow-amber-400/25 transition-transform hover:scale-105"
+              className="bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-slate-950 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-black flex items-center gap-2 cursor-pointer shadow-[0_0_15px_rgba(56,189,248,0.4)] transition-transform hover:scale-105"
             >
               <HeartHandshake className="w-4 h-4" />
               <span>Become a Sponsor</span>
@@ -68,35 +73,45 @@ export const SponsorShowcase: React.FC<SponsorShowcaseProps> = ({ onOpenSponsorM
               target="_blank"
               rel="noreferrer"
               onClick={() => playSound('click')}
-              className="hidden sm:flex px-4 py-2.5 rounded-2xl border border-purple-300 bg-white hover:bg-purple-50 text-purple-900 text-xs sm:text-sm font-bold items-center gap-2 transition-colors cursor-pointer"
+              className="hidden sm:flex px-4 py-2.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-slate-300 text-xs sm:text-sm font-bold items-center gap-2 transition-colors cursor-pointer"
             >
-              <Download className="w-4 h-4" />
+              <Download className="w-4 h-4 text-cyan-400" />
               <span>Sponsor Deck</span>
             </a>
           </div>
         </div>
 
-        {/* Tier Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Clean 3-Tier Grid */}
+        <div ref={cardsRef} className="sr-reveal grid grid-cols-1 md:grid-cols-3 gap-6">
           {tiers.map((item, idx) => (
             <div
               key={idx}
-              className="p-6 sm:p-7 rounded-3xl bg-white border-2 border-purple-200 shadow-[0_10px_30px_rgba(76,29,149,0.08)] flex flex-col justify-between hover:shadow-[0_16px_40px_rgba(76,29,149,0.15)] hover:-translate-y-1 transition-all"
+              className="p-6 sm:p-7 rounded-3xl bg-[#0D1B2A]/80 border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.3)] flex flex-col justify-between hover:border-cyan-400/40 hover:shadow-[0_0_25px_rgba(56,189,248,0.15)] transition-all duration-300 backdrop-blur-md"
             >
               <div>
-                <span className={`text-[10px] font-mono font-black px-2.5 py-1 rounded-full ${item.badgeColor} border border-purple-300/40 inline-flex items-center gap-1.5 mb-3`}>
-                  {item.isLocked ? <Lock className="w-3 h-3" /> : <Sparkles className="w-3 h-3" />}
-                  <span>{item.status}</span>
-                </span>
-                <h3 className="text-xl font-black text-[#260B49] mb-2">{item.tier}</h3>
-                <p className="text-xs sm:text-sm text-purple-950/75 leading-relaxed font-normal">
+                <div className="flex items-center justify-between pb-3 mb-4 border-b border-white/10">
+                  <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border inline-flex items-center gap-1.5 ${item.tagColor}`}>
+                    {item.isLocked ? <Lock className="w-3 h-3" /> : <Sparkles className="w-3 h-3" />}
+                    <span>{item.status}</span>
+                  </span>
+                </div>
+
+                <h3 className="font-anton text-xl sm:text-2xl text-white mb-2 tracking-tight">
+                  {item.tier}
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal" style={{ fontFamily: "'Inter', sans-serif" }}>
                   {item.desc}
                 </p>
               </div>
 
-              <div className="pt-4 mt-6 border-t border-purple-100 flex items-center justify-between text-xs font-mono text-purple-700">
-                <span className="font-bold">AWS SCD 2027</span>
-                <span className="font-black text-amber-600">INQUIRE NOW</span>
+              <div className="pt-4 mt-6 border-t border-white/10 flex items-center justify-between text-xs font-mono text-slate-400">
+                <span>AWS SCD 2027</span>
+                <button
+                  onClick={onOpenSponsorModal}
+                  className="font-bold text-cyan-400 hover:text-cyan-300 cursor-pointer"
+                >
+                  Inquire Now →
+                </button>
               </div>
             </div>
           ))}

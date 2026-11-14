@@ -54,7 +54,7 @@ export const SocialSidebar: React.FC = () => {
       className="fixed right-4 md:right-6 top-1/2 -translate-y-1/2 z-40 hidden sm:flex flex-col items-center gap-3.5 p-2.5 rounded-2xl bg-[#0D1B2A]/85 backdrop-blur-xl border border-slate-700/80 shadow-[0_10px_30px_rgba(0,0,0,0.5)] transition-all duration-300"
     >
       {/* Decorative top micro LED */}
-      <div className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_#FF9900] animate-pulse" />
+      <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#22D3EE] animate-pulse" />
 
       {socialLinks.map((item) => {
         const Icon = item.icon;
@@ -65,7 +65,7 @@ export const SocialSidebar: React.FC = () => {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`Visit our ${item.name}`}
-            className="group relative p-2.5 rounded-xl text-slate-400 hover:text-amber-400 hover:bg-slate-800/80 transition-all duration-300 transform hover:scale-110 hover:shadow-[0_0_16px_rgba(255,153,0,0.55)] border border-transparent hover:border-amber-400/40"
+            className="group relative p-2.5 rounded-xl text-slate-400 hover:text-cyan-400 hover:bg-slate-800/80 transition-all duration-300 transform hover:scale-110 hover:shadow-[0_0_16px_rgba(34,211,238,0.55)] border border-transparent hover:border-cyan-400/40"
           >
             <Icon className="w-5 h-5 transition-transform duration-200 group-hover:scale-110" />
 
